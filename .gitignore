@@ -1,0 +1,10 @@
+output/*
+!output/.gitkeep
+model/weights/
+data/raw/
+data/processed/
+build/artifacts/
+board/artifacts/
+__pycache__/
+*.pyc
+.env
