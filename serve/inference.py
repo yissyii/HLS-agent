@@ -47,8 +47,9 @@ def load_config(path=None):
     if "LLM_MAX_TOKENS" in os.environ:
         model["max_tokens"] = int(os.environ["LLM_MAX_TOKENS"])
     address = urllib.parse.urlsplit(model["base_url"])
-    if address.scheme != "https" or not address.hostname or address.username or address.password or address.query or address.fragment:
-        raise Failure("configuration_error", "Development API base_url must be HTTPS without credentials/query/fragment")
+    local_http = address.scheme == 'http' and address.hostname in {'localhost', '127.0.0.1', '::1'}
+    if (address.scheme != 'https' and not local_http) or not address.hostname or address.username or address.password or address.query or address.fragment:
+        raise Failure('configuration_error', 'API must use HTTPS or loopback HTTP without credentials/query/fragment')
     if not isinstance(model["name"], str) or not model["name"].strip():
         raise Failure("configuration_error", "Missing model name")
     if type(model["max_tokens"]) is not int or model["max_tokens"] <= 0:
@@ -89,9 +90,14 @@ def generate(problem, config, output, timeout=None):
     address = urllib.parse.urlsplit(model["base_url"])
     # Pin only this connection. Never change global TLS defaults or follow redirects.
     context = ssl._create_unverified_context() if model["tls_sha256"] else ssl.create_default_context()
-    connection = http.client.HTTPSConnection(address.hostname, address.port or 443, context=context, timeout=timeout or model["timeout_seconds"])
+    if address.scheme == 'http':
+        if address.hostname not in {'localhost', '127.0.0.1', '::1'} or model['tls_sha256']:
+            raise Failure('configuration_error', 'HTTP requires loopback without a TLS pin')
+        connection = http.client.HTTPConnection(address.hostname, address.port or 80, timeout=timeout or model['timeout_seconds'])
+    else:
+        connection = http.client.HTTPSConnection(address.hostname, address.port or 443, context=context, timeout=timeout or model['timeout_seconds'])
     started = time.monotonic()
-    metadata = {"model": model, "requests": 0, "development_external_api": True}
+    metadata = {"model": model, "requests": 0, "development_external_api": address.hostname not in {"localhost", "127.0.0.1", "::1"}}
     output.parent.mkdir(parents=True, exist_ok=True)
     try:
         connection.connect()

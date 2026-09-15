@@ -62,6 +62,17 @@ cd C:\Users\yissyii\zcomp-windows-harness
 
 `output/` is recreated automatically. Do not commit response text, generated code, logs, synthesized RTL, reports, credentials or tool caches.
 
+## Competition baseline entry
+
+`run_baseline.sh` provides a problem-only, one-request entry with a new output
+directory and complete request/result artifacts. `run_paired.sh` coordinates it
+with a supplied `run.sh` under one configuration snapshot and run ID. The actual
+agent `run.sh` is not implemented locally yet; pairing fails before model access
+when it is missing. See [baseline protocol](report/baseline_protocol.md) for usage,
+historical-data limitations and the agent receipt contract.
+
+`python -B tools/test_baseline_contract.py` uses a local mock service only.
+
 ## Git hygiene
 
 The repository tracks framework code, documentation, manifests and reusable scripts. It ignores model weights, raw and processed data, generated build/board artifacts, run artifacts, bytecode and `.env`. Git does not track empty directories; `.gitkeep` preserves the otherwise empty `output/` directory.
