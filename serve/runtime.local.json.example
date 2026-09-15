@@ -1,0 +1,23 @@
+{
+  "model": {
+    "base_url": "https://<your-model-endpoint>/v1",
+    "name": "<served-model-name>",
+    "max_tokens": 2048,
+    "temperature": 0.7,
+    "enable_thinking": false,
+    "timeout_seconds": 180,
+    "context_tokens": 8192,
+    "context_note": "Verify the served model context limit through the endpoint before benchmarking.",
+    "tls_sha256": ""
+  },
+  "hls": {
+    "vitis_root": "<your-vitis-install>/Vitis",
+    "vivado_root": "<your-vitis-install>/Vivado",
+    "license_file": "<your-license-file-or-null>",
+    "part": "xczu3eg-sbva484-1-e",
+    "clock_ns": 5,
+    "csim_timeout_seconds": 120,
+    "synthesis_timeout_seconds": 300,
+    "total_timeout_seconds": 600
+  }
+}

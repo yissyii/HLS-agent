@@ -7,7 +7,9 @@ import ssl
 import urllib.parse
 
 root = Path(__file__).resolve().parents[1]
-config = json.loads((root / "serve/runtime.json").read_text())['model']
+_local = root / "serve/runtime.local.json"
+_source = _local if _local.is_file() else root / "serve/runtime.json"
+config = json.loads(_source.read_text())['model']
 url = urllib.parse.urlsplit(config['base_url'])
 context = ssl._create_unverified_context() if config['tls_sha256'] else ssl.create_default_context()
 conn = http.client.HTTPSConnection(url.hostname, url.port, context=context, timeout=60)

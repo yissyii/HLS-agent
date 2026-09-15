@@ -14,7 +14,7 @@ def main():
     parser.add_argument("dataset", help="Project-relative directory containing task.json files")
     parser.add_argument("--limit", type=int, default=0, help="Maximum tasks; zero means all")
     parser.add_argument("--cpu-only", action="store_true")
-    parser.add_argument("--config", default="serve/runtime.json")
+    parser.add_argument("--config", help="Defaults to the untracked serve/runtime.local.json when present")
     parser.add_argument("--repair-attempts", type=int, default=0, choices=range(6))
     parser.add_argument("--no-api", action="store_true", help="Validate task-local source paths only when supplied; not supported for dataset baseline")
     args = parser.parse_args()
@@ -34,7 +34,9 @@ def main():
         write_json(batch_dir / "summary.json", summary)
         started = time.monotonic()
         for index, manifest in enumerate(manifests, 1):
-            command = [sys.executable, "-m", "evaluation.single_task", str(manifest.relative_to(ROOT)), "--config", args.config, "--repair-attempts", str(args.repair_attempts)]
+            command = [sys.executable, "-m", "evaluation.single_task", str(manifest.relative_to(ROOT)), "--repair-attempts", str(args.repair_attempts)]
+            if args.config:
+                command.extend(["--config", args.config])
             if args.cpu_only:
                 command.append("--cpu-only")
             task_started = time.monotonic()

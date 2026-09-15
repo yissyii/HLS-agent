@@ -35,7 +35,13 @@ def write_json(path, value):
 
 
 def load_config(path=None):
-    config = json.loads(project_path(path or "serve/runtime.json").read_text(encoding="utf-8"))
+    if path is None:
+        # Per-machine settings (Vitis install root, license file) live in an
+        # untracked local override. The tracked runtime.json keeps portable
+        # defaults and is never edited by hand, so teammates never collide.
+        local = ROOT / "serve/runtime.local.json"
+        path = local if local.is_file() else "serve/runtime.json"
+    config = json.loads(project_path(path).read_text(encoding="utf-8"))
     model = config["model"]
     model_keys = {"base_url", "name", "max_tokens", "temperature", "enable_thinking", "timeout_seconds", "context_tokens", "context_note", "tls_sha256"}
     hls_keys = {"vitis_root", "vivado_root", "license_file", "part", "clock_ns", "csim_timeout_seconds", "synthesis_timeout_seconds", "total_timeout_seconds"}
