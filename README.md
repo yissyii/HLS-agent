@@ -29,7 +29,8 @@ All repository paths use lowercase English names. The README files in placeholde
 ## Current implementation
 
 - `serve/inference.py` sends one OpenAI-compatible generation request and records response metadata.
-- `evaluation/single_task.py` runs a task manifest through C simulation and Vitis HLS synthesis; it can make bounded repair requests after code failures.
+- `agent/core/controller.py` implements bounded generation, public validation, repair and evidence-based candidate selection.
+- `evaluation/single_task.py` preserves the legacy manifest CLI and validation exit codes using the shared agent controller.
 - `evaluation/batch.py` runs manifests sequentially.
 - `evaluation/hls.py` starts `E:/2025.2/Vitis/bin/vitis-run.bat`, isolates child environment variables and terminates timed-out Windows process trees.
 - `tools/check_endpoint.py` is a minimal endpoint diagnostic. It may contact the configured model endpoint.
@@ -66,12 +67,15 @@ cd C:\Users\yissyii\zcomp-windows-harness
 
 `run_baseline.sh` provides a problem-only, one-request entry with a new output
 directory and complete request/result artifacts. `run_paired.sh` coordinates it
-with a supplied `run.sh` under one configuration snapshot and run ID. The actual
-agent `run.sh` is not implemented locally yet; pairing fails before model access
-when it is missing. See [baseline protocol](report/baseline_protocol.md) for usage,
+with `run.sh` under one configuration snapshot and run ID. The agent also has a
+Windows `run_agent.ps1` entry and accepts explicit `--task-manifest` public inputs.
+See [agent usage](agent/README.md) and [baseline protocol](report/baseline_protocol.md) for usage,
 historical-data limitations and the agent receipt contract.
 
 `python -B tools/test_baseline_contract.py` uses a local mock service only.
+`python -B tools/test_agent_contract.py` tests the controller and paired entry with
+synthetic tasks and mock validators. `tools/smoke_agent_hls.py` runs a synthetic
+compile-failure/repair case against real Vitis and a loopback model fixture.
 
 ## Git hygiene
 

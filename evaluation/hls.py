@@ -95,14 +95,14 @@ def classify(stage, execution, text):
         return "tool_timeout"
     if any(value in lowered for value in ["license checkout failed", "failed to acquire license", "no valid license", "license check failed", "failed to check out license"]):
         return "license_error"
-    if any(value in lowered for value in ["error while loading shared libraries", "command not found", "no such file or directory", "permission denied"]):
+    if any(value in lowered for value in ["error while loading shared libraries", "command not found", "no such file or directory", "permission denied", "couldn't create signal pipe", "win32 error 5", "access is denied"]):
         return "environment_or_dependency_error"
     if stage == "synthesis":
         return "synthesis_error"
     compiler_error = re.search(r"^(?!\s*error:\s*\[).*\b(?:fatal )?error:|undefined reference", lowered, re.MULTILINE)
     if compiler_error:
         return "compile_error"
-    if "csim.exe" in lowered and any(value in lowered for value in ["linking", "running", "generating"]):
+    if ("csim.exe" in lowered or "csim.out" in lowered) and any(value in lowered for value in ["linking", "running", "generating"]):
         return "functional_or_runtime_error"
     return "compile_or_csim_error"
 

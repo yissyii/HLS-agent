@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "max_repairs": 2,
+  "stagnation_limit": 2,
+  "validation_reserve_seconds": 30,
+  "cleanup_reserve_seconds": 2,
+  "skills_enabled": false,
+  "max_skills": 2,
+  "context_safety_tokens": 512,
+  "diagnostic_max_chars": 4000
+}

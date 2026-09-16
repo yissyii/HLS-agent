@@ -34,23 +34,30 @@ def write_json(path, value):
     temporary.replace(path)
 
 
-def load_config(path=None):
+def load_config(path=None, *, frozen=False, allow_external=False):
     if path is None:
         # Per-machine settings (Vitis install root, license file) live in an
         # untracked local override. The tracked runtime.json keeps portable
         # defaults and is never edited by hand, so teammates never collide.
         local = ROOT / "serve/runtime.local.json"
         path = local if local.is_file() else "serve/runtime.json"
-    config = json.loads(project_path(path).read_text(encoding="utf-8"))
+    source = Path(path).resolve() if allow_external else project_path(path)
+    config = json.loads(source.read_text(encoding="utf-8"))
+    return validate_config(config, frozen=frozen)
+
+
+def validate_config(config, *, frozen=False):
+    if not isinstance(config, dict) or not isinstance(config.get('model'), dict) or not isinstance(config.get('hls'), dict):
+        raise Failure('configuration_error', 'Expected model and hls objects')
     model = config["model"]
     model_keys = {"base_url", "name", "max_tokens", "temperature", "enable_thinking", "timeout_seconds", "context_tokens", "context_note", "tls_sha256"}
     hls_keys = {"vitis_root", "vivado_root", "license_file", "part", "clock_ns", "csim_timeout_seconds", "synthesis_timeout_seconds", "total_timeout_seconds"}
     if set(config) != {"model", "hls"} or set(model) != model_keys or set(config["hls"]) != hls_keys:
         raise Failure("configuration_error", "Unexpected or missing config fields; credentials must not be stored in config")
     for environment, field in [("LLM_BASE_URL", "base_url"), ("LLM_MODEL", "name")]:
-        if environment in os.environ:
+        if not frozen and environment in os.environ:
             model[field] = os.environ[environment]
-    if "LLM_MAX_TOKENS" in os.environ:
+    if not frozen and "LLM_MAX_TOKENS" in os.environ:
         model["max_tokens"] = int(os.environ["LLM_MAX_TOKENS"])
     address = urllib.parse.urlsplit(model["base_url"])
     local_http = address.scheme == 'http' and address.hostname in {'localhost', '127.0.0.1', '::1'}
@@ -60,7 +67,7 @@ def load_config(path=None):
         raise Failure("configuration_error", "Missing model name")
     if type(model["max_tokens"]) is not int or model["max_tokens"] <= 0:
         raise Failure("configuration_error", "max_tokens must be a positive integer")
-    if model["max_tokens"] >= model["context_tokens"]:
+    if type(model['context_tokens']) is not int or model["max_tokens"] >= model["context_tokens"]:
         raise Failure("configuration_error", "Output budget must leave room for the prompt")
     pin = model["tls_sha256"]
     if pin and (len(pin) != 64 or any(c not in "0123456789abcdef" for c in pin)):
@@ -78,6 +85,15 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
+def request_payload(problem, config):
+    model = config['model']
+    return {
+        'model': model['name'], 'messages': [{'role': 'user', 'content': problem}],
+        'max_tokens': model['max_tokens'], 'temperature': model['temperature'],
+        'chat_template_kwargs': {'enable_thinking': model['enable_thinking']}, 'stream': False,
+    }
+
+
 def generate(problem, config, output, timeout=None):
     if not problem.strip():
         raise Failure("input_error", "Problem is empty")
@@ -85,14 +101,7 @@ def generate(problem, config, output, timeout=None):
         raise Failure("input_error", "Refusing to overwrite a previous response")
     key = os.environ.get("LLM_API_KEY", "not-needed").strip()
     model = config["model"]
-    payload = {
-        "model": model["name"],
-        "messages": [{"role": "user", "content": problem}],
-        "max_tokens": model["max_tokens"],
-        "temperature": model["temperature"],
-        "chat_template_kwargs": {"enable_thinking": model["enable_thinking"]},
-        "stream": False,
-    }
+    payload = request_payload(problem, config)
     address = urllib.parse.urlsplit(model["base_url"])
     # Pin only this connection. Never change global TLS defaults or follow redirects.
     context = ssl._create_unverified_context() if model["tls_sha256"] else ssl.create_default_context()
@@ -110,6 +119,9 @@ def generate(problem, config, output, timeout=None):
         if model["tls_sha256"] and hashlib.sha256(connection.sock.getpeercert(binary_form=True)).hexdigest() != model["tls_sha256"]:
             raise Failure("api_tls_error", "Server certificate changed; verify and update tls_sha256 explicitly")
         metadata["requests"] = 1
+        metadata['status'] = 'sending'
+        # Survives a killed worker: the service outcome may be unknown, not zero calls.
+        write_json(Path(str(output) + '.meta.json'), metadata)
         connection.request("POST", address.path.rstrip("/") + "/chat/completions", body=json.dumps(payload).encode("utf-8"), headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
         response = connection.getresponse()
         if response.status != 200:

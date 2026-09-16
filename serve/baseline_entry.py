@@ -12,6 +12,7 @@ import uuid
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from serve.inference import Failure, generate, load_config, write_json
+from serve.code import extract_code
 
 
 def digest(data):
@@ -47,13 +48,10 @@ def run(problem_path, output, config, run_id):
     try:
         generate(problem, config, output / 'response.txt')
         raw = (output / 'response.txt').read_bytes().decode('utf-8')
-        match = re.fullmatch(r'```(?:cpp|c\+\+|c|cc)?\s*\n(.*?)\n```', raw.strip(), re.DOTALL | re.I)
-        if '```' in raw and (not match or '```' in match.group(1)):
-            raise Failure('response_format_error', 'Ambiguous Markdown; raw response preserved without repair')
-        source = match.group(1) + '\n' if match else raw
+        source, extraction = extract_code(raw)
         (output / 'candidate.cpp').write_bytes(source.encode('utf-8'))
         result.update(status='generated', source='candidate.cpp', source_sha256=digest((output/'candidate.cpp').read_bytes()),
-                      source_extraction='single_outer_fence_removed' if match else 'verbatim')
+                      source_extraction=extraction)
         code = 0
     except Failure as error:
         result.update(status='failed', category=error.category, message=str(error))

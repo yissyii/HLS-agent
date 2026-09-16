@@ -92,10 +92,16 @@ class BaselineContract(unittest.TestCase):
             problem,output=command[2:4]
             config=json.loads(Path(command[5]).read_text())
             code,receipt=run(problem,output,config,command[7])
-            class Done: returncode=code
-            return Done()
+            from agent.core.policy import load_policy
+            from agent.context.skills import Skills
+            from serve.baseline_entry import config_digest
+            receipt.update(policy_sha256=config_digest(load_policy()), skills_sha256=Skills().sha256)
+            (Path(output)/'result.json').write_text(json.dumps(receipt), encoding='utf-8')
+            return {'exit_code': code, 'timed_out': False, 'elapsed_seconds': 0, 'log': 'agent.log'}
+        def fake_process(command, work, environment, log, timeout):
+            return fake_agent(command)
         argv=['paired',str(self.problem),str(out),'--agent-entry',str(agent)]
-        with patch.object(sys,'argv',argv),patch.object(paired_entry,'load_config',return_value=copy.deepcopy(self.config)),patch.object(paired_entry.subprocess,'run',side_effect=fake_agent):
+        with patch.object(sys,'argv',argv),patch.object(paired_entry,'load_config',return_value=copy.deepcopy(self.config)),patch.object(paired_entry,'run_process',side_effect=fake_process):
             self.assertEqual(paired_entry.main(),0)
         pair=json.loads((out/'pair.json').read_text())
         self.assertTrue(pair['pairing_verified'])

@@ -26,7 +26,9 @@ run.sh <problem_file> <output_directory> --config <snapshot> --run-id <id>
 
 智能体须使用共享配置，并在 `<output_directory>/result.json` 中记录实际使用的 `run_id`、`problem_sha256`、`config_sha256`；配置哈希为键排序、紧凑 JSON 的 UTF-8 SHA256，与 `serve/baseline_entry.py` 一致。配对启动器校验回执及共享文件未变，输出 `pair.json`。回执核对不是对智能体内部行为的强制证明，最终还应审查实际请求记录和服务配置。
 
-当前本地项目没有可用的 `run.sh`，因此配对运行会在模型请求前明确失败；本次只建立基线和对接入口，未声称完整智能体方案已经完成。实际 `run.sh` 接入后，才能产生满足“同次运行”的正式增益比较。pass@5 的外层采样规则以赛事细则为准，本入口内部不做五次重试。
+2026-09-16 已接入 `run.sh` 和独立 agent；配对入口新增 `--task-manifest`、`--policy`、`--skills-dir`、`--cpu-only`。公开验证材料、策略与启用的技能包在基线运行前复制为快照，运行后核对材料哈希；回执还校验策略和技能包哈希。Windows 标准入口直接运行相同 Python 模块，无需 Bash；自定义 shell 入口仍依赖 Bash。agent 受总预算和外层看门狗约束。
+
+配对成功只表示两次运行的输入与配置对得上。agent 退出 0 表示交付了候选，仍需看 `validation_status`、`validation_scope` 和独立评测结果；基础设施错误返回非零。没有公开验证清单时，agent 不声称功能验证通过。pass@5 的外层采样规则以赛事细则为准，内部修复次数不计作独立采样次数。
 
 ## 现有资料
 
