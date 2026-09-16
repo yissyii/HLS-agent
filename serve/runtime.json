@@ -2,11 +2,11 @@
   "model": {
     "base_url": "https://unpaired-valid-crouch.ngrok-free.dev/v1",
     "name": "qwen38",
-    "max_tokens": 2048,
+    "max_tokens": 4096,
     "temperature": 0.7,
     "enable_thinking": false,
     "timeout_seconds": 180,
-    "context_tokens": 8192,
+    "context_tokens": 16384,
     "context_note": "Verify the served model context limit through the endpoint before benchmarking.",
     "tls_sha256": ""
   },
