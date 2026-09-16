@@ -122,6 +122,7 @@ def main():
     parser.add_argument("--config", default="serve/runtime.local.json")
     parser.add_argument("--cpu-only", action="store_true")
     parser.add_argument("--task", help="Run a single Prob id (e.g. Prob001)")
+    parser.add_argument("--selection", help="Selection JSON from select_bench4hls_tasks.py")
     args = parser.parse_args()
 
     task_dirs = sorted(DATASET.glob("Prob*"))
@@ -129,7 +130,14 @@ def main():
         task_dirs = [d for d in task_dirs if d.name == args.task]
         if not task_dirs:
             raise SystemExit(f"Task not found: {args.task}")
-    if args.limit:
+    elif args.selection or (DATASET / "selection.json").is_file():
+        selection_path = DATASET / (args.selection or "selection.json")
+        selection = json.loads(selection_path.read_text(encoding="utf-8"))
+        ids = [n for names in selection["categories"].values() for n in names]
+        task_dirs = [d for d in task_dirs if d.name in set(ids)]
+        if args.limit:
+            task_dirs = task_dirs[: args.limit]
+    elif args.limit:
         task_dirs = task_dirs[: args.limit]
     if not task_dirs:
         raise SystemExit("No tasks to run")
