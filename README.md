@@ -13,6 +13,7 @@ zcomp-windows-harness/
 ├── skill/                    # Reusable HLS skills and validation notes
 ├── serve/                    # OpenAI-compatible inference client and runtime config
 ├── evaluation/               # Manifest loading, C simulation, HLS synthesis and repair
+├── local_eval/               # Mandatory development network-failure restart lifecycle; removable
 ├── tools/                    # Standalone operational checks
 ├── src/                      # Source-code map for the current Python layout
 ├── sim/                      # Simulation and verification conventions
@@ -62,6 +63,10 @@ cd C:\Users\yissyii\zcomp-windows-harness
 ```
 
 `output/` is recreated automatically. Do not commit response text, generated code, logs, synthesized RTL, reports, credentials or tool caches.
+
+研发期间，上述入口以及 Agent、严格基线、配对、对比评测入口默认必经统一的评测管理模块，无须额外开启。遇到 503 等临时 HTTP 错误或网络异常，整轮作废并自动从头重跑；批量/配对命令由最外层统一重跑，子任务不单独重试。默认最多重跑两次，参数位于 `local_eval/retry.json`。
+
+显式输出目录现在保存整个会话，每轮原始结果位于 `attempt_NNN/result/`；无显式输出目录时会话写入 `output/local_eval/`。先查看 `session.json` 的 `valid_attempt` 再读取成绩，作废轮保留日志但不计分。提交副本移除 `local_eval/` 即恢复原始单轮行为及输出路径。详见 [研发评测与移除说明](local_eval/README.md)。
 
 ## Competition baseline entry
 

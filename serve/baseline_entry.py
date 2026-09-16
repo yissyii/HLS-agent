@@ -74,8 +74,14 @@ def main():
     parser.add_argument('--config', default='serve/runtime.json')
     parser.add_argument('--run-id')
     args = parser.parse_args()
+    from evaluation.lifecycle import evaluate
+    return evaluate(args, _evaluate, output=args.output)
+
+
+def _evaluate(args):
+    from evaluation.lifecycle import output_path
     try:
-        code, result = run(args.problem, args.output, load_config(args.config), args.run_id or uuid.uuid4().hex)
+        code, result = run(args.problem, output_path(args.output), load_config(args.config), args.run_id or uuid.uuid4().hex)
         print(json.dumps(result, ensure_ascii=False))
         return code
     except (Failure, OSError, ValueError) as error:

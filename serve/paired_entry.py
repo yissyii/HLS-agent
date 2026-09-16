@@ -14,6 +14,7 @@ from evaluation.hls import run_process
 from evaluation.task_io import load_task
 from agent.core.policy import load_policy
 from agent.context.skills import Skills
+from evaluation.lifecycle import evaluate as development_evaluation, output_path
 
 
 def main():
@@ -27,10 +28,14 @@ def main():
     parser.add_argument('--skills-dir', help='Read-only independently validated rule pack')
     parser.add_argument('--cpu-only', action='store_true')
     args = parser.parse_args()
+    return development_evaluation(args, lambda current: _evaluate(current, parser), output=args.output)
+
+
+def _evaluate(args, parser):
     agent = Path(args.agent_entry).resolve()
     if not agent.is_file() or agent.stat().st_size == 0:
         parser.error('A working run.sh is required; no model request was made')
-    output = Path(args.output).resolve()
+    output = Path(output_path(args.output)).resolve()
     if not output.is_relative_to(ROOT / 'output'):
         parser.error('Paired output must be within project/output')
     config = load_config(args.config)

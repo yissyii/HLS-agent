@@ -103,7 +103,7 @@ class BaselineContract(unittest.TestCase):
         argv=['paired',str(self.problem),str(out),'--agent-entry',str(agent)]
         with patch.object(sys,'argv',argv),patch.object(paired_entry,'load_config',return_value=copy.deepcopy(self.config)),patch.object(paired_entry,'run_process',side_effect=fake_process):
             self.assertEqual(paired_entry.main(),0)
-        pair=json.loads((out/'pair.json').read_text())
+        pair=json.loads((out/'attempt_000/result/pair.json').read_text())
         self.assertTrue(pair['pairing_verified'])
         self.assertEqual(len(self.requests),2)
         self.assertEqual(self.requests[0],self.requests[1])

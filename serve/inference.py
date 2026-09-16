@@ -95,6 +95,8 @@ def request_payload(problem, config):
 
 
 def generate(problem, config, output, timeout=None):
+    from evaluation.lifecycle import before_request, observe_request
+    before_request()
     if not problem.strip():
         raise Failure("input_error", "Problem is empty")
     if output.exists() or Path(str(output) + ".meta.json").exists():
@@ -122,6 +124,7 @@ def generate(problem, config, output, timeout=None):
         metadata['status'] = 'sending'
         # Survives a killed worker: the service outcome may be unknown, not zero calls.
         write_json(Path(str(output) + '.meta.json'), metadata)
+        observe_request(Path(str(output) + '.meta.json'), metadata)
         connection.request("POST", address.path.rstrip("/") + "/chat/completions", body=json.dumps(payload).encode("utf-8"), headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
         response = connection.getresponse()
         if response.status != 200:
@@ -155,4 +158,5 @@ def generate(problem, config, output, timeout=None):
         connection.close()
         metadata["elapsed_seconds"] = round(time.monotonic() - started, 3)
         write_json(Path(str(output) + ".meta.json"), metadata)
+        observe_request(Path(str(output) + '.meta.json'), metadata)
     return metadata

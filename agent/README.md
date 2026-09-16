@@ -6,6 +6,8 @@
 
 详细方案见 [design.md](design.md)。
 
+研发评测默认经过项目级 [评测管理模块](../local_eval/README.md)：网络故障使最外层命令对应的整轮评测作废并自动重跑。原命令直接生效，适用于任意题目和数据集。显式输出目录下先查看 `session.json`，再读取 `valid_attempt/result/` 中的 Agent 产物；提交副本删除 `local_eval/` 后恢复下面描述的单轮输出布局。
+
 ## 目录结构
 
 下列模块和策略文件均已建立，图中省略 Python 包标记：

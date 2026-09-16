@@ -9,13 +9,14 @@ import uuid
 from agent.core.policy import load_policy
 from agent.interface.entry import run
 from evaluation.task_io import load_manifest, relative_name
+from evaluation.lifecycle import evaluate as development_evaluation, output_path
 from serve.code import extract_code
 from serve.inference import Failure, ROOT, load_config, project_path, write_json
 
 
 def evaluate(args):
     run_id = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ') + '-' + uuid.uuid4().hex[:8]
-    work = ROOT / 'output/runs' / run_id
+    work = output_path(ROOT / 'output/runs' / run_id)
     # Keep the old entry's local-configuration preference and project path rules.
     try:
         runtime = load_config(args.config)
@@ -58,7 +59,7 @@ def main():
     parser.add_argument('--cpu-only', action='store_true')
     parser.add_argument('--repair-attempts', type=int, default=0, choices=range(6))
     args = parser.parse_args()
-    return evaluate(args)
+    return development_evaluation(args, evaluate)
 
 
 if __name__ == '__main__':

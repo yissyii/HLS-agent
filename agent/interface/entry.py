@@ -15,6 +15,7 @@ from agent.core.controller import solve
 from agent.core.policy import load_policy, validate_policy
 from evaluation.task_io import load_task
 from evaluation.validator import HLSValidator
+from evaluation.lifecycle import evaluate as development_evaluation, output_path
 from serve.agent_model import ModelClient
 from serve.inference import Failure, ROOT, load_config, validate_config
 
@@ -69,8 +70,12 @@ def main():
     parser.add_argument('--skills-dir')
     parser.add_argument('--cpu-only', action='store_true', help='Hide GPUs from HLS only, not from the model server')
     args = parser.parse_args()
+    return development_evaluation(args, _evaluate, output=args.output)
+
+
+def _evaluate(args):
     try:
-        code, receipt = run(args.problem, args.output, config=args.config, run_id=args.run_id,
+        code, receipt = run(args.problem, output_path(args.output), config=args.config, run_id=args.run_id,
                             manifest=args.task_manifest, policy=args.policy,
                             skills_dir=args.skills_dir, cpu_only=args.cpu_only)
         print(json.dumps(receipt, ensure_ascii=False))

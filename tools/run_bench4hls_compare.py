@@ -24,6 +24,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from evaluation.lifecycle import evaluate as development_evaluation, output_path
 DATASET = ROOT / "data" / "processed" / "bench4hls"
 
 # A single harness run is bounded by runtime.json's total_timeout_seconds (600);
@@ -123,15 +125,21 @@ def main():
     parser.add_argument("--cpu-only", action="store_true")
     parser.add_argument("--task", help="Run a single Prob id (e.g. Prob001)")
     parser.add_argument("--selection", help="Selection JSON from select_bench4hls_tasks.py")
+    parser.add_argument("--dataset", default=str(DATASET), help="Any directory with compatible task folders")
     args = parser.parse_args()
+    return development_evaluation(args, _evaluate)
 
-    task_dirs = sorted(DATASET.glob("Prob*"))
+
+def _evaluate(args):
+    dataset = Path(args.dataset).resolve()
+
+    task_dirs = sorted(p.parent for p in dataset.glob('*/task.json'))
     if args.task:
         task_dirs = [d for d in task_dirs if d.name == args.task]
         if not task_dirs:
             raise SystemExit(f"Task not found: {args.task}")
-    elif args.selection or (DATASET / "selection.json").is_file():
-        selection_path = DATASET / (args.selection or "selection.json")
+    elif args.selection or (dataset / "selection.json").is_file():
+        selection_path = dataset / (args.selection or "selection.json")
         selection = json.loads(selection_path.read_text(encoding="utf-8"))
         ids = [n for names in selection["categories"].values() for n in names]
         task_dirs = [d for d in task_dirs if d.name in set(ids)]
@@ -143,7 +151,7 @@ def main():
         raise SystemExit("No tasks to run")
 
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
-    batch_dir = ROOT / "output" / ("compare_" + stamp)
+    batch_dir = output_path(ROOT / "output" / ("compare_" + stamp))
     batch_dir.mkdir(parents=True)
     summary = {"batch_id": "compare_" + stamp, "config": args.config,
                "workers": args.workers, "cpu_only": args.cpu_only,

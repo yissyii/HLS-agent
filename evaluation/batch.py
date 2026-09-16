@@ -7,6 +7,7 @@ import sys
 import time
 
 from serve.inference import Failure, ROOT, project_path, write_json
+from evaluation.lifecycle import evaluate as development_evaluation, output_path
 
 
 def main():
@@ -18,6 +19,10 @@ def main():
     parser.add_argument("--repair-attempts", type=int, default=0, choices=range(6))
     parser.add_argument("--no-api", action="store_true", help="Validate task-local source paths only when supplied; not supported for dataset baseline")
     args = parser.parse_args()
+    return development_evaluation(args, _evaluate)
+
+
+def _evaluate(args):
     try:
         dataset = project_path(args.dataset)
         manifests = sorted(dataset.rglob("task.json"))
@@ -28,7 +33,7 @@ def main():
         if args.no_api:
             raise Failure("input_error", "Dataset batch baseline requires one API generation per task")
         batch_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
-        batch_dir = project_path("output/batches") / batch_id
+        batch_dir = output_path(project_path("output/batches") / batch_id)
         batch_dir.mkdir(parents=True, exist_ok=False)
         summary = {"schema_version": 1, "batch_id": batch_id, "dataset": str(dataset.relative_to(ROOT)), "task_count": len(manifests), "status": "running", "tasks": [], "api_requests_expected": len(manifests), "cpu_only_requested": args.cpu_only}
         write_json(batch_dir / "summary.json", summary)

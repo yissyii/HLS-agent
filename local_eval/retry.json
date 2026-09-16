@@ -1,0 +1,7 @@
+{
+  "max_restarts": 2,
+  "initial_delay_seconds": 5,
+  "max_delay_seconds": 30,
+  "retry_http_statuses": [408, 429, 500, 502, 503, 504],
+  "retry_generation_timeout": false
+}

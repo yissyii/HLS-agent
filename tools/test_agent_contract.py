@@ -251,7 +251,7 @@ class AgentContract(unittest.TestCase):
         self.assertEqual(result['category'], 'evidence_mismatch')
 
     def test_context_overflow_refuses_before_model(self):
-        self.problem.write_text('x' * 10000)
+        self.problem.write_text('x' * (self.config['model']['context_tokens'] + 1))
         code, result = self.solve()
         self.assertEqual(code, 1)
         self.assertEqual(result['stop_reason'], 'context_budget_exceeded')
@@ -344,9 +344,10 @@ class AgentContract(unittest.TestCase):
         # POSIX invokes the actual run.sh through bash.
         with patch.object(sys, 'argv', argv):
             self.assertEqual(paired_entry.main(), 0)
-        pair = json.loads((self.directory / 'pair/pair.json').read_text())
-        agent = json.loads((self.directory / 'pair/agent/result.json').read_text(encoding='utf-8'))
-        baseline = json.loads((self.directory / 'pair/baseline/result.json').read_text(encoding='utf-8'))
+        round_output = self.directory / 'pair/attempt_000/result'
+        pair = json.loads((round_output / 'pair.json').read_text())
+        agent = json.loads((round_output / 'agent/result.json').read_text(encoding='utf-8'))
+        baseline = json.loads((round_output / 'baseline/result.json').read_text(encoding='utf-8'))
         self.assertTrue(pair['pairing_verified'])
         self.assertEqual(agent['run_id'], baseline['run_id'])
         self.assertEqual(agent['config_sha256'], baseline['config_sha256'])
@@ -409,7 +410,8 @@ class AgentContract(unittest.TestCase):
             config = command[command.index('--config') + 1]
             manifest = command[command.index('--task-manifest') + 1]
             policy = command[command.index('--policy') + 1]
-            code, receipt = run(output / 'problem.txt', output / 'agent', config=config,
+            round_output = output / 'attempt_000/result'
+            code, receipt = run(round_output / 'problem.txt', round_output / 'agent', config=config,
                                 manifest=manifest, policy=policy, run_id=command[command.index('--run-id') + 1],
                                 model=FakeModel(), validator=FakeValidator())
             self.assertTrue(Path(manifest).is_relative_to(output))
@@ -417,7 +419,7 @@ class AgentContract(unittest.TestCase):
         argv = ['paired', str(self.problem), str(output), '--config', str(config_path), '--task-manifest', str(self.manifest)]
         with patch.object(sys, 'argv', argv), patch.object(paired_entry, 'run_process', side_effect=process), contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(paired_entry.main(), 0)
-        result = json.loads((output / 'agent/result.json').read_text())
+        result = json.loads((output / 'attempt_000/result/agent/result.json').read_text())
         self.assertEqual(result['task_sha256'], load_task(self.problem, self.manifest).fingerprint)
         self.assertEqual(result['status'], 'passed')
 
@@ -430,7 +432,7 @@ class AgentContract(unittest.TestCase):
         with patch.object(sys, 'argv', argv), contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(paired_entry.main(), 1)
         self.assertEqual(len(self.requests), 2)
-        pair = json.loads((output / 'pair.json').read_text())
+        pair = json.loads((output / 'attempt_000/result/pair.json').read_text())
         self.assertTrue(pair['pairing_verified'])
         self.assertEqual(pair['status'], 'completed_with_failures')
 
