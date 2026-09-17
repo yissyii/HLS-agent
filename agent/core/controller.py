@@ -52,8 +52,10 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
             if budget.remaining() <= 0:
                 raise Failure('total_timeout', 'Single-task budget exhausted')
             directory = artifacts.attempt(number)
+            extraction_details = {}
+            top_function = task.manifest['top_function'] if task.manifest else None
             if number == 0 and initial_source is not None:
-                source, extraction = extract_code(initial_source)
+                source, extraction = extract_code(initial_source, top_function=top_function, details=extraction_details)
                 summary['stages']['generation'] = {'status': 'skipped', 'requests': 0}
             else:
                 selected_skills = skills.select(diagnostic, policy['max_skills'])
@@ -75,7 +77,9 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
                 artifacts.event('generation_finished', attempt=number, metadata=metadata)
                 if metadata.get('status') != 'passed':
                     raise Failure(metadata.get('category', 'generation_error'), 'Model request failed; inspect candidate generation.log')
-                source, extraction = extract_code((directory / 'response.txt').read_bytes().decode('utf-8'))
+                source, extraction = extract_code((directory / 'response.txt').read_bytes().decode('utf-8'),
+                                                  top_function=top_function, details=extraction_details)
+            artifacts.json(f'candidates/{number:03d}/extraction.json', extraction_details)
             path = artifacts.bytes(f'candidates/{number:03d}/candidate.cpp', source.encode('utf-8'))
             candidate = candidates.add(number, source, path, previous.candidate_id if previous else None)
             if candidate is None:
@@ -83,7 +87,7 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
                 stop = 'repeated_candidate'
                 break
             artifacts.event('candidate_created', attempt=number, source_sha256=candidate.sha256,
-                            parent_id=candidate.parent_id, extraction=extraction)
+                            parent_id=candidate.parent_id, extraction=extraction, extraction_details=extraction_details)
             if not task.stages:
                 stop = 'no_validation_materials'
                 break

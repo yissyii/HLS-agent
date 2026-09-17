@@ -24,6 +24,7 @@ class BaselineContract(unittest.TestCase):
         self.problem.write_bytes('题目原文\r\n  preserve whitespace\n'.encode('utf-8'))
         self.requests = []
         self.mode = 'stop'
+        self.response_text = 'int kernel() { return 0; }\n'
         owner = self
         class Handler(BaseHTTPRequestHandler):
             def log_message(self,*args): pass
@@ -34,7 +35,7 @@ class BaselineContract(unittest.TestCase):
                     self.connection.shutdown(socket.SHUT_RDWR)
                     self.connection.close()
                     return
-                payload = dict(choices=[dict(message=dict(content='int kernel() { return 0; }\n'),finish_reason=owner.mode)],
+                payload = dict(choices=[dict(message=dict(content=owner.response_text),finish_reason=owner.mode)],
                                usage=dict(prompt_tokens=10,completion_tokens=10,total_tokens=20))
                 data = json.dumps(payload).encode()
                 self.send_response(200)
@@ -80,6 +81,18 @@ class BaselineContract(unittest.TestCase):
         self.assertEqual(code,1)
         self.assertEqual(result['category'],'api_network_or_timeout')
         self.assertEqual(len(self.requests),1)
+    def test_explained_multiblock_response_uses_one_request(self):
+        source = 'int kernel() { return 0; }\n'
+        self.response_text = ('这里是声明：\n```cpp\nint kernel();\n```\n完整实现：\n```cpp\n'
+                              + source + '```\n测试台：\n```cpp\nint main() { return kernel(); }\n```\n')
+        output = self.directory / 'selected'
+        code, result = run(self.problem, output, self.config, 'test')
+        self.assertEqual(code, 0)
+        self.assertEqual(len(self.requests), 1)
+        self.assertEqual((output / 'response.txt').read_text(encoding='utf-8'), self.response_text)
+        self.assertEqual((output / 'candidate.cpp').read_text(), source)
+        self.assertEqual(result['source_extraction_details']['selected_block'], 1)
+        self.assertEqual(self.requests[0][1]['messages'], [dict(role='user', content=self.problem.read_bytes().decode())])
     def test_pair_requires_agent_before_model_call(self):
         with patch.object(sys,'argv',['paired',str(self.problem),str(self.directory/'pair'),'--agent-entry',str(self.directory/'missing.sh')]):
             with self.assertRaises(SystemExit):paired_entry.main()

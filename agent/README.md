@@ -91,6 +91,8 @@ Linux 对应 `bash run.sh ...` 和 `bash run_paired.sh ...`。`--cpu-only` 仅�
 - `events.jsonl`：请求发出、工具调用、修复决策与选中候选的事件。
 - `candidates/000/` 等：每次模型请求、响应、上下文来源、源码和独立 HLS 工作目录。
 
+模型回复允许带说明文字及多个代码块。共享提取器按结构完整性、已知顶层函数、测试台特征等选择最可能完整的一个，评分相同选最先出现者；各候选的 `extraction.json` 保存选择依据。不会拼接代码块，生成截断仍判为失败。具体规则见 [设计文档](design.md#64-响应提取与多代码块选择)。
+
 新 agent 入口退出 0 表示成功交付候选，不代表题目通过；查看 `validation_status`、`validation_scope` 和 `checks`。基础设施故障或没有完整候选时退出非零。旧 `run_eval.ps1` 仍要求功能测试与综合均通过才返回 0。
 
 ## 验证与边界
@@ -98,6 +100,7 @@ Linux 对应 `bash run.sh ...` 和 `bash run_paired.sh ...`。`--cpu-only` 仅�
 ```powershell
 python -B tools/test_agent_contract.py
 python -B tools/test_baseline_contract.py
+python -B tools/test_code_extraction.py
 # 使用本机 Vitis 和人工小题；模型是本机模拟服务，不请求真实模型。
 python -B tools/smoke_agent_hls.py --config serve/runtime.local.json
 ```

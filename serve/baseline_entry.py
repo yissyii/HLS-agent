@@ -48,7 +48,8 @@ def run(problem_path, output, config, run_id):
     try:
         generate(problem, config, output / 'response.txt')
         raw = (output / 'response.txt').read_bytes().decode('utf-8')
-        source, extraction = extract_code(raw)
+        result['source_extraction_details'] = {}
+        source, extraction = extract_code(raw, details=result['source_extraction_details'])
         (output / 'candidate.cpp').write_bytes(source.encode('utf-8'))
         result.update(status='generated', source='candidate.cpp', source_sha256=digest((output/'candidate.cpp').read_bytes()),
                       source_extraction=extraction)

@@ -457,13 +457,25 @@ class AgentContract(unittest.TestCase):
         self.assertEqual(result['category'], 'policy_error')
         self.assertEqual(self.model.prompts, [])
 
-    def test_ambiguous_output_not_merged_or_retried(self):
+    def test_multiple_blocks_selected_deterministically_without_retry(self):
         self.model = FakeModel(['```cpp\nint a;\n```\n```cpp\nint b;\n```'])
         code, result = self.solve()
-        self.assertEqual(code, 1)
-        self.assertEqual(result['category'], 'response_format_error')
+        self.assertEqual(code, 0)
         self.assertEqual(len(self.model.prompts), 1)
-        self.assertFalse((self.directory / 'agent/candidate.cpp').exists())
+        self.assertEqual((self.directory / 'agent/candidate.cpp').read_text(), 'int a;\n')
+        details = json.loads((self.directory / 'agent/candidates/000/extraction.json').read_text())
+        self.assertEqual(details['selected_block'], 0)
+        self.assertEqual(details['tie_break'], 'first_in_response')
+
+    def test_public_top_function_guides_block_selection(self):
+        self.public_task()
+        self.model = FakeModel(['```cpp\nint helper() { return 0; }\n```\n说明：\n'
+                                '```cpp\nint kernel(int a) { return a+1; }\n```'])
+        code, result = self.solve()
+        self.assertEqual(code, 0)
+        self.assertEqual(result['status'], 'passed')
+        self.assertEqual((self.directory / 'agent/candidate.cpp').read_text(), 'int kernel(int a) { return a+1; }\n')
+        self.assertEqual(len(self.model.prompts), 1)
 
 
 if __name__ == '__main__':
