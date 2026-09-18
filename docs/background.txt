@@ -1,0 +1,20 @@
+【身份与比赛】
+我是新手，参加2026全国大学生嵌入式芯片与系统设计竞赛（AMD FPGA创新设计赛道）。
+赛道：3.1 RTL/HLS 本地智能体设计赛道，已选 HLS track（Vitis HLS C++）。
+比赛要求：本地开源模型，单张32GB卡完整容纳，不跨卡；提交基于官方基础镜像的容器，断网沙箱运行；工具 Vivado/Vitis 2025.2；目标器件 xczu3eg-sbva484-1-e；时钟约束5ns；判定四级：可解析→可编译→可运行（通过全部测试用例）→可综合；报告 pass@1/pass@5。
+提交物：容器 + run.sh + run_baseline.sh + MODEL.md + 设计报告 + 技能包。评测窗口不能改代码/技能包/权重，哈希一致。
+
+【硬件与系统环境】
+哥哥的 Windows 11 台式机：RTX 5090D 32GB（Blackwell sm_120），32GB内存，WSL2分配24GB，16核/24线程。
+哥哥电脑的 WSL2 Ubuntu 22.04，root 用户，原生 Docker Engine，只跑 vLLM，未装 Vitis。
+vLLM 镜像：ngpitt/vllm:0.25.1-sm120-cu133（CUDA 13.3）。
+模型：cyankiwi/Qwen3.8-27B-AWQ-INT4，19.57 GiB，compressed-tensors 格式。
+vLLM 端口 8001，--network=host，--gpu-memory-utilization 0.88，--max-model-len 16484，--max-num-seqs 4，--disable-custom-all-reduce，NCCL_P2P_DISABLE=1，VLLM_WORKER_MULTIPROC_METHOD=spawn。
+我的轻薄本：Ultra 225H + 16GB + 1TB，只做开发和控制，已装 Vitis HLS 2025.2（用于开发测试）。
+队友的电脑：已装 Vitis HLS 2025.2（用于开发测试）。
+使用 ngrok 暴露到公网给队友调试
+
+【已装与已完成】
+- 哥哥电脑 WSL2 内存已调到24GB，只跑 vLLM，未装 Vitis。
+- 我的电脑和队友电脑均已安装 Vitis HLS 2025.2
+- 不需要购买开发板（3.1赛道纯软件工具链判定）。

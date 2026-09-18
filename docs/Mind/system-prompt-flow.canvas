@@ -1,0 +1,34 @@
+{
+	"nodes":[
+		{"id":"files","type":"text","text":"**① 可编辑的模板文件**\nagent/prompts/\n• system.txt：固定行为约束\n• initial.txt／repair.txt：阶段指令\n• manifest.json：版本与工具版本\n[[zcomp/agent/prompts/README.md|编辑与版本说明]]","x":90,"y":0,"width":340,"height":200,"color":"4"},
+		{"id":"load","type":"text","text":"**② 每次运行加载一次**\ncontroller.py → prompts.py\n校验非空文本和版本，统一换行，计算哈希。\n生成不可变 PromptTemplates；本轮修复不重读磁盘。\n加载失败：模型调用前终止。","x":45,"y":360,"width":430,"height":205,"color":"4"},
+		{"id":"initial","type":"text","text":"**③ A · 首次生成**\ninitial.txt＋题目＋目标器件／时钟＋公开材料。\n没有当前候选，也没有上一轮诊断。","x":740,"y":-27,"width":430,"height":120,"color":"4"},
+		{"id":"bundle","type":"text","text":"**④ builder.py 组装 PromptBundle**\nsystem：冻结的 system.txt\ntext：当轮 user 内容\nmessages：带角色的完整消息列表\n同时记录阶段、来源、模板版本与哈希。","x":920,"y":340,"width":360,"height":170,"color":"4"},
+		{"id":"budget","type":"text","text":"**⑤ 检查完整提示预算**\nsystem＋user＋消息开销都计入。\n超限：先移除可选技能，再缩短诊断。\n必要内容仍超限 → 停止本次生成。\n这是保守字节估算，不是精确 token 数。","x":920,"y":640,"width":440,"height":175,"color":"3"},
+		{"id":"client","type":"text","text":"**⑥ agent_model.py · ModelClient**\n保存 system_prompt.txt／prompt.txt、request.json、context.json。\n启动有超时限制的 worker，读取本次保存的文本和配置。","x":1000,"y":1043,"width":440,"height":175,"color":"5"},
+		{"id":"validate","type":"text","text":"**⑧ 有材料时执行 Vitis 验证**\n有测试台：csim → csynth。\n无测试台的显式清单：仅综合。\n无验证材料：直接交付，标为未验证。\n只向 Agent 释放允许的反馈。","x":1360,"y":1340,"width":340,"height":140,"color":"4"},
+		{"id":"records","type":"text","text":"**运行证据：看这里理解实际输入**\n运行根目录 prompt_templates.json：冻结模板全文／版本／哈希。\n候选目录 system_prompt.txt：system。\nprompt.txt：仅 user，不是完整请求。\nrequest.json：完整角色与内容。\ncontext.json：来源、阶段、预算和哈希。\nresponse.txt.meta.json：实际传输消息哈希与结果。","x":-520,"y":832,"width":610,"height":310,"color":"6"},
+		{"id":"result","type":"text","text":"**结束与交付**\n按验证证据选择候选，写入结果与停止原因。\n有候选可交付，不等于通过全部验证。","x":540,"y":1690,"width":380,"height":110,"color":"3"},
+		{"id":"http","type":"text","text":"**⑦ inference.py · 实际请求**\n构造 messages = [system, user]\n发送 HTTP → 生成模型。\n响应源码经提取后登记为候选。","x":1690,"y":896,"width":300,"height":147,"color":"5"},
+		{"id":"decision","type":"text","text":"**⑨ 是否继续修复？**\n失败可修复，且次数／时间充足 → 进入 B。\n验证通过、预算耗尽或其他停止条件 → 收尾。\n基础设施故障不交给模型修代码。","x":1770,"y":1745,"width":440,"height":160,"color":"3"},
+		{"id":"repair","type":"text","text":"**③ B · 修复阶段**\nrepair.txt＋题目／配置／公开材料＋当前完整源码＋允许的诊断。\n参考技能仅在显式启用且适用时加入。","x":1450,"y":60,"width":390,"height":152,"color":"4"},
+		{"id":"compat","type":"text","text":"**兼容例外**\n严格裸基线：原题单条 user，无 Agent system。\n旧 raw_initial=True：首稿无 system；修复才用 system＋repair。\n提供 initial_source：跳过首稿生成，先验证；需修复时进入 B。\n完整主循环：[[agent-flow.canvas]]","x":-360,"y":1320,"width":650,"height":245,"color":"3"}
+	],
+	"edges":[
+		{"id":"sp_e00","fromNode":"files","fromSide":"bottom","toNode":"load","toSide":"top","color":"4","label":"启动时读取"},
+		{"id":"sp_e01","fromNode":"load","fromSide":"right","toNode":"bundle","toSide":"left","color":"4","label":"同一份冻结模板"},
+		{"id":"sp_e02","fromNode":"initial","fromSide":"bottom","toNode":"bundle","toSide":"top","color":"4","label":"首稿 user"},
+		{"id":"sp_e03","fromNode":"repair","fromSide":"bottom","toNode":"bundle","toSide":"top","color":"4","label":"修复 user"},
+		{"id":"sp_e04","fromNode":"bundle","fromSide":"bottom","toNode":"budget","toSide":"top","color":"4"},
+		{"id":"sp_e05","fromNode":"budget","fromSide":"bottom","toNode":"client","toSide":"top","color":"4","label":"预算允许发送"},
+		{"id":"sp_e06","fromNode":"budget","fromSide":"left","toNode":"result","toSide":"left","color":"3","label":"仍超限：不发送"},
+		{"id":"sp_e07","fromNode":"client","fromSide":"right","toNode":"http","toSide":"left","color":"5","label":"限时 worker 调用"},
+		{"id":"sp_e08","fromNode":"http","fromSide":"bottom","toNode":"validate","toSide":"top","color":"5","label":"候选代码"},
+		{"id":"sp_e09","fromNode":"validate","fromSide":"bottom","toNode":"decision","toSide":"top","color":"4","label":"验证结果与允许的诊断"},
+		{"id":"sp_e10","fromNode":"decision","fromSide":"right","toNode":"repair","toSide":"right","color":"3","label":"允许修复：复用冻结模板"},
+		{"id":"sp_e11","fromNode":"decision","fromSide":"left","toNode":"result","toSide":"right","color":"3","label":"停止／交付"},
+		{"id":"sp_e12","fromNode":"validate","fromSide":"left","toNode":"result","toSide":"top","color":"3","label":"无验证材料"},
+		{"id":"sp_e13","fromNode":"load","fromSide":"bottom","toNode":"records","toSide":"top","color":"6","label":"保存模板快照"},
+		{"id":"sp_e14","fromNode":"client","fromSide":"left","toNode":"records","toSide":"right","color":"6","label":"保存当次请求"}
+	]
+}
