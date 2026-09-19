@@ -91,11 +91,49 @@
 4. **检索是「参考材料」而非「验证过的修复」**：UG1399 条目 `validation=unvalidated`、`release=reference`，不包含 Bench4HLS 任务级的修复方案；注入的 6000 字节参考区可能挤占 prompt 里真正有用的 diagnostic/代码空间。
 5. **基础设施干净**：全量 510 次仅 1 次 `rag_timeout`（Prob030 hybrid，Phase 2 并行下模型冷启动 CPU 争用）、零网络失败、零 csim 启动异常；`generation_incomplete`/`response_format_error`/`context_budget_exceeded`/`tool_timeout` 均为确定性合法失败，无整轮重跑，数据未被污染。
 
+## 检索失效机理（数据核查）
+
+对注入证据的抽查揭示了「检索无增益且略降」的具体机制。
+
+### 1. 78% 的修复反馈是「空壳」
+
+212 次修复轮次的诊断类别分布：
+
+| 诊断类别 | 次数 | 占比 | 反馈内容 |
+|---|---:|---:|---|
+| functional_or_runtime_error | 166 | 78.3% | 仅一个类别字符串，无具体报错/反例 |
+| compile_error | 43 | 20.3% | 有具体 clang 报错文本 |
+| synthesis_error | 3 | 1.4% | 有具体综合报错 |
+
+`feedback_policy=compiler_diagnostics` 只释放 compiler/synthesis 的具体报错，功能失败（csim 比对不过）只回传 `functional_or_runtime_error` 一个类别。因此 78% 的检索 query 是「题目描述 + 一句无信息量的类别串」，检索器只能靠题目去匹配手册，结果跑偏。
+
+### 2. 检索命中质量抽查
+
+| 题 | 真实编译报错 | RAG 检索到的章节 | 相关性 |
+|---|---|---|---|
+| Prob072 | `invalid digit 'b'`（写成 Verilog `2'b01`） | Initialization from Constants (Literals) | ✅ 命中 |
+| Prob050 | `no member 'parity' in ap_uint<100>` | Class Methods / Deprecated / Port Protocols | 半对 |
+| Prob088 | `y(0)`（Verilog 索引，应为 `y[0]`） | Fixed-Point Math / Print Function / Constants | ❌ 跑偏 |
+| Prob109 | `x(0)` 索引错误 | Dealing with Unsupported Functions（ap_float） | ❌ 跑偏 |
+
+compile 类报错（20%）检索偶有命中（如 `2'b01`→「常量初始化」），但功能类（78%）无从匹配。
+
+### 3. 噪声挤占信号（Prob033 八 D 触发器修复 prompt）
+
+| prompt 构成 | 大小 | 占比 |
+|---|---:|---:|
+| `<REFERENCE_MATERIAL>`（检索材料） | 5334 字符 | 84% |
+| `<CURRENT_SOURCE>`（待修代码） | 115 字符 | 2% |
+| `<DIAGNOSTIC>` | "functional_or_runtime_error" | — |
+
+检索材料（Port-Level Protocols、RTL Blackbox JSON 等无关段落）占据 84% 上下文，真正要改的代码只剩 2% 篇幅，模型注意力被无关文本稀释——这解释了为何注入越多（hybrid）反而降得越多。
+
 ## 局限与后续
 
 - 本结论仅针对「UG1399 通用手册」这一语料与「compiler_diagnostics 反馈档」的组合；不排除**任务级案例库**（Vitis HLS Introductory Examples / 官方库组件 / 历史实验案例）在修复阶段更有针对性。
 - 修复请求在 Phase 2 用 workers=4 并发，存在采样级非确定性；overall 的 3 题差异与 noise 同量级，方向可参考、幅度不宜过度解读。
 - 后续可尝试：语料换成「已验证代码示例」、增大 `rag_top_k`/`max_bytes`、或仅对 kernel 大类启用检索。
+- 更根本的方向：**给功能失败也释放 csim 的具体反例**（如 `public_diagnostics` 档），让 78% 的功能类修复有可匹配的检索信号，而不是只有一句 `functional_or_runtime_error`。
 
 ## 环境与数据产物
 
