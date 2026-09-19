@@ -1,12 +1,12 @@
 """Compare RAG repair conditions (off / bm25 / hybrid) on Bench4HLS.
 
-Three agent conditions share the same first draft (temperature pinned to 0 in
-the eval config), the same feedback policy and budget; they differ only in the
-repair-stage retrieval mode:
-
-    off    -- default policy (rag_enabled=false), no --rag-runtime
-    bm25   -- policy.rag-bm25.json (BM25 only, no embedding model)
-    hybrid -- policy.rag-hybrid.json (BM25 + dense, needs the local model)
+Two-phase, fixed first draft:
+  Phase 1 (sequential): run the "off" condition, which generates the first
+    draft (temperature pinned to 0, deterministic under non-concurrent
+    scheduling) and captures candidates/000/response.txt.
+  Phase 2 (parallel): run "bm25" and "hybrid" with --initial-source pointing at
+    the off draft, so all three conditions start from the identical first draft
+    and differ only in the repair-stage retrieval mode.
 
 Usage:
   python -B tools/run_rag_compare.py \\
@@ -71,19 +71,17 @@ def _metrics(receipt):
     }
 
 
-def eval_condition(task_dir, batch_dir, config, condition, policy, rag_runtime):
-    name = task_dir.name
-    out = batch_dir / name / condition
+def _entry(task_dir, out_dir, config, condition, policy, rag_runtime, initial_source=None):
     cmd = [sys.executable, "-B", "-m", "agent.interface.entry",
-           str(task_dir / "problem.txt"), str(out), "--config", config,
+           str(task_dir / "problem.txt"), str(out_dir), "--config", config,
            "--task-manifest", str(task_dir / "task.json")]
     if policy:
-        cmd += ["--policy", str(ROOT / policy)]
-    if rag_runtime:
-        cmd += ["--rag-runtime", rag_runtime]
+        cmd += ["--policy", str(ROOT / policy), "--rag-runtime", rag_runtime]
+    if initial_source and Path(initial_source).is_file():
+        cmd += ["--initial-source", str(initial_source)]
     r = _run(cmd)
     receipt = _last_json(r.stdout)
-    entry = {"task": name, "method": condition, "stage": "validated"}
+    entry = {"task": task_dir.name, "method": condition, "stage": "validated"}
     entry.update(_metrics(receipt))
     entry["ok"] = bool(entry.get("overall"))
     if not entry.get("checks"):
@@ -107,9 +105,8 @@ def main():
     return development_evaluation(args, _evaluate)
 
 
-def _evaluate(args):
+def _discover(args):
     dataset = Path(args.dataset).resolve()
-
     task_dirs = sorted(p.parent for p in dataset.glob('*/task.json'))
     if args.task:
         task_dirs = [d for d in task_dirs if d.name == args.task]
@@ -126,28 +123,64 @@ def _evaluate(args):
         task_dirs = task_dirs[: args.limit]
     if not task_dirs:
         raise SystemExit("No tasks to run")
+    return task_dirs
+
+
+def _evaluate(args):
+    task_dirs = _discover(args)
 
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     batch_dir = output_path(ROOT / "output" / ("rag_compare_" + stamp))
     batch_dir.mkdir(parents=True)
     summary = {"batch_id": "rag_compare_" + stamp, "config": args.config,
                "rag_runtime": args.rag_runtime, "workers": args.workers,
+               "two_phase_fixed_draft": True,
                "conditions": [{"name": name, "policy": policy, "rag_runtime": rt}
                               for name, policy, rt in CONDITIONS],
                "task_count": len(task_dirs), "status": "running", "results": [],
                "started_at": datetime.now(timezone.utc).isoformat()}
     summary_file = batch_dir / "summary.json"
-    summary_file.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
 
+    def flush():
+        summary_file.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+
+    def note(entry):
+        summary["results"].append(entry)
+        flush()
+        print(json.dumps({"task": entry.get("task"), "method": entry.get("method"),
+                          "ok": entry.get("ok"), "checks": entry.get("checks"),
+                          "status": entry.get("status"), "stop_reason": entry.get("stop_reason"),
+                          "api_requests": entry.get("api_requests"),
+                          "elapsed_seconds": entry.get("elapsed_seconds"),
+                          "done": len(summary["results"]), "total": len(task_dirs) * 3},
+                         ensure_ascii=False), flush=True)
+
+    flush()
+    started = time.monotonic()
+
+    # Phase 1: off condition, sequential, generates the canonical first draft.
+    drafts = {}
+    for d in task_dirs:
+        out_dir = batch_dir / d.name / "off"
+        try:
+            entry = _entry(d, out_dir, args.config, "off", None, args.rag_runtime)
+        except Exception as error:
+            entry = {"task": d.name, "method": "off", "stage": "runner_error",
+                     "ok": False, "reason": type(error).__name__, "message": str(error)}
+        draft = out_dir / "candidates" / "000" / "response.txt"
+        drafts[d.name] = draft if draft.is_file() else None
+        note(entry)
+
+    # Phase 2: bm25 + hybrid, parallel, reuse the fixed first draft.
     def work():
         for d in task_dirs:
-            for name, policy, rt in CONDITIONS:
-                yield name, policy, rt, d
+            for name, policy, rt in CONDITIONS[1:]:
+                yield d, name, policy, rt
 
-    started = time.monotonic()
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
-        futures = {pool.submit(eval_condition, d, batch_dir, args.config, name, policy, rt):
-                   (d.name, name) for name, policy, rt, d in work()}
+        futures = {pool.submit(_entry, d, batch_dir / d.name / name, args.config,
+                               name, policy, rt, drafts[d.name]): (d.name, name)
+                   for d, name, policy, rt in work()}
         for future in as_completed(futures):
             task, cond = futures[future]
             try:
@@ -155,15 +188,7 @@ def _evaluate(args):
             except Exception as error:  # includes subprocess.TimeoutExpired
                 result = {"task": task, "method": cond, "stage": "runner_error",
                           "ok": False, "reason": type(error).__name__, "message": str(error)}
-            summary["results"].append(result)
-            summary_file.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
-            print(json.dumps({"task": result.get("task"), "method": result.get("method"),
-                              "ok": result.get("ok"), "checks": result.get("checks"),
-                              "status": result.get("status"), "stop_reason": result.get("stop_reason"),
-                              "api_requests": result.get("api_requests"),
-                              "elapsed_seconds": result.get("elapsed_seconds"),
-                              "done": len(summary["results"]), "total": len(futures)},
-                             ensure_ascii=False), flush=True)
+            note(result)
 
     summary["status"] = "completed"
     summary["elapsed_seconds"] = round(time.monotonic() - started, 3)
@@ -194,12 +219,11 @@ def _evaluate(args):
         by_cond[name]["mean_elapsed_seconds"] = round(sum(elap) / len(elap), 2) if elap else None
 
     summary["comparison"] = by_cond
-    summary_file.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+    flush()
 
     print("\n===== Bench4HLS RAG comparison (off / bm25 / hybrid) =====")
     print(f"tasks={len(task_dirs)} workers={args.workers} summary={summary_file.relative_to(ROOT)}")
-    header = f"{'metric':<14}" + "".join(f"{name:>12}" for name, _, _ in CONDITIONS)
-    print(header)
+    print(f"{'metric':<14}" + "".join(f"{name:>12}" for name, _, _ in CONDITIONS))
     for key, label in (("compile", "compile"), ("run", "csim/run"),
                        ("synthesize", "synthesis"), ("overall", "overall")):
         line = f"{label:<14}"

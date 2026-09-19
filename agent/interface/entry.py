@@ -69,6 +69,7 @@ def main():
     parser.add_argument('--policy')
     parser.add_argument('--skills-dir')
     parser.add_argument('--rag-runtime', help='Local RAG paths JSON; read only when RAG is enabled in policy')
+    parser.add_argument('--initial-source', help='Path to a pre-generated first draft (raw model output); skips generation')
     parser.add_argument('--cpu-only', action='store_true', help='Hide GPUs from HLS only, not from the model server')
     args = parser.parse_args()
     return development_evaluation(args, _evaluate, output=args.output)
@@ -78,7 +79,8 @@ def _evaluate(args):
     try:
         code, receipt = run(args.problem, output_path(args.output), config=args.config, run_id=args.run_id,
                             manifest=args.task_manifest, policy=args.policy,
-                            skills_dir=args.skills_dir, cpu_only=args.cpu_only, rag_runtime=args.rag_runtime)
+                            skills_dir=args.skills_dir, cpu_only=args.cpu_only, rag_runtime=args.rag_runtime,
+                            initial_source=args.initial_source)
         print(json.dumps(receipt, ensure_ascii=False))
         return code
     except (Failure, OSError, ValueError) as error:
