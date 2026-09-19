@@ -24,7 +24,9 @@ def load_runtime(path=None):
         if not isinstance(data[key], str) or not data[key].strip():
             raise ValueError('Invalid RAG runtime field: ' + key)
         value = Path(data[key])
-        data[key] = str((ROOT / value).resolve() if not value.is_absolute() else value.resolve())
+        # abspath (not resolve) so a venv bin/python symlink is not collapsed to
+        # the base interpreter, which would lose the venv site-packages.
+        data[key] = os.path.abspath(ROOT / value) if not value.is_absolute() else os.path.abspath(value)
     data['python'] = data['python'] or sys.executable
     return source, data
 
