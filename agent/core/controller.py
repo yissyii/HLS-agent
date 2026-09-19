@@ -6,6 +6,7 @@ import time
 
 from agent.candidates.manager import Candidates
 from agent.context.builder import build
+from agent.context.prompts import load_prompts
 from agent.core.contracts import Budget, digest, empty_checks, json_digest
 from agent.core.policy import decide
 from agent.feedback.diagnostics import classify
@@ -18,10 +19,13 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
     started = time.monotonic() if started is None else started
     budget = Budget(started, started + runtime['hls']['total_timeout_seconds'] - policy['cleanup_reserve_seconds'])
     candidates = Candidates(task.fingerprint, json_digest(runtime['hls']))
+    templates = load_prompts()  # One immutable prompt snapshot for all attempts in this run.
     summary = dict(schema_version=1, branch='agent', run_id=run_id, status='running',
                    problem_sha256=digest(task.problem), config_sha256=json_digest(runtime),
                    policy_sha256=json_digest(policy), task_sha256=task.fingerprint,
                    skills_sha256=skills.sha256, model=runtime['model'], agent_used=True,
+                   prompt_templates_version=templates.version, prompt_templates_sha256=templates.sha256,
+                   raw_initial=raw_initial,
                    skills_used=False, started_at=datetime.now(timezone.utc).isoformat(),
                    checks=empty_checks(), generation_requests=0, tool_calls=0,
                    repair_attempts_allowed=policy['max_repairs'], repair_attempts_used=0,
@@ -33,6 +37,7 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
     artifacts.bytes('problem.txt', task.problem)
     artifacts.json('config.json', runtime)
     artifacts.json('policy.json', policy)
+    artifacts.json('prompt_templates.json', templates.snapshot())
     artifacts.json('task.json', task.snapshot())
     for material in task.materials:
         artifacts.bytes('materials/' + material.name, material.content)
@@ -59,12 +64,14 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
                 summary['stages']['generation'] = {'status': 'skipped', 'requests': 0}
             else:
                 selected_skills = skills.select(diagnostic, policy['max_skills'])
-                prompt = build(task, runtime, policy, previous, diagnostic, selected_skills, raw_initial)
+                prompt = build(task, runtime, policy, previous, diagnostic, selected_skills, raw_initial, templates=templates)
                 summary['skills_used'] |= bool(prompt.skills)
                 budget.requests += 1
                 summary['repair_attempts_used'] = number
                 artifacts.event('generation_dispatched', attempt=number, request_number=budget.requests,
-                                prompt_sha256=digest(prompt.text.encode()), skills=prompt.skills)
+                                prompt_sha256=digest(prompt.text.encode()), messages_sha256=json_digest(prompt.messages),
+                                system_prompt_sha256=digest(prompt.system.encode()),
+                                prompt_templates_sha256=templates.sha256, skills=prompt.skills)
                 summary['requests'].append({'attempt': number, 'state': 'dispatched',
                                             'request_outcome_unknown': True})
                 summary['generation_requests'] = budget.requests

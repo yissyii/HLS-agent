@@ -1,0 +1,29 @@
+{
+  "description": "Author-curated retrieval smoke set, not independent held-out HLS tasks. Labels identify useful manual sections, not complete answers or repair correctness.",
+  "queries": [
+    {"id":"state","kind":"english_semantic","query":"My accumulator loses its previous value on every call to the top function. How can I retain state between invocations?","titles":["Statics"]},
+    {"id":"malloc","kind":"english_semantic","query":"Can I synthesize a function that allocates a variable size buffer using malloc and frees it before returning?","titles":["Dynamic Memory Usage"]},
+    {"id":"recursion","kind":"english_semantic","query":"The function calls itself recursively. Is tail recursion supported by HLS synthesis?","titles":["Recursive Functions"]},
+    {"id":"pointer","kind":"english_semantic","query":"Are pointers to pointers and function pointers synthesizable?","titles":["Pointer Limitations","Pointers on the Interface"]},
+    {"id":"volatile","kind":"english_semantic","query":"Several reads of the same pointer are collapsed into a single read. How do I preserve multiple reads in hardware?","titles":["Understanding Volatile Data","Volatile","Multi-Access Pointers on the Interface"]},
+    {"id":"fifo","kind":"english_semantic","query":"An input array has an ap_fifo interface but is indexed in random order. Why can this fail in RTL co-simulation?","titles":["FIFO Interfaces"]},
+    {"id":"loop_bound","kind":"english_semantic","query":"Why does pipelining a function fail when one of its loops has a variable iteration bound?","titles":["Working with Variable Loop Bounds","Function Pipelining","Pipelining Loops"]},
+    {"id":"deadlock","kind":"english_semantic","query":"How do I diagnose FIFO depth problems that cause a dataflow design to deadlock during RTL cosimulation?","titles":["Cosim Deadlock Detection","Troubleshooting C/RTL Co-Simulation","Configuring Dataflow Memory Channels","Specifying Compiler-Created FIFO Depth"]},
+    {"id":"width","kind":"english_semantic","query":"How is the result bit width determined for arithmetic operations on arbitrary precision integers?","titles":["Bit-Width Propagation","Overview of Arbitrary Precision Integer Data Types","Arithmetic Operators"]},
+    {"id":"reset","kind":"english_semantic","query":"Does initialization of a static array guarantee its contents are restored every time reset is asserted?","titles":["Statics","Initializing and Resetting Arrays","RTL Configuration"]},
+    {"id":"partition","kind":"symbol","query":"pragma HLS array_partition variable factor dim block cyclic complete","titles":["pragma HLS array_partition"]},
+    {"id":"interface","kind":"symbol","query":"pragma HLS interface m_axi offset off slave direct","titles":["pragma HLS interface","Offset and Modes of Operation"]},
+    {"id":"pipeline","kind":"symbol","query":"pragma HLS pipeline II enable_flush rewind","titles":["pragma HLS pipeline"]},
+    {"id":"unroll","kind":"symbol","query":"pragma HLS unroll factor skip_exit_check","titles":["pragma HLS unroll"]},
+    {"id":"dependence","kind":"symbol","query":"pragma HLS dependence inter false incorrect results","titles":["pragma HLS dependence"]},
+    {"id":"bind_storage","kind":"symbol","query":"pragma HLS bind_storage ram_2p bram latency","titles":["pragma HLS bind_storage"]},
+    {"id":"array_reshape","kind":"symbol","query":"What is the difference between ARRAY_RESHAPE and ARRAY_PARTITION?","titles":["Array Reshaping","pragma HLS array_reshape","Array Partitioning"]},
+    {"id":"stream","kind":"code","query":"hls::stream<int> s; s.read(); s.write(x); What happens when the FIFO is empty or full?","titles":["Blocking API","Blocking Read Methods","Blocking Write Methods"]},
+    {"id":"range","kind":"code","query":"ap_uint<32> x; how can I select a single bit and a range of bits?","titles":["Other Class Methods, Operators, and Data Members"]},
+    {"id":"testbench","kind":"english_semantic","query":"What must a C simulation test bench return when an output differs from the expected result?","titles":["Writing a Test Bench","Example Test Bench"]},
+    {"id":"zh_state","kind":"chinese_crosslingual","query":"函数每调用一次局部累加器就清零，如何让硬件保存上一次调用后的状态？","titles":["Statics"]},
+    {"id":"zh_malloc","kind":"chinese_crosslingual","query":"HLS 综合不支持动态分配内存 malloc，应如何替换？","titles":["Dynamic Memory Usage"]},
+    {"id":"zh_partition","kind":"chinese_crosslingual","query":"数组分块和循环分区有什么区别，如何设置 array_partition 的 factor 和 dim？","titles":["pragma HLS array_partition","Array Partitioning"]},
+    {"id":"zh_recursion","kind":"chinese_crosslingual","query":"递归函数和尾递归能不能综合成 FPGA 电路？","titles":["Recursive Functions"]}
+  ]
+}

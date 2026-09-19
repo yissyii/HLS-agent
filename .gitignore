@@ -9,3 +9,9 @@ __pycache__/
 *.pyc
 .env
 serve/runtime.local.json
+rag/.cache/
+rag/.venv/
+rag/corpora/
+rag/indexes/
+rag/staging/
+rag/*.local.json

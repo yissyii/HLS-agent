@@ -1,0 +1,151 @@
+{
+  "corpus": {
+    "schema_version": 2,
+    "records": 1756,
+    "records_sha256": "79778e1393914794575071150c9fde64cbc679fe6fac05c859a4971df6c02d0c",
+    "source_type": "pdf",
+    "source_file": "ug1399-vitis-hls-en-us-2025.2.pdf",
+    "source_sha256": "a7ce9855528cd121f25f7f55e532d907f58a46a8ad9d012f837bfc553f7ba2ea",
+    "source_pages": 904,
+    "language": "en-US",
+    "extraction": "pdfplumber-layout-bookmarks-v2",
+    "extraction_versions": {
+      "pdfplumber": "0.11.9",
+      "pypdf": "6.10.0",
+      "pdfminer": "20251230"
+    },
+    "max_chars": 1700,
+    "skipped_front_matter": true,
+    "validation_note": "Document excerpts only; no HLS repair effectiveness claim."
+  },
+  "model": {
+    "repository": "Qwen/Qwen3-Embedding-0.6B",
+    "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+    "license": "Apache-2.0",
+    "quantization": "none",
+    "dimensions": 1024,
+    "files": {
+      "1_Pooling/config.json": {
+        "sha256": "37bf193fa101f19101bfad9c31d3eb0f786e247b7b1e5cb7f007d730eed1ddbd",
+        "bytes": 313
+      },
+      "config.json": {
+        "sha256": "b5bf1f51fc45be473a54718cef92448d90a1be001bf9b9a44b8c7f10a19feaa9",
+        "bytes": 727
+      },
+      "config_sentence_transformers.json": {
+        "sha256": "10667c72ddb772627bf1780cb7f86af8e2ae0032b8c243c731172064105c6961",
+        "bytes": 215
+      },
+      "generation_config.json": {
+        "sha256": "28396d421a2108acce96383f6a7de78008f7f1b17f807958f3c14c51dbfb65fb",
+        "bytes": 117
+      },
+      "merges.txt": {
+        "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+        "bytes": 1671853
+      },
+      "model.safetensors": {
+        "sha256": "0437e45c94563b09e13cb7a64478fc406947a93cb34a7e05870fc8dcd48e23fd",
+        "bytes": 1191586416
+      },
+      "modules.json": {
+        "sha256": "84e40c8e006c9b1d6c122e02cba9b02458120b5fb0c87b746c41e0207cf642cf",
+        "bytes": 349
+      },
+      "README.md": {
+        "sha256": "c34d9b7e5a267ad3fdd13227a253686bc90844ff4744a2a6a86c7c905e3d06f3",
+        "bytes": 17237
+      },
+      "tokenizer.json": {
+        "sha256": "def76fb086971c7867b829c23a26261e38d9d74e02139253b38aeb9df8b4b50a",
+        "bytes": 11423705
+      },
+      "tokenizer_config.json": {
+        "sha256": "253153d0738ceb4c668d2eff957714dd2bea0b56de772a9fdccd96cbf517e6a0",
+        "bytes": 9706
+      },
+      "vocab.json": {
+        "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+        "bytes": 2776833
+      }
+    },
+    "purpose": "local_retrieval_only"
+  },
+  "index": {
+    "schema_version": 1,
+    "corpus_sha256": "79778e1393914794575071150c9fde64cbc679fe6fac05c859a4971df6c02d0c",
+    "encoder": {
+      "repository": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+      "model_manifest_sha256": "a84491d7136cf875e1694059d6b06aad78222ad19b770bfe99d1e2d3badaaf60",
+      "dimensions": 1024,
+      "pooling": "last_token_from_model_config",
+      "normalized": true,
+      "document_format": "last_three_headings_plus_whitespace_normalized_body_v1",
+      "query_instruction": "Given a Vitis HLS question, compiler diagnostic, or C++ coding issue, retrieve relevant official manual passages explaining the applicable semantics, restrictions, or correct usage.",
+      "max_length": 2048,
+      "device": "cpu",
+      "dtype": "float32",
+      "quantization": "none",
+      "sentence_transformers": "5.7.0",
+      "transformers": "4.57.6",
+      "torch": "2.8.0+cpu"
+    },
+    "fingerprint": "51cfeaa9a9dcfadab20c43db07bae0dcd4f485506dcb47e8c8361cf0bce6e756",
+    "vectors_sha256": "6baf6495b88e871b95423a7f094ca7f565cbba785c78277c6e1ede0a6166f1e7",
+    "rows": 1756,
+    "dimensions": 1024,
+    "max_document_tokens": 652,
+    "total_document_tokens": 384907,
+    "this_run_seconds": 874.61
+  },
+  "source_pages_with_chunks": 895,
+  "pages_without_section_text": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "quality_counts": {
+    "pdf_extracted_not_executable": 1756,
+    "oversized_block_split": 13,
+    "expand_parent_for_context": 13
+  },
+  "manual_visual_spot_checks": {
+    "125": "Statics code and initialization/reset text checked against rendered page.",
+    "129": "Table 5 AP types and required headers checked; layout text, not structured cells.",
+    "154": "Pointer limitations and recursive function example checked against page.",
+    "547": "array_partition pragma syntax checked; remaining options continue on following page."
+  },
+  "corpus_auxiliary_sha256": {
+    "coverage.json": "29986083a954cd5042262869d6d7eb5bf82e442b24fc9b84b8c1d2e88a4d32e8",
+    "manifest.json": "89ac2ca879739e19649068e46bd6bea649f1ef0de7d3a500c1aa639191672cd8",
+    "outline.json": "e36548f6b245d4acc51d7fc3a1d67ffcf071927229d475f3bad4cd0e5f10e54d",
+    "pages.json": "075508f65be19cb260b887bdca2252c871d626bf1f074ebc1a27e6e4bf2a2de7",
+    "sections.json": "ad1b66417e5507713066ab6c746c054c68cf2d7dcd20395848334ed54e4fbb76"
+  },
+  "build_code_sha256": {
+    "audit.py": "332f25ace17e75eaabfdc579cefd0c1017a5b414850b0c34d49cd2c26e0c6de4",
+    "build_index.py": "5d02e84cccaefdc78216400dfd179bb14e09652648e5dfbca637db4a8e448630",
+    "common.py": "a9a81e036437d3c3f754bdf82153bf3587793ab591f0c86b64de2ed0cd10f7ab",
+    "download_model.py": "a0ef24797a49e909c3bd8d65e46c43e01d667f5783f0038e0e59c9beedad54c5",
+    "embedding.py": "43e287ab7ce4f9c514440b37e8d80ab7398d1daa3a559dcf649131bbebce6855",
+    "evaluate.py": "6af3524dc2a648fff62e016a21f83e7c0cb392b69666e92a8ebac00e0008f5d4",
+    "ingest_pdf.py": "623176b8e5d205525bd43761e2ca2dd88262622e68f640714730f4b329daf1bb",
+    "retrieve.py": "484feeac8645c5f5daa1b77970aa4388c4f6a22853831abd1b83f05d6e8de7fd",
+    "test_retrieval.py": "a51e47ca57a5dda8baf21d9416c80dd2340ff9fdd415743628bd08a69f47b9e9",
+    "__init__.py": "e9a7d15a13a0a2022974105cea1527c2d207e807448073a361d82b355d109428"
+  },
+  "dependency_lock_sha256": "86c21338018413e29e6511f839377a5025ef353b48e6846eedeaf2d2bedd0e76",
+  "caveats": [
+    "Spot checks are not exhaustive PDF QA.",
+    "Figures are not OCR-indexed.",
+    "No remote Vitis run or Agent success-rate experiment was performed."
+  ]
+}

@@ -18,7 +18,8 @@ class ModelClient:
     def generate(self, prompt, runtime, directory, deadline):
         directory = Path(directory)
         (directory / 'prompt.txt').write_bytes(prompt.text.encode('utf-8'))
-        write_json(directory / 'request.json', request_payload(prompt.text, runtime))
+        (directory / 'system_prompt.txt').write_bytes(prompt.system.encode('utf-8'))
+        write_json(directory / 'request.json', request_payload(prompt.text, runtime, system_prompt=prompt.system))
         write_json(directory / 'context.json', {'provenance': prompt.provenance, **prompt.context, 'skills': prompt.skills})
         write_json(directory / 'config.json', runtime)
         remaining = min(runtime['model']['timeout_seconds'], deadline - time.monotonic())
@@ -52,7 +53,8 @@ def main():
     try:
         runtime = load_config(directory / 'config.json', frozen=True, allow_external=True)
         generate((directory / 'prompt.txt').read_bytes().decode('utf-8'), runtime,
-                 directory / 'response.txt', timeout=args.timeout)
+                 directory / 'response.txt', timeout=args.timeout,
+                 system_prompt=(directory / 'system_prompt.txt').read_bytes().decode('utf-8'))
         return 0
     except Failure as error:
         print(error.category + ': ' + str(error), file=sys.stderr)

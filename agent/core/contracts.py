@@ -99,6 +99,12 @@ class PromptBundle:
     provenance: list[dict]
     context: dict
     skills: list[str] = field(default_factory=list)
+    system: str = ''
+
+    @property
+    def messages(self):
+        messages = [{'role': 'system', 'content': self.system}] if self.system else []
+        return messages + [{'role': 'user', 'content': self.text}]
 
 
 @dataclass

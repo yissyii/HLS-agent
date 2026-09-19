@@ -1,0 +1,3456 @@
+{
+  "description": "Author-curated retrieval smoke set, not independent held-out HLS tasks. Labels identify useful manual sections, not complete answers or repair correctness.",
+  "corpus_sha256": "bd00aa1331204e759ef6097f9c8267279016fed8804b93ee1394de257ff05633",
+  "queries_sha256": "28d5d783c5d6b26c028144e6145051d19428b4f562d4ca2ea832c9939acbbdb8",
+  "configuration": {
+    "top_k": 5,
+    "recall_k": 30,
+    "max_bytes": 20000
+  },
+  "index_fingerprint": "d6a36a639b9bdcc73cd13d6b2872c4e562e9a4411cd3978fbd0e09c867ecc496",
+  "query_encoding_and_cold_load_seconds": 9.844000000000051,
+  "summary": {
+    "bm25": {
+      "all": {
+        "queries": 24,
+        "hit_at_1": 0.5833333333333334,
+        "hit_at_3": 0.75,
+        "hit_at_5": 0.875
+      },
+      "english_semantic": {
+        "queries": 11,
+        "hit_at_1": 0.7272727272727273,
+        "hit_at_3": 0.8181818181818182,
+        "hit_at_5": 0.9090909090909091
+      },
+      "symbol": {
+        "queries": 7,
+        "hit_at_1": 0.5714285714285714,
+        "hit_at_3": 0.8571428571428571,
+        "hit_at_5": 1.0
+      },
+      "code": {
+        "queries": 2,
+        "hit_at_1": 0.5,
+        "hit_at_3": 0.5,
+        "hit_at_5": 1.0
+      },
+      "chinese_crosslingual": {
+        "queries": 4,
+        "hit_at_1": 0.25,
+        "hit_at_3": 0.5,
+        "hit_at_5": 0.5
+      }
+    },
+    "dense": {
+      "all": {
+        "queries": 24,
+        "hit_at_1": 0.625,
+        "hit_at_3": 0.8333333333333334,
+        "hit_at_5": 0.9583333333333334
+      },
+      "english_semantic": {
+        "queries": 11,
+        "hit_at_1": 0.6363636363636364,
+        "hit_at_3": 0.8181818181818182,
+        "hit_at_5": 0.9090909090909091
+      },
+      "symbol": {
+        "queries": 7,
+        "hit_at_1": 0.8571428571428571,
+        "hit_at_3": 1.0,
+        "hit_at_5": 1.0
+      },
+      "code": {
+        "queries": 2,
+        "hit_at_1": 0.5,
+        "hit_at_3": 0.5,
+        "hit_at_5": 1.0
+      },
+      "chinese_crosslingual": {
+        "queries": 4,
+        "hit_at_1": 0.25,
+        "hit_at_3": 0.75,
+        "hit_at_5": 1.0
+      }
+    },
+    "hybrid": {
+      "all": {
+        "queries": 24,
+        "hit_at_1": 0.625,
+        "hit_at_3": 0.9166666666666666,
+        "hit_at_5": 1.0
+      },
+      "english_semantic": {
+        "queries": 11,
+        "hit_at_1": 0.7272727272727273,
+        "hit_at_3": 1.0,
+        "hit_at_5": 1.0
+      },
+      "symbol": {
+        "queries": 7,
+        "hit_at_1": 0.7142857142857143,
+        "hit_at_3": 1.0,
+        "hit_at_5": 1.0
+      },
+      "code": {
+        "queries": 2,
+        "hit_at_1": 0.5,
+        "hit_at_3": 0.5,
+        "hit_at_5": 1.0
+      },
+      "chinese_crosslingual": {
+        "queries": 4,
+        "hit_at_1": 0.25,
+        "hit_at_3": 0.75,
+        "hit_at_5": 1.0
+      }
+    }
+  },
+  "runs": [
+    {
+      "query_id": "state",
+      "kind": "english_semantic",
+      "mode": "bm25",
+      "gold_titles": [
+        "Statics"
+      ],
+      "first_relevant_rank": 4,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0054-p0096-00",
+          "title": "Initializing and Resetting Arrays",
+          "page": 96,
+          "score": 15.661606511880453
+        },
+        {
+          "id": "ug1399-2025.2-en-s0178-p0272-00",
+          "title": "Extracting Control Logic and Implementing I/O Ports Example",
+          "page": 272,
+          "score": 13.829824921872124
+        },
+        {
+          "id": "ug1399-2025.2-en-s0086-p0135-00",
+          "title": "Accumulation of ap_float<> Using ap_float_acc<> Helper Class",
+          "page": 135,
+          "score": 12.785147801632483
+        },
+        {
+          "id": "ug1399-2025.2-en-s0076-p0125-00",
+          "title": "Statics",
+          "page": 125,
+          "score": 12.381428635806012
+        },
+        {
+          "id": "ug1399-2025.2-en-s0172-p0256-00",
+          "title": "Initialization Behavior",
+          "page": 256,
+          "score": 12.256183916992768
+        }
+      ],
+      "context_bytes": 8241,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "malloc",
+      "kind": "english_semantic",
+      "mode": "bm25",
+      "gold_titles": [
+        "Dynamic Memory Usage"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0101-p0152-00",
+          "title": "Dynamic Memory Usage",
+          "page": 152,
+          "score": 17.33277352862472
+        },
+        {
+          "id": "ug1399-2025.2-en-s0146-p0220-00",
+          "title": "Programming Model for Multi-Port Access in HBM",
+          "page": 220,
+          "score": 14.908365113490456
+        },
+        {
+          "id": "ug1399-2025.2-en-s0014-p0028-00",
+          "title": "Producer-Consumer Paradigm",
+          "page": 28,
+          "score": 13.72145127497948
+        },
+        {
+          "id": "ug1399-2025.2-en-s0155-p0234-00",
+          "title": "Impact of Struct Size on Pipelining",
+          "page": 234,
+          "score": 12.136747323866874
+        },
+        {
+          "id": "ug1399-2025.2-en-s0292-p0489-00",
+          "title": "syn.directive.alias",
+          "page": 489,
+          "score": 11.54215694636495
+        }
+      ],
+      "context_bytes": 8378,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "recursion",
+      "kind": "english_semantic",
+      "mode": "bm25",
+      "gold_titles": [
+        "Recursive Functions"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0103-p0154-00",
+          "title": "Recursive Functions",
+          "page": 154,
+          "score": 26.742353260926144
+        },
+        {
+          "id": "ug1399-2025.2-en-s0071-p0120-00",
+          "title": "Using Templates to Create Unique Instances",
+          "page": 120,
+          "score": 22.57551340584526
+        },
+        {
+          "id": "ug1399-2025.2-en-s0104-p0155-00",
+          "title": "Standard Template Libraries",
+          "page": 155,
+          "score": 18.044138517376805
+        },
+        {
+          "id": "ug1399-2025.2-en-s0334-p0575-00",
+          "title": "pragma HLS inline",
+          "page": 575,
+          "score": 14.791297454101802
+        },
+        {
+          "id": "ug1399-2025.2-en-s0304-p0515-00",
+          "title": "syn.directive.inline",
+          "page": 515,
+          "score": 12.607655533049302
+        }
+      ],
+      "context_bytes": 7106,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "pointer",
+      "kind": "english_semantic",
+      "mode": "bm25",
+      "gold_titles": [
+        "Pointer Limitations",
+        "Pointers on the Interface"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0090-p0140-00",
+          "title": "Pointers on the Interface",
+          "page": 140,
+          "score": 9.333391287857815
+        },
+        {
+          "id": "ug1399-2025.2-en-s0102-p0154-00",
+          "title": "Pointer Limitations",
+          "page": 154,
+          "score": 9.006253346708283
+        },
+        {
+          "id": "ug1399-2025.2-en-s0214-p0352-00",
+          "title": "Adding RTL Blackbox Functions",
+          "page": 352,
+          "score": 8.610409802896378
+        },
+        {
+          "id": "ug1399-2025.2-en-s0089-p0137-00",
+          "title": "Pointers",
+          "page": 137,
+          "score": 8.540920052173822
+        },
+        {
+          "id": "ug1399-2025.2-en-s0093-p0143-00",
+          "title": "Multi-Access Pointers on the Interface",
+          "page": 143,
+          "score": 8.3802137286355
+        }
+      ],
+      "context_bytes": 5136,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "volatile",
+      "kind": "english_semantic",
+      "mode": "bm25",
+      "gold_titles": [
+        "Understanding Volatile Data",
+        "Volatile",
+        "Multi-Access Pointers on the Interface"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0094-p0145-00",
+          "title": "Understanding Volatile Data",
+          "page": 145,
+          "score": 19.826033451468966
+        },
+        {
+          "id": "ug1399-2025.2-en-s0095-p0146-00",
+          "title": "Modeling Streaming Data Interfaces",
+          "page": 146,
+          "score": 15.529457460907983
+        },
+        {
+          "id": "ug1399-2025.2-en-s0116-p0179-00",
+          "title": "M_AXI Channels",
+          "page": 179,
+          "score": 15.488350119834184
+        },
+        {
+          "id": "ug1399-2025.2-en-s0096-p0148-00",
+          "title": "Multi-Access Pointers and RTL Simulation",
+          "page": 148,
+          "score": 15.270609704900128
+        },
+        {
+          "id": "ug1399-2025.2-en-s0093-p0143-00",
+          "title": "Multi-Access Pointers on the Interface",
+          "page": 143,
+          "score": 14.623511393566638
+        }
+      ],
+      "context_bytes": 9258,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "fifo",
+      "kind": "english_semantic",
+      "mode": "bm25",
+      "gold_titles": [
+        "FIFO Interfaces"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0052-p0094-00",
+          "title": "FIFO Interfaces",
+          "page": 94,
+          "score": 36.2915907546882
+        },
+        {
+          "id": "ug1399-2025.2-en-s0145-p0218-00",
+          "title": "Port-Level I/O: Memory Interface Protocol",
+          "page": 218,
+          "score": 26.608838043538093
+        },
+        {
+          "id": "ug1399-2025.2-en-s0417-p0687-01",
+          "title": "set_directive_interface",
+          "page": 687,
+          "score": 25.822060879215357
+        },
+        {
+          "id": "ug1399-2025.2-en-s0250-p0422-00",
+          "title": "Co-simulation Requirements for Interface Synthesis",
+          "page": 422,
+          "score": 25.06516679706072
+        },
+        {
+          "id": "ug1399-2025.2-en-s0335-p0577-01",
+          "title": "pragma HLS interface",
+          "page": 577,
+          "score": 22.99345161757002
+        }
+      ],
+      "context_bytes": 6729,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "loop_bound",
+      "kind": "english_semantic",
+      "mode": "bm25",
+      "gold_titles": [
+        "Working with Variable Loop Bounds",
+        "Function Pipelining",
+        "Pipelining Loops"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0035-p0065-00",
+          "title": "Pipelining Loops",
+          "page": 65,
+          "score": 19.982293927008
+        },
+        {
+          "id": "ug1399-2025.2-en-s0043-p0083-01",
+          "title": "Working with Variable Loop Bounds",
+          "page": 83,
+          "score": 15.913857509680778
+        },
+        {
+          "id": "ug1399-2025.2-en-s0059-p0101-00",
+          "title": "Function Pipelining",
+          "page": 101,
+          "score": 15.809532351447285
+        },
+        {
+          "id": "ug1399-2025.2-en-s0119-p0184-00",
+          "title": "Automatic Port Width Resizing",
+          "page": 184,
+          "score": 15.2056446692083
+        },
+        {
+          "id": "ug1399-2025.2-en-s0412-p0679-00",
+          "title": "set_directive_dependence",
+          "page": 679,
+          "score": 15.026776047330356
+        }
+      ],
+      "context_bytes": 7517,
+      "search_seconds": 0.016
+    },
+    {
+      "query_id": "deadlock",
+      "kind": "english_semantic",
+      "mode": "bm25",
+      "gold_titles": [
+        "Cosim Deadlock Detection",
+        "Troubleshooting C/RTL Co-Simulation",
+        "Configuring Dataflow Memory Channels",
+        "Specifying Compiler-Created FIFO Depth"
+      ],
+      "first_relevant_rank": null,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_5": false,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0392-p0644-00",
+          "title": "config_dataflow",
+          "page": 644,
+          "score": 25.905242178459737
+        },
+        {
+          "id": "ug1399-2025.2-en-s0251-p0423-00",
+          "title": "Verification of DATAFLOW and DEPENDENCE",
+          "page": 423,
+          "score": 25.323676328327707
+        },
+        {
+          "id": "ug1399-2025.2-en-s0246-p0417-00",
+          "title": "Dataflow Viewer",
+          "page": 417,
+          "score": 21.429280732573726
+        },
+        {
+          "id": "ug1399-2025.2-en-s0356-p0613-00",
+          "title": "cosim_design",
+          "page": 613,
+          "score": 20.556333618271825
+        },
+        {
+          "id": "ug1399-2025.2-en-s0280-p0469-00",
+          "title": "Dataflow Configuration",
+          "page": 469,
+          "score": 20.077671521143685
+        }
+      ],
+      "context_bytes": 7176,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "width",
+      "kind": "english_semantic",
+      "mode": "bm25",
+      "gold_titles": [
+        "Bit-Width Propagation",
+        "Overview of Arbitrary Precision Integer Data Types",
+        "Arithmetic Operators"
+      ],
+      "first_relevant_rank": 2,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0475-p0736-00",
+          "title": "C++ Arbitrary Precision Integer Types: Reference Information",
+          "page": 736,
+          "score": 27.731541195870022
+        },
+        {
+          "id": "ug1399-2025.2-en-s0098-p0149-00",
+          "title": "Bit-Width Propagation",
+          "page": 149,
+          "score": 26.01818657122712
+        },
+        {
+          "id": "ug1399-2025.2-en-s0474-p0733-00",
+          "title": "C++ Arbitrary Precision Integer Types",
+          "page": 733,
+          "score": 25.12607992185046
+        },
+        {
+          "id": "ug1399-2025.2-en-s0485-p0760-00",
+          "title": "C++ Arbitrary Precision Fixed-Point Types: Reference Information",
+          "page": 760,
+          "score": 23.97404835374582
+        },
+        {
+          "id": "ug1399-2025.2-en-s0494-p0769-00",
+          "title": "Class Methods, Operators, and Data Members",
+          "page": 769,
+          "score": 23.28281937455418
+        }
+      ],
+      "context_bytes": 7054,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "reset",
+      "kind": "english_semantic",
+      "mode": "bm25",
+      "gold_titles": [
+        "Statics",
+        "Initializing and Resetting Arrays",
+        "RTL Configuration"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0054-p0096-00",
+          "title": "Initializing and Resetting Arrays",
+          "page": 96,
+          "score": 26.292499041494178
+        },
+        {
+          "id": "ug1399-2025.2-en-s0076-p0125-00",
+          "title": "Statics",
+          "page": 125,
+          "score": 18.369225341564867
+        },
+        {
+          "id": "ug1399-2025.2-en-s0426-p0704-00",
+          "title": "set_directive_reset",
+          "page": 704,
+          "score": 18.27007337376554
+        },
+        {
+          "id": "ug1399-2025.2-en-s0171-p0254-00",
+          "title": "Controlling Initialization and Reset Behavior",
+          "page": 254,
+          "score": 17.5716575894944
+        },
+        {
+          "id": "ug1399-2025.2-en-s0344-p0599-00",
+          "title": "pragma HLS reset",
+          "page": 599,
+          "score": 16.765695009208564
+        }
+      ],
+      "context_bytes": 7524,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "partition",
+      "kind": "symbol",
+      "mode": "bm25",
+      "gold_titles": [
+        "pragma HLS array_partition"
+      ],
+      "first_relevant_rank": 3,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0294-p0493-00",
+          "title": "syn.directive.array_partition",
+          "page": 493,
+          "score": 41.05485894279853
+        },
+        {
+          "id": "ug1399-2025.2-en-s0406-p0663-00",
+          "title": "set_directive_array_partition",
+          "page": 663,
+          "score": 39.40151048009817
+        },
+        {
+          "id": "ug1399-2025.2-en-s0323-p0548-00",
+          "title": "pragma HLS array_partition",
+          "page": 548,
+          "score": 38.85713827814536
+        },
+        {
+          "id": "ug1399-2025.2-en-s0224-p0372-02",
+          "title": "Using Directives in Scripts vs. Pragmas in Code",
+          "page": 372,
+          "score": 34.7946375172131
+        },
+        {
+          "id": "ug1399-2025.2-en-s0147-p0221-00",
+          "title": "Improving HBM Bandwidth with Multiple M_AXI Interfaces",
+          "page": 221,
+          "score": 32.501530239597
+        }
+      ],
+      "context_bytes": 8120,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "interface",
+      "kind": "symbol",
+      "mode": "bm25",
+      "gold_titles": [
+        "pragma HLS interface",
+        "Offset and Modes of Operation"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0114-p0175-00",
+          "title": "Offset and Modes of Operation",
+          "page": 175,
+          "score": 31.096022496034607
+        },
+        {
+          "id": "ug1399-2025.2-en-s0395-p0649-01",
+          "title": "config_interface",
+          "page": 649,
+          "score": 28.345852747397508
+        },
+        {
+          "id": "ug1399-2025.2-en-s0417-p0690-00",
+          "title": "set_directive_interface",
+          "page": 690,
+          "score": 27.59935094351071
+        },
+        {
+          "id": "ug1399-2025.2-en-s0335-p0580-00",
+          "title": "pragma HLS interface",
+          "page": 580,
+          "score": 27.410480484471584
+        },
+        {
+          "id": "ug1399-2025.2-en-s0292-p0490-00",
+          "title": "syn.directive.alias",
+          "page": 490,
+          "score": 27.401871010672405
+        }
+      ],
+      "context_bytes": 8590,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "pipeline",
+      "kind": "symbol",
+      "mode": "bm25",
+      "gold_titles": [
+        "pragma HLS pipeline"
+      ],
+      "first_relevant_rank": 5,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0389-p0638-00",
+          "title": "config_compile",
+          "page": 638,
+          "score": 23.340627229812412
+        },
+        {
+          "id": "ug1399-2025.2-en-s0279-p0467-00",
+          "title": "Compile Options",
+          "page": 467,
+          "score": 21.754630609348563
+        },
+        {
+          "id": "ug1399-2025.2-en-s0038-p0071-01",
+          "title": "Flushing Pipelines and Pipeline Types",
+          "page": 71,
+          "score": 18.625737771722264
+        },
+        {
+          "id": "ug1399-2025.2-en-s0575-p0883-00",
+          "title": "Ch. 35: Deprecated and Unsupported Features",
+          "page": 883,
+          "score": 16.811653204494704
+        },
+        {
+          "id": "ug1399-2025.2-en-s0342-p0596-01",
+          "title": "pragma HLS pipeline",
+          "page": 596,
+          "score": 16.547168140812648
+        }
+      ],
+      "context_bytes": 8191,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "unroll",
+      "kind": "symbol",
+      "mode": "bm25",
+      "gold_titles": [
+        "pragma HLS unroll"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0348-p0606-00",
+          "title": "pragma HLS unroll",
+          "page": 606,
+          "score": 45.46012416804206
+        },
+        {
+          "id": "ug1399-2025.2-en-s0430-p0711-00",
+          "title": "set_directive_unroll",
+          "page": 711,
+          "score": 45.304276410404796
+        },
+        {
+          "id": "ug1399-2025.2-en-s0318-p0540-00",
+          "title": "syn.directive.unroll",
+          "page": 540,
+          "score": 41.98857436461567
+        },
+        {
+          "id": "ug1399-2025.2-en-s0040-p0079-00",
+          "title": "Unrolling Loops",
+          "page": 79,
+          "score": 27.25664578429423
+        },
+        {
+          "id": "ug1399-2025.2-en-s0147-p0221-01",
+          "title": "Improving HBM Bandwidth with Multiple M_AXI Interfaces",
+          "page": 221,
+          "score": 12.969832936898973
+        }
+      ],
+      "context_bytes": 6091,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "dependence",
+      "kind": "symbol",
+      "mode": "bm25",
+      "gold_titles": [
+        "pragma HLS dependence"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0330-p0567-00",
+          "title": "pragma HLS dependence",
+          "page": 567,
+          "score": 26.968124477652356
+        },
+        {
+          "id": "ug1399-2025.2-en-s0039-p0076-00",
+          "title": "Managing Pipeline Dependencies",
+          "page": 76,
+          "score": 21.4698872008133
+        },
+        {
+          "id": "ug1399-2025.2-en-s0412-p0680-00",
+          "title": "set_directive_dependence",
+          "page": 680,
+          "score": 20.05121459063571
+        },
+        {
+          "id": "ug1399-2025.2-en-s0300-p0510-00",
+          "title": "syn.directive.dependence",
+          "page": 510,
+          "score": 19.914038800798743
+        },
+        {
+          "id": "ug1399-2025.2-en-s0260-p0432-00",
+          "title": "Optimization Directives",
+          "page": 432,
+          "score": 16.897897730918082
+        }
+      ],
+      "context_bytes": 8118,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "bind_storage",
+      "kind": "symbol",
+      "mode": "bm25",
+      "gold_titles": [
+        "pragma HLS bind_storage"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0327-p0559-01",
+          "title": "pragma HLS bind_storage",
+          "page": 559,
+          "score": 50.70120590920679
+        },
+        {
+          "id": "ug1399-2025.2-en-s0297-p0503-00",
+          "title": "syn.directive.bind_storage",
+          "page": 503,
+          "score": 45.432596838584246
+        },
+        {
+          "id": "ug1399-2025.2-en-s0409-p0673-01",
+          "title": "set_directive_bind_storage",
+          "page": 673,
+          "score": 40.65047850835968
+        },
+        {
+          "id": "ug1399-2025.2-en-s0534-p0838-00",
+          "title": "Resource Usage",
+          "page": 838,
+          "score": 35.524833754352
+        },
+        {
+          "id": "ug1399-2025.2-en-s0305-p0521-00",
+          "title": "syn.directive.interface",
+          "page": 521,
+          "score": 35.17354938287128
+        }
+      ],
+      "context_bytes": 6108,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "array_reshape",
+      "kind": "symbol",
+      "mode": "bm25",
+      "gold_titles": [
+        "Array Reshaping",
+        "pragma HLS array_reshape",
+        "Array Partitioning"
+      ],
+      "first_relevant_rank": 2,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0295-p0494-00",
+          "title": "syn.directive.array_reshape",
+          "page": 494,
+          "score": 29.69883267194647
+        },
+        {
+          "id": "ug1399-2025.2-en-s0324-p0549-00",
+          "title": "pragma HLS array_reshape",
+          "page": 549,
+          "score": 29.69163615556001
+        },
+        {
+          "id": "ug1399-2025.2-en-s0407-p0664-00",
+          "title": "set_directive_array_reshape",
+          "page": 664,
+          "score": 25.315855479031796
+        },
+        {
+          "id": "ug1399-2025.2-en-s0294-p0492-00",
+          "title": "syn.directive.array_partition",
+          "page": 492,
+          "score": 24.328601135148322
+        },
+        {
+          "id": "ug1399-2025.2-en-s0406-p0662-00",
+          "title": "set_directive_array_partition",
+          "page": 662,
+          "score": 22.605847645554196
+        }
+      ],
+      "context_bytes": 5071,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "stream",
+      "kind": "code",
+      "mode": "bm25",
+      "gold_titles": [
+        "Blocking API",
+        "Blocking Read Methods",
+        "Blocking Write Methods"
+      ],
+      "first_relevant_rank": 5,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0518-p0806-00",
+          "title": "hls::stream.size() Method",
+          "page": 806,
+          "score": 32.38889616505007
+        },
+        {
+          "id": "ug1399-2025.2-en-s0511-p0802-00",
+          "title": "Deterministic Behavior",
+          "page": 802,
+          "score": 31.43012245896339
+        },
+        {
+          "id": "ug1399-2025.2-en-s0516-p0805-00",
+          "title": "hls::stream.empty() Method",
+          "page": 805,
+          "score": 27.061708114795003
+        },
+        {
+          "id": "ug1399-2025.2-en-s0505-p0796-01",
+          "title": "Ch. 24: HLS Stream Library",
+          "page": 796,
+          "score": 24.95712638699125
+        },
+        {
+          "id": "ug1399-2025.2-en-s0508-p0800-00",
+          "title": "Blocking API",
+          "page": 800,
+          "score": 24.95286230102357
+        }
+      ],
+      "context_bytes": 5342,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "range",
+      "kind": "code",
+      "mode": "bm25",
+      "gold_titles": [
+        "Other Class Methods, Operators, and Data Members"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0482-p0750-00",
+          "title": "Other Class Methods, Operators, and Data Members",
+          "page": 750,
+          "score": 36.83039888872565
+        },
+        {
+          "id": "ug1399-2025.2-en-s0494-p0779-00",
+          "title": "Class Methods, Operators, and Data Members",
+          "page": 779,
+          "score": 34.32848576538757
+        },
+        {
+          "id": "ug1399-2025.2-en-s0541-p0845-00",
+          "title": "Unsigned Inputs",
+          "page": 845,
+          "score": 21.593785515571042
+        },
+        {
+          "id": "ug1399-2025.2-en-s0474-p0734-01",
+          "title": "C++ Arbitrary Precision Integer Types",
+          "page": 734,
+          "score": 20.87753625858973
+        },
+        {
+          "id": "ug1399-2025.2-en-s0582-p0898-00",
+          "title": "Appx. B: Instruction/Operator Explanation",
+          "page": 898,
+          "score": 20.826789254266536
+        }
+      ],
+      "context_bytes": 7397,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "testbench",
+      "kind": "english_semantic",
+      "mode": "bm25",
+      "gold_titles": [
+        "Writing a Test Bench",
+        "Example Test Bench"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0232-p0380-00",
+          "title": "Writing a Test Bench",
+          "page": 380,
+          "score": 26.981260325604996
+        },
+        {
+          "id": "ug1399-2025.2-en-s0249-p0421-00",
+          "title": "Automatically Verifying the RTL",
+          "page": 421,
+          "score": 22.826170853850773
+        },
+        {
+          "id": "ug1399-2025.2-en-s0068-p0117-00",
+          "title": "C++ Classes and Templates",
+          "page": 117,
+          "score": 21.777131581109163
+        },
+        {
+          "id": "ug1399-2025.2-en-s0231-p0375-00",
+          "title": "Running C Simulation",
+          "page": 375,
+          "score": 21.51696088186421
+        },
+        {
+          "id": "ug1399-2025.2-en-s0233-p0383-00",
+          "title": "Example Test Bench",
+          "page": 383,
+          "score": 20.847647500663435
+        }
+      ],
+      "context_bytes": 7365,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "zh_state",
+      "kind": "chinese_crosslingual",
+      "mode": "bm25",
+      "gold_titles": [
+        "Statics"
+      ],
+      "first_relevant_rank": null,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_5": false,
+      "retrieved": [],
+      "context_bytes": 0,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "zh_malloc",
+      "kind": "chinese_crosslingual",
+      "mode": "bm25",
+      "gold_titles": [
+        "Dynamic Memory Usage"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0101-p0153-00",
+          "title": "Dynamic Memory Usage",
+          "page": 153,
+          "score": 10.433646957165378
+        },
+        {
+          "id": "ug1399-2025.2-en-s0056-p0099-00",
+          "title": "C Simulation with Arrays",
+          "page": 99,
+          "score": 9.33871131705305
+        },
+        {
+          "id": "ug1399-2025.2-en-s0319-p0542-00",
+          "title": "Ch. 17: HLS Pragmas",
+          "page": 542,
+          "score": 1.1729602067702838
+        },
+        {
+          "id": "ug1399-2025.2-en-s0466-p0728-00",
+          "title": "Sec. VI: Vitis HLS Libraries Reference",
+          "page": 728,
+          "score": 1.1669517935207114
+        },
+        {
+          "id": "ug1399-2025.2-en-s0529-p0826-00",
+          "title": "Tasks and Channels",
+          "page": 826,
+          "score": 1.1460035179629489
+        }
+      ],
+      "context_bytes": 6609,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "zh_partition",
+      "kind": "chinese_crosslingual",
+      "mode": "bm25",
+      "gold_titles": [
+        "pragma HLS array_partition",
+        "Array Partitioning"
+      ],
+      "first_relevant_rank": 2,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0294-p0493-01",
+          "title": "syn.directive.array_partition",
+          "page": 493,
+          "score": 30.158340642072176
+        },
+        {
+          "id": "ug1399-2025.2-en-s0323-p0548-01",
+          "title": "pragma HLS array_partition",
+          "page": 548,
+          "score": 28.333902658046195
+        },
+        {
+          "id": "ug1399-2025.2-en-s0406-p0663-00",
+          "title": "set_directive_array_partition",
+          "page": 663,
+          "score": 23.56960020518796
+        },
+        {
+          "id": "ug1399-2025.2-en-s0224-p0372-02",
+          "title": "Using Directives in Scripts vs. Pragmas in Code",
+          "page": 372,
+          "score": 20.995737006052877
+        },
+        {
+          "id": "ug1399-2025.2-en-s0324-p0552-00",
+          "title": "pragma HLS array_reshape",
+          "page": 552,
+          "score": 20.192880791615583
+        }
+      ],
+      "context_bytes": 4869,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "zh_recursion",
+      "kind": "chinese_crosslingual",
+      "mode": "bm25",
+      "gold_titles": [
+        "Recursive Functions"
+      ],
+      "first_relevant_rank": null,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_5": false,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0012-p0025-01",
+          "title": "Ch. 1: Design Principles",
+          "page": 25,
+          "score": 6.547521179956369
+        },
+        {
+          "id": "ug1399-2025.2-en-s0269-p0446-00",
+          "title": "L1 Library Wizard Flow",
+          "page": 446,
+          "score": 5.86725216546463
+        },
+        {
+          "id": "ug1399-2025.2-en-s0383-p0633-00",
+          "title": "set_part",
+          "page": 633,
+          "score": 5.80671689072776
+        },
+        {
+          "id": "ug1399-2025.2-en-s0149-p0225-00",
+          "title": "Vitis HLS Memory Layout Model",
+          "page": 225,
+          "score": 5.675901055721209
+        },
+        {
+          "id": "ug1399-2025.2-en-s0083-p0133-01",
+          "title": "Arbitrary Precision Floating-Point Library ap_float<int W, int E>",
+          "page": 133,
+          "score": 5.125870509730033
+        }
+      ],
+      "context_bytes": 6591,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "state",
+      "kind": "english_semantic",
+      "mode": "dense",
+      "gold_titles": [
+        "Statics"
+      ],
+      "first_relevant_rank": null,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_5": false,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0086-p0136-00",
+          "title": "Accumulation of ap_float<> Using ap_float_acc<> Helper Class",
+          "page": 136,
+          "score": 0.5412445068359375
+        },
+        {
+          "id": "ug1399-2025.2-en-s0542-p0845-00",
+          "title": "Accumulation",
+          "page": 845,
+          "score": 0.5340160131454468
+        },
+        {
+          "id": "ug1399-2025.2-en-s0087-p0136-00",
+          "title": "Using ap_float_acc<> Restrictions",
+          "page": 136,
+          "score": 0.4878656566143036
+        },
+        {
+          "id": "ug1399-2025.2-en-s0529-p0825-00",
+          "title": "Tasks and Channels",
+          "page": 825,
+          "score": 0.46724653244018555
+        },
+        {
+          "id": "ug1399-2025.2-en-s0347-p0604-00",
+          "title": "pragma HLS top",
+          "page": 604,
+          "score": 0.4647397994995117
+        }
+      ],
+      "context_bytes": 4933,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "malloc",
+      "kind": "english_semantic",
+      "mode": "dense",
+      "gold_titles": [
+        "Dynamic Memory Usage"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0101-p0152-00",
+          "title": "Dynamic Memory Usage",
+          "page": 152,
+          "score": 0.6530905961990356
+        },
+        {
+          "id": "ug1399-2025.2-en-s0322-p0547-00",
+          "title": "pragma HLS allocation",
+          "page": 547,
+          "score": 0.5448521375656128
+        },
+        {
+          "id": "ug1399-2025.2-en-s0056-p0099-00",
+          "title": "C Simulation with Arrays",
+          "page": 99,
+          "score": 0.5439286231994629
+        },
+        {
+          "id": "ug1399-2025.2-en-s0293-p0491-00",
+          "title": "syn.directive.allocation",
+          "page": 491,
+          "score": 0.5193660259246826
+        },
+        {
+          "id": "ug1399-2025.2-en-s0104-p0155-00",
+          "title": "Standard Template Libraries",
+          "page": 155,
+          "score": 0.5172970294952393
+        }
+      ],
+      "context_bytes": 5741,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "recursion",
+      "kind": "english_semantic",
+      "mode": "dense",
+      "gold_titles": [
+        "Recursive Functions"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0103-p0154-00",
+          "title": "Recursive Functions",
+          "page": 154,
+          "score": 0.7951796054840088
+        },
+        {
+          "id": "ug1399-2025.2-en-s0104-p0155-00",
+          "title": "Standard Template Libraries",
+          "page": 155,
+          "score": 0.6367244720458984
+        },
+        {
+          "id": "ug1399-2025.2-en-s0308-p0526-00",
+          "title": "syn.directive.loop_merge",
+          "page": 526,
+          "score": 0.617898166179657
+        },
+        {
+          "id": "ug1399-2025.2-en-s0309-p0526-01",
+          "title": "syn.directive.loop_tripcount",
+          "page": 526,
+          "score": 0.6082550883293152
+        },
+        {
+          "id": "ug1399-2025.2-en-s0334-p0576-00",
+          "title": "pragma HLS inline",
+          "page": 576,
+          "score": 0.6037734746932983
+        }
+      ],
+      "context_bytes": 3637,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "pointer",
+      "kind": "english_semantic",
+      "mode": "dense",
+      "gold_titles": [
+        "Pointer Limitations",
+        "Pointers on the Interface"
+      ],
+      "first_relevant_rank": 2,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0089-p0138-00",
+          "title": "Pointers",
+          "page": 138,
+          "score": 0.7182705402374268
+        },
+        {
+          "id": "ug1399-2025.2-en-s0090-p0140-00",
+          "title": "Pointers on the Interface",
+          "page": 140,
+          "score": 0.6929411292076111
+        },
+        {
+          "id": "ug1399-2025.2-en-s0091-p0140-00",
+          "title": "Basic Pointers",
+          "page": 140,
+          "score": 0.67071133852005
+        },
+        {
+          "id": "ug1399-2025.2-en-s0102-p0154-00",
+          "title": "Pointer Limitations",
+          "page": 154,
+          "score": 0.660617470741272
+        },
+        {
+          "id": "ug1399-2025.2-en-s0093-p0143-00",
+          "title": "Multi-Access Pointers on the Interface",
+          "page": 143,
+          "score": 0.6081609129905701
+        }
+      ],
+      "context_bytes": 6529,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "volatile",
+      "kind": "english_semantic",
+      "mode": "dense",
+      "gold_titles": [
+        "Understanding Volatile Data",
+        "Volatile",
+        "Multi-Access Pointers on the Interface"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0093-p0143-00",
+          "title": "Multi-Access Pointers on the Interface",
+          "page": 143,
+          "score": 0.631982684135437
+        },
+        {
+          "id": "ug1399-2025.2-en-s0096-p0148-00",
+          "title": "Multi-Access Pointers and RTL Simulation",
+          "page": 148,
+          "score": 0.6201434135437012
+        },
+        {
+          "id": "ug1399-2025.2-en-s0094-p0145-00",
+          "title": "Understanding Volatile Data",
+          "page": 145,
+          "score": 0.6128722429275513
+        },
+        {
+          "id": "ug1399-2025.2-en-s0537-p0841-01",
+          "title": "Limitations",
+          "page": 841,
+          "score": 0.6067838668823242
+        },
+        {
+          "id": "ug1399-2025.2-en-s0338-p0589-00",
+          "title": "pragma HLS loop_merge",
+          "page": 589,
+          "score": 0.605120062828064
+        }
+      ],
+      "context_bytes": 7381,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "fifo",
+      "kind": "english_semantic",
+      "mode": "dense",
+      "gold_titles": [
+        "FIFO Interfaces"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0052-p0094-00",
+          "title": "FIFO Interfaces",
+          "page": 94,
+          "score": 0.8123997449874878
+        },
+        {
+          "id": "ug1399-2025.2-en-s0145-p0218-00",
+          "title": "Port-Level I/O: Memory Interface Protocol",
+          "page": 218,
+          "score": 0.6969649791717529
+        },
+        {
+          "id": "ug1399-2025.2-en-s0092-p0142-00",
+          "title": "Pointer Arithmetic",
+          "page": 142,
+          "score": 0.6749433279037476
+        },
+        {
+          "id": "ug1399-2025.2-en-s0417-p0687-01",
+          "title": "set_directive_interface",
+          "page": 687,
+          "score": 0.6687496900558472
+        },
+        {
+          "id": "ug1399-2025.2-en-s0028-p0056-00",
+          "title": "Specifying Arrays as PIPOs or FIFOs",
+          "page": 56,
+          "score": 0.6659703254699707
+        }
+      ],
+      "context_bytes": 8515,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "loop_bound",
+      "kind": "english_semantic",
+      "mode": "dense",
+      "gold_titles": [
+        "Working with Variable Loop Bounds",
+        "Function Pipelining",
+        "Pipelining Loops"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0043-p0083-01",
+          "title": "Working with Variable Loop Bounds",
+          "page": 83,
+          "score": 0.8043906092643738
+        },
+        {
+          "id": "ug1399-2025.2-en-s0059-p0101-00",
+          "title": "Function Pipelining",
+          "page": 101,
+          "score": 0.7636829614639282
+        },
+        {
+          "id": "ug1399-2025.2-en-s0035-p0065-00",
+          "title": "Pipelining Loops",
+          "page": 65,
+          "score": 0.7089405059814453
+        },
+        {
+          "id": "ug1399-2025.2-en-s0036-p0067-00",
+          "title": "Automatic Loop Pipelining",
+          "page": 67,
+          "score": 0.6858416795730591
+        },
+        {
+          "id": "ug1399-2025.2-en-s0199-p0323-00",
+          "title": "Limitations of Pipelining with Static Variables",
+          "page": 323,
+          "score": 0.6685277223587036
+        }
+      ],
+      "context_bytes": 5308,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "deadlock",
+      "kind": "english_semantic",
+      "mode": "dense",
+      "gold_titles": [
+        "Cosim Deadlock Detection",
+        "Troubleshooting C/RTL Co-Simulation",
+        "Configuring Dataflow Memory Channels",
+        "Specifying Compiler-Created FIFO Depth"
+      ],
+      "first_relevant_rank": 3,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0392-p0644-00",
+          "title": "config_dataflow",
+          "page": 644,
+          "score": 0.8163073658943176
+        },
+        {
+          "id": "ug1399-2025.2-en-s0251-p0423-00",
+          "title": "Verification of DATAFLOW and DEPENDENCE",
+          "page": 423,
+          "score": 0.785007119178772
+        },
+        {
+          "id": "ug1399-2025.2-en-s0027-p0055-01",
+          "title": "Configuring Dataflow Memory Channels",
+          "page": 55,
+          "score": 0.7730973362922668
+        },
+        {
+          "id": "ug1399-2025.2-en-s0280-p0469-01",
+          "title": "Dataflow Configuration",
+          "page": 469,
+          "score": 0.7622891664505005
+        },
+        {
+          "id": "ug1399-2025.2-en-s0519-p0806-00",
+          "title": "Controlling the RTL FIFO Depth",
+          "page": 806,
+          "score": 0.7596623301506042
+        }
+      ],
+      "context_bytes": 4545,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "width",
+      "kind": "english_semantic",
+      "mode": "dense",
+      "gold_titles": [
+        "Bit-Width Propagation",
+        "Overview of Arbitrary Precision Integer Data Types",
+        "Arithmetic Operators"
+      ],
+      "first_relevant_rank": 5,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0474-p0733-00",
+          "title": "C++ Arbitrary Precision Integer Types",
+          "page": 733,
+          "score": 0.7266043424606323
+        },
+        {
+          "id": "ug1399-2025.2-en-s0494-p0769-00",
+          "title": "Class Methods, Operators, and Data Members",
+          "page": 769,
+          "score": 0.7078957557678223
+        },
+        {
+          "id": "ug1399-2025.2-en-s0481-p0742-00",
+          "title": "Class Methods and Operators",
+          "page": 742,
+          "score": 0.7040144205093384
+        },
+        {
+          "id": "ug1399-2025.2-en-s0475-p0736-00",
+          "title": "C++ Arbitrary Precision Integer Types: Reference Information",
+          "page": 736,
+          "score": 0.6953870058059692
+        },
+        {
+          "id": "ug1399-2025.2-en-s0098-p0149-00",
+          "title": "Bit-Width Propagation",
+          "page": 149,
+          "score": 0.6855109930038452
+        }
+      ],
+      "context_bytes": 7065,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "reset",
+      "kind": "english_semantic",
+      "mode": "dense",
+      "gold_titles": [
+        "Statics",
+        "Initializing and Resetting Arrays",
+        "RTL Configuration"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0054-p0096-00",
+          "title": "Initializing and Resetting Arrays",
+          "page": 96,
+          "score": 0.7778115272521973
+        },
+        {
+          "id": "ug1399-2025.2-en-s0171-p0256-00",
+          "title": "Controlling Initialization and Reset Behavior",
+          "page": 256,
+          "score": 0.6368141770362854
+        },
+        {
+          "id": "ug1399-2025.2-en-s0172-p0256-00",
+          "title": "Initialization Behavior",
+          "page": 256,
+          "score": 0.6087785959243774
+        },
+        {
+          "id": "ug1399-2025.2-en-s0076-p0125-00",
+          "title": "Statics",
+          "page": 125,
+          "score": 0.5971966981887817
+        },
+        {
+          "id": "ug1399-2025.2-en-s0426-p0705-01",
+          "title": "set_directive_reset",
+          "page": 705,
+          "score": 0.5816047787666321
+        }
+      ],
+      "context_bytes": 5942,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "partition",
+      "kind": "symbol",
+      "mode": "dense",
+      "gold_titles": [
+        "pragma HLS array_partition"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0323-p0548-00",
+          "title": "pragma HLS array_partition",
+          "page": 548,
+          "score": 0.8916064500808716
+        },
+        {
+          "id": "ug1399-2025.2-en-s0294-p0493-00",
+          "title": "syn.directive.array_partition",
+          "page": 493,
+          "score": 0.8658571839332581
+        },
+        {
+          "id": "ug1399-2025.2-en-s0406-p0663-00",
+          "title": "set_directive_array_partition",
+          "page": 663,
+          "score": 0.844798743724823
+        },
+        {
+          "id": "ug1399-2025.2-en-s0295-p0495-00",
+          "title": "syn.directive.array_reshape",
+          "page": 495,
+          "score": 0.7895586490631104
+        },
+        {
+          "id": "ug1399-2025.2-en-s0324-p0551-00",
+          "title": "pragma HLS array_reshape",
+          "page": 551,
+          "score": 0.7778462171554565
+        }
+      ],
+      "context_bytes": 9807,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "interface",
+      "kind": "symbol",
+      "mode": "dense",
+      "gold_titles": [
+        "pragma HLS interface",
+        "Offset and Modes of Operation"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0114-p0175-01",
+          "title": "Offset and Modes of Operation",
+          "page": 175,
+          "score": 0.8281817436218262
+        },
+        {
+          "id": "ug1399-2025.2-en-s0417-p0690-00",
+          "title": "set_directive_interface",
+          "page": 690,
+          "score": 0.7598499059677124
+        },
+        {
+          "id": "ug1399-2025.2-en-s0282-p0475-00",
+          "title": "Interface Configuration",
+          "page": 475,
+          "score": 0.7402323484420776
+        },
+        {
+          "id": "ug1399-2025.2-en-s0305-p0520-00",
+          "title": "syn.directive.interface",
+          "page": 520,
+          "score": 0.7358903884887695
+        },
+        {
+          "id": "ug1399-2025.2-en-s0292-p0490-00",
+          "title": "syn.directive.alias",
+          "page": 490,
+          "score": 0.7165548205375671
+        }
+      ],
+      "context_bytes": 7970,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "pipeline",
+      "kind": "symbol",
+      "mode": "dense",
+      "gold_titles": [
+        "pragma HLS pipeline"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0342-p0596-01",
+          "title": "pragma HLS pipeline",
+          "page": 596,
+          "score": 0.8097729682922363
+        },
+        {
+          "id": "ug1399-2025.2-en-s0038-p0071-00",
+          "title": "Flushing Pipelines and Pipeline Types",
+          "page": 71,
+          "score": 0.7423180341720581
+        },
+        {
+          "id": "ug1399-2025.2-en-s0312-p0531-00",
+          "title": "syn.directive.pipeline",
+          "page": 531,
+          "score": 0.7396682500839233
+        },
+        {
+          "id": "ug1399-2025.2-en-s0279-p0467-01",
+          "title": "Compile Options",
+          "page": 467,
+          "score": 0.7332438230514526
+        },
+        {
+          "id": "ug1399-2025.2-en-s0389-p0638-00",
+          "title": "config_compile",
+          "page": 638,
+          "score": 0.7312614917755127
+        }
+      ],
+      "context_bytes": 6663,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "unroll",
+      "kind": "symbol",
+      "mode": "dense",
+      "gold_titles": [
+        "pragma HLS unroll"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0348-p0606-00",
+          "title": "pragma HLS unroll",
+          "page": 606,
+          "score": 0.8651127815246582
+        },
+        {
+          "id": "ug1399-2025.2-en-s0430-p0711-00",
+          "title": "set_directive_unroll",
+          "page": 711,
+          "score": 0.8472858667373657
+        },
+        {
+          "id": "ug1399-2025.2-en-s0318-p0540-00",
+          "title": "syn.directive.unroll",
+          "page": 540,
+          "score": 0.7946488857269287
+        },
+        {
+          "id": "ug1399-2025.2-en-s0040-p0079-00",
+          "title": "Unrolling Loops",
+          "page": 79,
+          "score": 0.7409908771514893
+        },
+        {
+          "id": "ug1399-2025.2-en-s0289-p0487-00",
+          "title": "Unroll Setting",
+          "page": 487,
+          "score": 0.72464919090271
+        }
+      ],
+      "context_bytes": 5975,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "dependence",
+      "kind": "symbol",
+      "mode": "dense",
+      "gold_titles": [
+        "pragma HLS dependence"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0330-p0567-00",
+          "title": "pragma HLS dependence",
+          "page": 567,
+          "score": 0.8423027992248535
+        },
+        {
+          "id": "ug1399-2025.2-en-s0300-p0509-00",
+          "title": "syn.directive.dependence",
+          "page": 509,
+          "score": 0.7798224687576294
+        },
+        {
+          "id": "ug1399-2025.2-en-s0039-p0076-00",
+          "title": "Managing Pipeline Dependencies",
+          "page": 76,
+          "score": 0.7619037628173828
+        },
+        {
+          "id": "ug1399-2025.2-en-s0412-p0679-00",
+          "title": "set_directive_dependence",
+          "page": 679,
+          "score": 0.7408870458602905
+        },
+        {
+          "id": "ug1399-2025.2-en-s0577-p0887-00",
+          "title": "Pragmas",
+          "page": 887,
+          "score": 0.647280752658844
+        }
+      ],
+      "context_bytes": 8326,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "bind_storage",
+      "kind": "symbol",
+      "mode": "dense",
+      "gold_titles": [
+        "pragma HLS bind_storage"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0327-p0559-01",
+          "title": "pragma HLS bind_storage",
+          "page": 559,
+          "score": 0.8345652222633362
+        },
+        {
+          "id": "ug1399-2025.2-en-s0297-p0503-01",
+          "title": "syn.directive.bind_storage",
+          "page": 503,
+          "score": 0.8001145720481873
+        },
+        {
+          "id": "ug1399-2025.2-en-s0409-p0673-01",
+          "title": "set_directive_bind_storage",
+          "page": 673,
+          "score": 0.7779094576835632
+        },
+        {
+          "id": "ug1399-2025.2-en-s0305-p0521-00",
+          "title": "syn.directive.interface",
+          "page": 521,
+          "score": 0.6699657440185547
+        },
+        {
+          "id": "ug1399-2025.2-en-s0534-p0838-00",
+          "title": "Resource Usage",
+          "page": 838,
+          "score": 0.6662734746932983
+        }
+      ],
+      "context_bytes": 4821,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "array_reshape",
+      "kind": "symbol",
+      "mode": "dense",
+      "gold_titles": [
+        "Array Reshaping",
+        "pragma HLS array_reshape",
+        "Array Partitioning"
+      ],
+      "first_relevant_rank": 3,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0295-p0494-00",
+          "title": "syn.directive.array_reshape",
+          "page": 494,
+          "score": 0.8023090958595276
+        },
+        {
+          "id": "ug1399-2025.2-en-s0407-p0664-00",
+          "title": "set_directive_array_reshape",
+          "page": 664,
+          "score": 0.7831994891166687
+        },
+        {
+          "id": "ug1399-2025.2-en-s0324-p0551-01",
+          "title": "pragma HLS array_reshape",
+          "page": 551,
+          "score": 0.7789059281349182
+        },
+        {
+          "id": "ug1399-2025.2-en-s0049-p0090-00",
+          "title": "Array Reshaping",
+          "page": 90,
+          "score": 0.750248908996582
+        },
+        {
+          "id": "ug1399-2025.2-en-s0406-p0662-00",
+          "title": "set_directive_array_partition",
+          "page": 662,
+          "score": 0.7486974000930786
+        }
+      ],
+      "context_bytes": 4985,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "stream",
+      "kind": "code",
+      "mode": "dense",
+      "gold_titles": [
+        "Blocking API",
+        "Blocking Read Methods",
+        "Blocking Write Methods"
+      ],
+      "first_relevant_rank": 5,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0511-p0802-00",
+          "title": "Deterministic Behavior",
+          "page": 802,
+          "score": 0.790681004524231
+        },
+        {
+          "id": "ug1399-2025.2-en-s0518-p0806-00",
+          "title": "hls::stream.size() Method",
+          "page": 806,
+          "score": 0.7648032307624817
+        },
+        {
+          "id": "ug1399-2025.2-en-s0516-p0805-00",
+          "title": "hls::stream.empty() Method",
+          "page": 805,
+          "score": 0.7645257711410522
+        },
+        {
+          "id": "ug1399-2025.2-en-s0505-p0797-00",
+          "title": "Ch. 24: HLS Stream Library",
+          "page": 797,
+          "score": 0.7601094245910645
+        },
+        {
+          "id": "ug1399-2025.2-en-s0508-p0800-00",
+          "title": "Blocking API",
+          "page": 800,
+          "score": 0.7247970104217529
+        }
+      ],
+      "context_bytes": 5071,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "range",
+      "kind": "code",
+      "mode": "dense",
+      "gold_titles": [
+        "Other Class Methods, Operators, and Data Members"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0482-p0750-00",
+          "title": "Other Class Methods, Operators, and Data Members",
+          "page": 750,
+          "score": 0.7363492846488953
+        },
+        {
+          "id": "ug1399-2025.2-en-s0494-p0779-00",
+          "title": "Class Methods, Operators, and Data Members",
+          "page": 779,
+          "score": 0.6893632411956787
+        },
+        {
+          "id": "ug1399-2025.2-en-s0453-p0722-00",
+          "title": "X<DUT>_Get_ARG_BitWidth",
+          "page": 722,
+          "score": 0.5726001262664795
+        },
+        {
+          "id": "ug1399-2025.2-en-s0473-p0733-00",
+          "title": "Example Using ap_fixed",
+          "page": 733,
+          "score": 0.5409291386604309
+        },
+        {
+          "id": "ug1399-2025.2-en-s0481-p0745-00",
+          "title": "Class Methods and Operators",
+          "page": 745,
+          "score": 0.5327023267745972
+        }
+      ],
+      "context_bytes": 7292,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "testbench",
+      "kind": "english_semantic",
+      "mode": "dense",
+      "gold_titles": [
+        "Writing a Test Bench",
+        "Example Test Bench"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0233-p0383-00",
+          "title": "Example Test Bench",
+          "page": 383,
+          "score": 0.7941772937774658
+        },
+        {
+          "id": "ug1399-2025.2-en-s0232-p0380-00",
+          "title": "Writing a Test Bench",
+          "page": 380,
+          "score": 0.7627301812171936
+        },
+        {
+          "id": "ug1399-2025.2-en-s0261-p0432-00",
+          "title": "C Test Bench and C Source Code",
+          "page": 432,
+          "score": 0.6863155364990234
+        },
+        {
+          "id": "ug1399-2025.2-en-s0249-p0421-01",
+          "title": "Automatically Verifying the RTL",
+          "page": 421,
+          "score": 0.6633815765380859
+        },
+        {
+          "id": "ug1399-2025.2-en-s0501-p0792-00",
+          "title": "Verification Option 1: Standard Math Library and Verify Differences",
+          "page": 792,
+          "score": 0.6383352279663086
+        }
+      ],
+      "context_bytes": 6975,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "zh_state",
+      "kind": "chinese_crosslingual",
+      "mode": "dense",
+      "gold_titles": [
+        "Statics"
+      ],
+      "first_relevant_rank": 4,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0285-p0483-01",
+          "title": "RTL Configuration",
+          "page": 483,
+          "score": 0.5452724695205688
+        },
+        {
+          "id": "ug1399-2025.2-en-s0158-p0246-00",
+          "title": "Continuously Running Mode",
+          "page": 246,
+          "score": 0.5450026988983154
+        },
+        {
+          "id": "ug1399-2025.2-en-s0542-p0845-00",
+          "title": "Accumulation",
+          "page": 845,
+          "score": 0.5409814715385437
+        },
+        {
+          "id": "ug1399-2025.2-en-s0076-p0125-00",
+          "title": "Statics",
+          "page": 125,
+          "score": 0.5380613803863525
+        },
+        {
+          "id": "ug1399-2025.2-en-s0172-p0256-00",
+          "title": "Initialization Behavior",
+          "page": 256,
+          "score": 0.5285803079605103
+        }
+      ],
+      "context_bytes": 3986,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "zh_malloc",
+      "kind": "chinese_crosslingual",
+      "mode": "dense",
+      "gold_titles": [
+        "Dynamic Memory Usage"
+      ],
+      "first_relevant_rank": 2,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0322-p0546-01",
+          "title": "pragma HLS allocation",
+          "page": 546,
+          "score": 0.6751884818077087
+        },
+        {
+          "id": "ug1399-2025.2-en-s0101-p0152-00",
+          "title": "Dynamic Memory Usage",
+          "page": 152,
+          "score": 0.6715162396430969
+        },
+        {
+          "id": "ug1399-2025.2-en-s0045-p0085-00",
+          "title": "Mapping Software Arrays to Hardware Memory",
+          "page": 85,
+          "score": 0.6153606176376343
+        },
+        {
+          "id": "ug1399-2025.2-en-s0056-p0098-01",
+          "title": "C Simulation with Arrays",
+          "page": 98,
+          "score": 0.614425539970398
+        },
+        {
+          "id": "ug1399-2025.2-en-s0297-p0500-00",
+          "title": "syn.directive.bind_storage",
+          "page": 500,
+          "score": 0.6051912307739258
+        }
+      ],
+      "context_bytes": 6355,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "zh_partition",
+      "kind": "chinese_crosslingual",
+      "mode": "dense",
+      "gold_titles": [
+        "pragma HLS array_partition",
+        "Array Partitioning"
+      ],
+      "first_relevant_rank": 3,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0406-p0663-00",
+          "title": "set_directive_array_partition",
+          "page": 663,
+          "score": 0.8564726114273071
+        },
+        {
+          "id": "ug1399-2025.2-en-s0294-p0493-00",
+          "title": "syn.directive.array_partition",
+          "page": 493,
+          "score": 0.8452092409133911
+        },
+        {
+          "id": "ug1399-2025.2-en-s0047-p0090-00",
+          "title": "Array Partitioning",
+          "page": 90,
+          "score": 0.8375624418258667
+        },
+        {
+          "id": "ug1399-2025.2-en-s0323-p0548-00",
+          "title": "pragma HLS array_partition",
+          "page": 548,
+          "score": 0.8259421586990356
+        },
+        {
+          "id": "ug1399-2025.2-en-s0295-p0495-00",
+          "title": "syn.directive.array_reshape",
+          "page": 495,
+          "score": 0.7674461603164673
+        }
+      ],
+      "context_bytes": 9046,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "zh_recursion",
+      "kind": "chinese_crosslingual",
+      "mode": "dense",
+      "gold_titles": [
+        "Recursive Functions"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0103-p0154-00",
+          "title": "Recursive Functions",
+          "page": 154,
+          "score": 0.6796283721923828
+        },
+        {
+          "id": "ug1399-2025.2-en-s0218-p0359-01",
+          "title": "JSON File for RTL Blackbox",
+          "page": 359,
+          "score": 0.5587303638458252
+        },
+        {
+          "id": "ug1399-2025.2-en-s0416-p0686-00",
+          "title": "set_directive_inline",
+          "page": 686,
+          "score": 0.5383453965187073
+        },
+        {
+          "id": "ug1399-2025.2-en-s0175-p0266-02",
+          "title": "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+          "page": 266,
+          "score": 0.5356223583221436
+        },
+        {
+          "id": "ug1399-2025.2-en-s0018-p0037-00",
+          "title": "Conclusion - A Prescription for Performance",
+          "page": 37,
+          "score": 0.5291538834571838
+        }
+      ],
+      "context_bytes": 6044,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "state",
+      "kind": "english_semantic",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Statics"
+      ],
+      "first_relevant_rank": 2,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0086-p0135-00",
+          "title": "Accumulation of ap_float<> Using ap_float_acc<> Helper Class",
+          "page": 135,
+          "score": 0.03149801587301587
+        },
+        {
+          "id": "ug1399-2025.2-en-s0076-p0125-00",
+          "title": "Statics",
+          "page": 125,
+          "score": 0.028283227848101264
+        },
+        {
+          "id": "ug1399-2025.2-en-s0178-p0272-01",
+          "title": "Extracting Control Logic and Implementing I/O Ports Example",
+          "page": 272,
+          "score": 0.02782608695652174
+        },
+        {
+          "id": "ug1399-2025.2-en-s0063-p0109-00",
+          "title": "Floats and Doubles",
+          "page": 109,
+          "score": 0.024184149184149184
+        },
+        {
+          "id": "ug1399-2025.2-en-s0054-p0096-00",
+          "title": "Initializing and Resetting Arrays",
+          "page": 96,
+          "score": 0.01639344262295082
+        }
+      ],
+      "context_bytes": 7853,
+      "search_seconds": 0.015
+    },
+    {
+      "query_id": "malloc",
+      "kind": "english_semantic",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Dynamic Memory Usage"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0101-p0152-00",
+          "title": "Dynamic Memory Usage",
+          "page": 152,
+          "score": 0.03278688524590164
+        },
+        {
+          "id": "ug1399-2025.2-en-s0056-p0099-00",
+          "title": "C Simulation with Arrays",
+          "page": 99,
+          "score": 0.028612012987012988
+        },
+        {
+          "id": "ug1399-2025.2-en-s0146-p0220-00",
+          "title": "Programming Model for Multi-Port Access in HBM",
+          "page": 220,
+          "score": 0.016129032258064516
+        },
+        {
+          "id": "ug1399-2025.2-en-s0014-p0028-00",
+          "title": "Producer-Consumer Paradigm",
+          "page": 28,
+          "score": 0.015873015873015872
+        },
+        {
+          "id": "ug1399-2025.2-en-s0322-p0547-00",
+          "title": "pragma HLS allocation",
+          "page": 547,
+          "score": 0.015873015873015872
+        }
+      ],
+      "context_bytes": 6906,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "recursion",
+      "kind": "english_semantic",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Recursive Functions"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0103-p0154-00",
+          "title": "Recursive Functions",
+          "page": 154,
+          "score": 0.03278688524590164
+        },
+        {
+          "id": "ug1399-2025.2-en-s0104-p0155-00",
+          "title": "Standard Template Libraries",
+          "page": 155,
+          "score": 0.03200204813108039
+        },
+        {
+          "id": "ug1399-2025.2-en-s0334-p0575-00",
+          "title": "pragma HLS inline",
+          "page": 575,
+          "score": 0.030117753623188408
+        },
+        {
+          "id": "ug1399-2025.2-en-s0304-p0515-00",
+          "title": "syn.directive.inline",
+          "page": 515,
+          "score": 0.02946912242686891
+        },
+        {
+          "id": "ug1399-2025.2-en-s0071-p0120-00",
+          "title": "Using Templates to Create Unique Instances",
+          "page": 120,
+          "score": 0.02832415420928403
+        }
+      ],
+      "context_bytes": 7106,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "pointer",
+      "kind": "english_semantic",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Pointer Limitations",
+        "Pointers on the Interface"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0090-p0140-00",
+          "title": "Pointers on the Interface",
+          "page": 140,
+          "score": 0.03252247488101534
+        },
+        {
+          "id": "ug1399-2025.2-en-s0102-p0154-00",
+          "title": "Pointer Limitations",
+          "page": 154,
+          "score": 0.031754032258064516
+        },
+        {
+          "id": "ug1399-2025.2-en-s0089-p0138-00",
+          "title": "Pointers",
+          "page": 138,
+          "score": 0.031544957774465976
+        },
+        {
+          "id": "ug1399-2025.2-en-s0091-p0140-00",
+          "title": "Basic Pointers",
+          "page": 140,
+          "score": 0.03057889822595705
+        },
+        {
+          "id": "ug1399-2025.2-en-s0093-p0143-00",
+          "title": "Multi-Access Pointers on the Interface",
+          "page": 143,
+          "score": 0.030536130536130537
+        }
+      ],
+      "context_bytes": 6529,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "volatile",
+      "kind": "english_semantic",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Understanding Volatile Data",
+        "Volatile",
+        "Multi-Access Pointers on the Interface"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0094-p0145-00",
+          "title": "Understanding Volatile Data",
+          "page": 145,
+          "score": 0.032266458495966696
+        },
+        {
+          "id": "ug1399-2025.2-en-s0093-p0143-00",
+          "title": "Multi-Access Pointers on the Interface",
+          "page": 143,
+          "score": 0.031544957774465976
+        },
+        {
+          "id": "ug1399-2025.2-en-s0096-p0148-00",
+          "title": "Multi-Access Pointers and RTL Simulation",
+          "page": 148,
+          "score": 0.0315136476426799
+        },
+        {
+          "id": "ug1399-2025.2-en-s0095-p0147-00",
+          "title": "Modeling Streaming Data Interfaces",
+          "page": 147,
+          "score": 0.028594771241830064
+        },
+        {
+          "id": "ug1399-2025.2-en-s0308-p0525-00",
+          "title": "syn.directive.loop_merge",
+          "page": 525,
+          "score": 0.026356857985087564
+        }
+      ],
+      "context_bytes": 8938,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "fifo",
+      "kind": "english_semantic",
+      "mode": "hybrid",
+      "gold_titles": [
+        "FIFO Interfaces"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0052-p0094-00",
+          "title": "FIFO Interfaces",
+          "page": 94,
+          "score": 0.03278688524590164
+        },
+        {
+          "id": "ug1399-2025.2-en-s0145-p0218-00",
+          "title": "Port-Level I/O: Memory Interface Protocol",
+          "page": 218,
+          "score": 0.03200204813108039
+        },
+        {
+          "id": "ug1399-2025.2-en-s0417-p0687-01",
+          "title": "set_directive_interface",
+          "page": 687,
+          "score": 0.031024531024531024
+        },
+        {
+          "id": "ug1399-2025.2-en-s0335-p0577-01",
+          "title": "pragma HLS interface",
+          "page": 577,
+          "score": 0.028665028665028666
+        },
+        {
+          "id": "ug1399-2025.2-en-s0028-p0056-00",
+          "title": "Specifying Arrays as PIPOs or FIFOs",
+          "page": 56,
+          "score": 0.026973565905412694
+        }
+      ],
+      "context_bytes": 7797,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "loop_bound",
+      "kind": "english_semantic",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Working with Variable Loop Bounds",
+        "Function Pipelining",
+        "Pipelining Loops"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0043-p0083-01",
+          "title": "Working with Variable Loop Bounds",
+          "page": 83,
+          "score": 0.03252247488101534
+        },
+        {
+          "id": "ug1399-2025.2-en-s0035-p0065-00",
+          "title": "Pipelining Loops",
+          "page": 65,
+          "score": 0.032266458495966696
+        },
+        {
+          "id": "ug1399-2025.2-en-s0059-p0101-00",
+          "title": "Function Pipelining",
+          "page": 101,
+          "score": 0.03200204813108039
+        },
+        {
+          "id": "ug1399-2025.2-en-s0036-p0067-00",
+          "title": "Automatic Loop Pipelining",
+          "page": 67,
+          "score": 0.029138513513513514
+        },
+        {
+          "id": "ug1399-2025.2-en-s0037-p0068-00",
+          "title": "Rewinding Pipelined Loops for Performance",
+          "page": 68,
+          "score": 0.026334026334026334
+        }
+      ],
+      "context_bytes": 5521,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "deadlock",
+      "kind": "english_semantic",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Cosim Deadlock Detection",
+        "Troubleshooting C/RTL Co-Simulation",
+        "Configuring Dataflow Memory Channels",
+        "Specifying Compiler-Created FIFO Depth"
+      ],
+      "first_relevant_rank": 3,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0392-p0644-00",
+          "title": "config_dataflow",
+          "page": 644,
+          "score": 0.03278688524590164
+        },
+        {
+          "id": "ug1399-2025.2-en-s0251-p0423-00",
+          "title": "Verification of DATAFLOW and DEPENDENCE",
+          "page": 423,
+          "score": 0.03225806451612903
+        },
+        {
+          "id": "ug1399-2025.2-en-s0027-p0055-01",
+          "title": "Configuring Dataflow Memory Channels",
+          "page": 55,
+          "score": 0.030798389007344232
+        },
+        {
+          "id": "ug1399-2025.2-en-s0280-p0469-00",
+          "title": "Dataflow Configuration",
+          "page": 469,
+          "score": 0.029236022193768675
+        },
+        {
+          "id": "ug1399-2025.2-en-s0316-p0537-00",
+          "title": "syn.directive.stream",
+          "page": 537,
+          "score": 0.02900988017658188
+        }
+      ],
+      "context_bytes": 6768,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "width",
+      "kind": "english_semantic",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Bit-Width Propagation",
+        "Overview of Arbitrary Precision Integer Data Types",
+        "Arithmetic Operators"
+      ],
+      "first_relevant_rank": 3,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0474-p0733-00",
+          "title": "C++ Arbitrary Precision Integer Types",
+          "page": 733,
+          "score": 0.032266458495966696
+        },
+        {
+          "id": "ug1399-2025.2-en-s0475-p0736-00",
+          "title": "C++ Arbitrary Precision Integer Types: Reference Information",
+          "page": 736,
+          "score": 0.032018442622950824
+        },
+        {
+          "id": "ug1399-2025.2-en-s0098-p0149-00",
+          "title": "Bit-Width Propagation",
+          "page": 149,
+          "score": 0.0315136476426799
+        },
+        {
+          "id": "ug1399-2025.2-en-s0494-p0769-00",
+          "title": "Class Methods, Operators, and Data Members",
+          "page": 769,
+          "score": 0.0315136476426799
+        },
+        {
+          "id": "ug1399-2025.2-en-s0468-p0730-00",
+          "title": "Ch. 21: Arbitrary Precision Data Types Library",
+          "page": 730,
+          "score": 0.028370221327967807
+        }
+      ],
+      "context_bytes": 6500,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "reset",
+      "kind": "english_semantic",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Statics",
+        "Initializing and Resetting Arrays",
+        "RTL Configuration"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0054-p0096-00",
+          "title": "Initializing and Resetting Arrays",
+          "page": 96,
+          "score": 0.03278688524590164
+        },
+        {
+          "id": "ug1399-2025.2-en-s0076-p0125-00",
+          "title": "Statics",
+          "page": 125,
+          "score": 0.031024531024531024
+        },
+        {
+          "id": "ug1399-2025.2-en-s0172-p0256-00",
+          "title": "Initialization Behavior",
+          "page": 256,
+          "score": 0.029877369007803793
+        },
+        {
+          "id": "ug1399-2025.2-en-s0344-p0599-00",
+          "title": "pragma HLS reset",
+          "page": 599,
+          "score": 0.02964426877470356
+        },
+        {
+          "id": "ug1399-2025.2-en-s0171-p0256-00",
+          "title": "Controlling Initialization and Reset Behavior",
+          "page": 256,
+          "score": 0.0293236301369863
+        }
+      ],
+      "context_bytes": 7172,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "partition",
+      "kind": "symbol",
+      "mode": "hybrid",
+      "gold_titles": [
+        "pragma HLS array_partition"
+      ],
+      "first_relevant_rank": 2,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0294-p0493-00",
+          "title": "syn.directive.array_partition",
+          "page": 493,
+          "score": 0.03252247488101534
+        },
+        {
+          "id": "ug1399-2025.2-en-s0323-p0548-00",
+          "title": "pragma HLS array_partition",
+          "page": 548,
+          "score": 0.032266458495966696
+        },
+        {
+          "id": "ug1399-2025.2-en-s0406-p0663-00",
+          "title": "set_directive_array_partition",
+          "page": 663,
+          "score": 0.03200204813108039
+        },
+        {
+          "id": "ug1399-2025.2-en-s0324-p0551-00",
+          "title": "pragma HLS array_reshape",
+          "page": 551,
+          "score": 0.028577260665441927
+        },
+        {
+          "id": "ug1399-2025.2-en-s0295-p0495-00",
+          "title": "syn.directive.array_reshape",
+          "page": 495,
+          "score": 0.027425373134328357
+        }
+      ],
+      "context_bytes": 9807,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "interface",
+      "kind": "symbol",
+      "mode": "hybrid",
+      "gold_titles": [
+        "pragma HLS interface",
+        "Offset and Modes of Operation"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0114-p0175-00",
+          "title": "Offset and Modes of Operation",
+          "page": 175,
+          "score": 0.03252247488101534
+        },
+        {
+          "id": "ug1399-2025.2-en-s0417-p0690-00",
+          "title": "set_directive_interface",
+          "page": 690,
+          "score": 0.03149801587301587
+        },
+        {
+          "id": "ug1399-2025.2-en-s0395-p0649-01",
+          "title": "config_interface",
+          "page": 649,
+          "score": 0.030621785881252923
+        },
+        {
+          "id": "ug1399-2025.2-en-s0292-p0490-00",
+          "title": "syn.directive.alias",
+          "page": 490,
+          "score": 0.029857397504456328
+        },
+        {
+          "id": "ug1399-2025.2-en-s0282-p0475-00",
+          "title": "Interface Configuration",
+          "page": 475,
+          "score": 0.029273504273504274
+        }
+      ],
+      "context_bytes": 8607,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "pipeline",
+      "kind": "symbol",
+      "mode": "hybrid",
+      "gold_titles": [
+        "pragma HLS pipeline"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0342-p0596-01",
+          "title": "pragma HLS pipeline",
+          "page": 596,
+          "score": 0.03177805800756621
+        },
+        {
+          "id": "ug1399-2025.2-en-s0389-p0638-00",
+          "title": "config_compile",
+          "page": 638,
+          "score": 0.03177805800756621
+        },
+        {
+          "id": "ug1399-2025.2-en-s0038-p0071-01",
+          "title": "Flushing Pipelines and Pipeline Types",
+          "page": 71,
+          "score": 0.03036576949620428
+        },
+        {
+          "id": "ug1399-2025.2-en-s0279-p0467-01",
+          "title": "Compile Options",
+          "page": 467,
+          "score": 0.030330882352941176
+        },
+        {
+          "id": "ug1399-2025.2-en-s0312-p0531-00",
+          "title": "syn.directive.pipeline",
+          "page": 531,
+          "score": 0.029206349206349208
+        }
+      ],
+      "context_bytes": 7178,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "unroll",
+      "kind": "symbol",
+      "mode": "hybrid",
+      "gold_titles": [
+        "pragma HLS unroll"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0348-p0606-00",
+          "title": "pragma HLS unroll",
+          "page": 606,
+          "score": 0.03278688524590164
+        },
+        {
+          "id": "ug1399-2025.2-en-s0430-p0711-00",
+          "title": "set_directive_unroll",
+          "page": 711,
+          "score": 0.03200204813108039
+        },
+        {
+          "id": "ug1399-2025.2-en-s0318-p0540-00",
+          "title": "syn.directive.unroll",
+          "page": 540,
+          "score": 0.031024531024531024
+        },
+        {
+          "id": "ug1399-2025.2-en-s0040-p0079-00",
+          "title": "Unrolling Loops",
+          "page": 79,
+          "score": 0.029631255487269532
+        },
+        {
+          "id": "ug1399-2025.2-en-s0223-p0371-00",
+          "title": "Conditional Control of Pragmas",
+          "page": 371,
+          "score": 0.0259915611814346
+        }
+      ],
+      "context_bytes": 6912,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "dependence",
+      "kind": "symbol",
+      "mode": "hybrid",
+      "gold_titles": [
+        "pragma HLS dependence"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0330-p0567-00",
+          "title": "pragma HLS dependence",
+          "page": 567,
+          "score": 0.03278688524590164
+        },
+        {
+          "id": "ug1399-2025.2-en-s0039-p0076-00",
+          "title": "Managing Pipeline Dependencies",
+          "page": 76,
+          "score": 0.030776515151515152
+        },
+        {
+          "id": "ug1399-2025.2-en-s0300-p0509-00",
+          "title": "syn.directive.dependence",
+          "page": 509,
+          "score": 0.03057889822595705
+        },
+        {
+          "id": "ug1399-2025.2-en-s0412-p0680-00",
+          "title": "set_directive_dependence",
+          "page": 680,
+          "score": 0.02967032967032967
+        },
+        {
+          "id": "ug1399-2025.2-en-s0577-p0887-00",
+          "title": "Pragmas",
+          "page": 887,
+          "score": 0.027242401779095628
+        }
+      ],
+      "context_bytes": 8427,
+      "search_seconds": 0.016
+    },
+    {
+      "query_id": "bind_storage",
+      "kind": "symbol",
+      "mode": "hybrid",
+      "gold_titles": [
+        "pragma HLS bind_storage"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0327-p0559-01",
+          "title": "pragma HLS bind_storage",
+          "page": 559,
+          "score": 0.03278688524590164
+        },
+        {
+          "id": "ug1399-2025.2-en-s0409-p0673-01",
+          "title": "set_directive_bind_storage",
+          "page": 673,
+          "score": 0.030798389007344232
+        },
+        {
+          "id": "ug1399-2025.2-en-s0297-p0503-00",
+          "title": "syn.directive.bind_storage",
+          "page": 503,
+          "score": 0.030017921146953404
+        },
+        {
+          "id": "ug1399-2025.2-en-s0534-p0838-00",
+          "title": "Resource Usage",
+          "page": 838,
+          "score": 0.02664576802507837
+        },
+        {
+          "id": "ug1399-2025.2-en-s0305-p0521-00",
+          "title": "syn.directive.interface",
+          "page": 521,
+          "score": 0.026553280111072546
+        }
+      ],
+      "context_bytes": 6108,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "array_reshape",
+      "kind": "symbol",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Array Reshaping",
+        "pragma HLS array_reshape",
+        "Array Partitioning"
+      ],
+      "first_relevant_rank": 3,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0295-p0494-00",
+          "title": "syn.directive.array_reshape",
+          "page": 494,
+          "score": 0.03278688524590164
+        },
+        {
+          "id": "ug1399-2025.2-en-s0407-p0664-00",
+          "title": "set_directive_array_reshape",
+          "page": 664,
+          "score": 0.031746031746031744
+        },
+        {
+          "id": "ug1399-2025.2-en-s0324-p0549-00",
+          "title": "pragma HLS array_reshape",
+          "page": 549,
+          "score": 0.031054405392392875
+        },
+        {
+          "id": "ug1399-2025.2-en-s0294-p0492-00",
+          "title": "syn.directive.array_partition",
+          "page": 492,
+          "score": 0.028850145288501453
+        },
+        {
+          "id": "ug1399-2025.2-en-s0406-p0662-00",
+          "title": "set_directive_array_partition",
+          "page": 662,
+          "score": 0.028381642512077296
+        }
+      ],
+      "context_bytes": 5071,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "stream",
+      "kind": "code",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Blocking API",
+        "Blocking Read Methods",
+        "Blocking Write Methods"
+      ],
+      "first_relevant_rank": 4,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0511-p0802-00",
+          "title": "Deterministic Behavior",
+          "page": 802,
+          "score": 0.03252247488101534
+        },
+        {
+          "id": "ug1399-2025.2-en-s0518-p0806-00",
+          "title": "hls::stream.size() Method",
+          "page": 806,
+          "score": 0.03252247488101534
+        },
+        {
+          "id": "ug1399-2025.2-en-s0516-p0805-00",
+          "title": "hls::stream.empty() Method",
+          "page": 805,
+          "score": 0.031746031746031744
+        },
+        {
+          "id": "ug1399-2025.2-en-s0508-p0800-00",
+          "title": "Blocking API",
+          "page": 800,
+          "score": 0.03076923076923077
+        },
+        {
+          "id": "ug1399-2025.2-en-s0505-p0796-01",
+          "title": "Ch. 24: HLS Stream Library",
+          "page": 796,
+          "score": 0.028782894736842105
+        }
+      ],
+      "context_bytes": 5342,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "range",
+      "kind": "code",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Other Class Methods, Operators, and Data Members"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0482-p0750-00",
+          "title": "Other Class Methods, Operators, and Data Members",
+          "page": 750,
+          "score": 0.03278688524590164
+        },
+        {
+          "id": "ug1399-2025.2-en-s0494-p0779-00",
+          "title": "Class Methods, Operators, and Data Members",
+          "page": 779,
+          "score": 0.03225806451612903
+        },
+        {
+          "id": "ug1399-2025.2-en-s0480-p0740-00",
+          "title": "Expressions Involving ap_[u]<> types",
+          "page": 740,
+          "score": 0.027598020555767037
+        },
+        {
+          "id": "ug1399-2025.2-en-s0098-p0149-00",
+          "title": "Bit-Width Propagation",
+          "page": 149,
+          "score": 0.0259915611814346
+        },
+        {
+          "id": "ug1399-2025.2-en-s0477-p0736-00",
+          "title": "Declaring/Defining ap_[u] Variables",
+          "page": 736,
+          "score": 0.025859192525859193
+        }
+      ],
+      "context_bytes": 7445,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "testbench",
+      "kind": "english_semantic",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Writing a Test Bench",
+        "Example Test Bench"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0232-p0380-00",
+          "title": "Writing a Test Bench",
+          "page": 380,
+          "score": 0.03252247488101534
+        },
+        {
+          "id": "ug1399-2025.2-en-s0233-p0383-00",
+          "title": "Example Test Bench",
+          "page": 383,
+          "score": 0.03131881575727918
+        },
+        {
+          "id": "ug1399-2025.2-en-s0249-p0422-00",
+          "title": "Automatically Verifying the RTL",
+          "page": 422,
+          "score": 0.029910714285714284
+        },
+        {
+          "id": "ug1399-2025.2-en-s0261-p0432-00",
+          "title": "C Test Bench and C Source Code",
+          "page": 432,
+          "score": 0.029877369007803793
+        },
+        {
+          "id": "ug1399-2025.2-en-s0231-p0375-00",
+          "title": "Running C Simulation",
+          "page": 375,
+          "score": 0.02904040404040404
+        }
+      ],
+      "context_bytes": 7214,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "zh_state",
+      "kind": "chinese_crosslingual",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Statics"
+      ],
+      "first_relevant_rank": 4,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0285-p0483-01",
+          "title": "RTL Configuration",
+          "page": 483,
+          "score": 0.01639344262295082
+        },
+        {
+          "id": "ug1399-2025.2-en-s0158-p0246-00",
+          "title": "Continuously Running Mode",
+          "page": 246,
+          "score": 0.016129032258064516
+        },
+        {
+          "id": "ug1399-2025.2-en-s0542-p0845-00",
+          "title": "Accumulation",
+          "page": 845,
+          "score": 0.015873015873015872
+        },
+        {
+          "id": "ug1399-2025.2-en-s0076-p0125-00",
+          "title": "Statics",
+          "page": 125,
+          "score": 0.015625
+        },
+        {
+          "id": "ug1399-2025.2-en-s0172-p0256-00",
+          "title": "Initialization Behavior",
+          "page": 256,
+          "score": 0.015151515151515152
+        }
+      ],
+      "context_bytes": 3986,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "zh_malloc",
+      "kind": "chinese_crosslingual",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Dynamic Memory Usage"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0101-p0153-00",
+          "title": "Dynamic Memory Usage",
+          "page": 153,
+          "score": 0.032266458495966696
+        },
+        {
+          "id": "ug1399-2025.2-en-s0056-p0099-00",
+          "title": "C Simulation with Arrays",
+          "page": 99,
+          "score": 0.028531243721117136
+        },
+        {
+          "id": "ug1399-2025.2-en-s0009-p0022-00",
+          "title": "Refactoring C++ Source Code for HLS",
+          "page": 22,
+          "score": 0.02506265664160401
+        },
+        {
+          "id": "ug1399-2025.2-en-s0528-p0824-00",
+          "title": "Support of Scalars/Memory Interfaces in DTLP",
+          "page": 824,
+          "score": 0.02484567901234568
+        },
+        {
+          "id": "ug1399-2025.2-en-s0568-p0879-00",
+          "title": "Memory Model",
+          "page": 879,
+          "score": 0.024614919963757174
+        }
+      ],
+      "context_bytes": 6845,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "zh_partition",
+      "kind": "chinese_crosslingual",
+      "mode": "hybrid",
+      "gold_titles": [
+        "pragma HLS array_partition",
+        "Array Partitioning"
+      ],
+      "first_relevant_rank": 3,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0294-p0493-00",
+          "title": "syn.directive.array_partition",
+          "page": 493,
+          "score": 0.03200204813108039
+        },
+        {
+          "id": "ug1399-2025.2-en-s0406-p0663-00",
+          "title": "set_directive_array_partition",
+          "page": 663,
+          "score": 0.031544957774465976
+        },
+        {
+          "id": "ug1399-2025.2-en-s0323-p0548-01",
+          "title": "pragma HLS array_partition",
+          "page": 548,
+          "score": 0.030834914611005692
+        },
+        {
+          "id": "ug1399-2025.2-en-s0295-p0496-00",
+          "title": "syn.directive.array_reshape",
+          "page": 496,
+          "score": 0.026547116736990152
+        },
+        {
+          "id": "ug1399-2025.2-en-s0324-p0551-00",
+          "title": "pragma HLS array_reshape",
+          "page": 551,
+          "score": 0.025859192525859193
+        }
+      ],
+      "context_bytes": 7727,
+      "search_seconds": 0.0
+    },
+    {
+      "query_id": "zh_recursion",
+      "kind": "chinese_crosslingual",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Recursive Functions"
+      ],
+      "first_relevant_rank": 3,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2025.2-en-s0018-p0037-00",
+          "title": "Conclusion - A Prescription for Performance",
+          "page": 37,
+          "score": 0.030090497737556562
+        },
+        {
+          "id": "ug1399-2025.2-en-s0012-p0025-01",
+          "title": "Ch. 1: Design Principles",
+          "page": 25,
+          "score": 0.01639344262295082
+        },
+        {
+          "id": "ug1399-2025.2-en-s0103-p0154-00",
+          "title": "Recursive Functions",
+          "page": 154,
+          "score": 0.01639344262295082
+        },
+        {
+          "id": "ug1399-2025.2-en-s0218-p0359-01",
+          "title": "JSON File for RTL Blackbox",
+          "page": 359,
+          "score": 0.016129032258064516
+        },
+        {
+          "id": "ug1399-2025.2-en-s0269-p0446-00",
+          "title": "L1 Library Wizard Flow",
+          "page": 446,
+          "score": 0.016129032258064516
+        }
+      ],
+      "context_bytes": 7272,
+      "search_seconds": 0.0
+    }
+  ],
+  "limitations": [
+    "Author-curated small development smoke set; not independent hold-out.",
+    "Gold labels are at section level; a retrieved chunk may not contain all required details.",
+    "These are retrieval hit rates, not HLS correctness or Agent repair gains.",
+    "Search timing excludes cached query encoding; cold-load time reported separately."
+  ]
+}

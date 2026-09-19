@@ -14,6 +14,7 @@ from evaluation.hls import run_process
 from evaluation.task_io import load_task
 from agent.core.policy import load_policy
 from agent.context.skills import Skills
+from agent.context.prompts import load_prompts
 from evaluation.lifecycle import evaluate as development_evaluation, output_path
 
 
@@ -51,6 +52,9 @@ def _evaluate(args, parser):
     write_json(snapshot, config)
     expected = dict(run_id=run_id, problem_sha256=digest(problem_bytes), config_sha256=config_digest(config))
     expected.update(policy_sha256=config_digest(policy), skills_sha256=skill_pack.sha256)
+    prompt_templates = load_prompts()
+    expected['prompt_templates_sha256'] = prompt_templates.sha256
+    write_json(output / 'prompt_templates.json', prompt_templates.snapshot())
     frozen_files = {}
     manifest_snapshot = None
     if task.manifest is not None:

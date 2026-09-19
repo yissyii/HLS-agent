@@ -87,9 +87,11 @@ class AgentContract(unittest.TestCase):
                 payload = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
                 cls.requests.append(payload)
                 mode = cls.response_mode
+                content = ('int kernel(int a) { return bad; }' if mode == 'repair' and len(cls.requests) == 1
+                           else 'int kernel(int a) { return a+1; }\n')
                 if mode == 'slow':
                     time.sleep(1.5)
-                data = json.dumps({'choices': [{'message': {'content': 'int kernel(int a) { return a+1; }\n'},
+                data = json.dumps({'choices': [{'message': {'content': content},
                                                 'finish_reason': 'length' if mode == 'length' else 'stop'}],
                                    'usage': {'prompt_tokens': 20, 'completion_tokens': 10}}).encode()
                 try:
@@ -175,6 +177,92 @@ class AgentContract(unittest.TestCase):
         self.assertEqual(self.validator.calls, [(0, 'csim'), (1, 'csim'), (1, 'synthesis')])
         self.assertIn('int kernel(int a);', self.model.prompts[0].text)
         self.assertNotIn('int main()', self.model.prompts[0].text)
+        initial, repair = self.model.prompts
+        self.assertTrue(initial.system)
+        self.assertEqual(initial.system, repair.system)
+        self.assertEqual([m['role'] for m in initial.messages], ['system', 'user'])
+        self.assertIn('<STAGE>initial</STAGE>', initial.text)
+        self.assertIn('<STAGE>repair</STAGE>', repair.text)
+        self.assertNotIn('<CURRENT_SOURCE>', initial.text)
+        self.assertIn('<CURRENT_SOURCE>', repair.text)
+        self.assertIn('<DIAGNOSTIC', repair.text)
+
+    def test_prompt_templates_frozen_across_repairs(self):
+        from agent.context.prompts import load_prompts
+        templates = load_prompts()
+        self.public_task()
+        self.model = FakeModel(['bad', 'int kernel(int a){return a+1;}'])
+        self.validator = FakeValidator({(0, 'csim'): 'compile_error'})
+        # Any reload during repair would receive different text and fingerprint.
+        with patch('agent.core.controller.load_prompts', side_effect=[templates, replace(templates, system='CHANGED')]) as loader:
+            code, result = self.solve()
+        self.assertEqual(code, 0)
+        self.assertEqual(loader.call_count, 1)
+        self.assertEqual(result['prompt_templates_sha256'], templates.sha256)
+        self.assertTrue(all(p.system == templates.system for p in self.model.prompts))
+        snapshot = json.loads((self.directory / 'agent/prompt_templates.json').read_text(encoding='utf-8'))
+        self.assertEqual(snapshot, templates.snapshot())
+
+    def test_raw_initial_compatibility_only_applies_to_first_request(self):
+        self.public_task()
+        self.model = FakeModel(['bad', 'int kernel(int a){return a+1;}'])
+        self.validator = FakeValidator({(0, 'csim'): 'compile_error'})
+        _, result = self.solve(raw_initial=True)
+        initial, repair = self.model.prompts
+        self.assertEqual(initial.messages, [{'role': 'user', 'content': self.problem.read_bytes().decode('utf-8')}])
+        self.assertEqual(initial.context['stage'], 'raw_initial')
+        self.assertTrue(repair.system)
+        self.assertEqual(repair.context['stage'], 'repair')
+        self.assertTrue(result['raw_initial'])
+
+    def test_system_prompt_is_included_in_context_budget(self):
+        from agent.context.builder import build
+        task = load_task(self.problem)
+        prompt = build(task, self.config, self.policy)
+        self.assertEqual(prompt.context['input_bytes'], sum(len(m['content'].encode('utf-8')) for m in prompt.messages))
+        self.assertEqual(prompt.context['budgeted_input_bytes'], prompt.context['input_bytes'] + prompt.context['message_overhead_bytes'])
+        # User content fits, but the same request including system content must fail.
+        self.config['model']['context_tokens'] = (self.config['model']['max_tokens']
+            + self.policy['context_safety_tokens'] + prompt.context['user_bytes'] + 128 + 10)
+        code, result = self.solve()
+        self.assertEqual(code, 1)
+        self.assertEqual(result['stop_reason'], 'context_budget_exceeded')
+        self.assertEqual(self.model.prompts, [])
+
+    def test_invalid_prompt_pack_fails_before_model(self):
+        from agent.context.prompts import load_prompts
+        root = self.directory / 'prompts'
+        root.mkdir()
+        (root / 'manifest.json').write_text('{"schema_version":1}', encoding='utf-8')
+        with self.assertRaises(Failure) as raised:
+            load_prompts(root)
+        self.assertEqual(raised.exception.category, 'prompt_configuration_error')
+        with patch('agent.core.controller.load_prompts', side_effect=raised.exception):
+            code, result = self.solve()
+        self.assertEqual(code, 1)
+        self.assertEqual(result['category'], 'prompt_configuration_error')
+        self.assertEqual(self.model.prompts, [])
+
+    def test_loopback_sends_system_on_initial_and_repair(self):
+        self.public_task()
+        self.validator = FakeValidator({(0, 'csim'): 'compile_error'})
+        type(self).response_mode = 'repair'
+        code, result = self.solve(model=None)
+        self.assertEqual((code, result['status']), (0, 'passed'))
+        self.assertEqual(len(self.requests), 2)
+        for i, payload in enumerate(self.requests):
+            self.assertEqual([m['role'] for m in payload['messages']], ['system', 'user'])
+            directory = self.directory / f'agent/candidates/{i:03d}'
+            saved = json.loads((directory / 'request.json').read_text(encoding='utf-8'))
+            context = json.loads((directory / 'context.json').read_text(encoding='utf-8'))
+            metadata = json.loads((directory / 'response.txt.meta.json').read_text(encoding='utf-8'))
+            self.assertEqual(saved, payload)
+            self.assertEqual(context['messages_sha256'], json_digest(payload['messages']))
+            self.assertEqual(metadata['messages_sha256'], context['messages_sha256'])
+            self.assertEqual((directory / 'system_prompt.txt').read_bytes().decode('utf-8'), payload['messages'][0]['content'])
+            self.assertEqual((directory / 'prompt.txt').read_bytes().decode('utf-8'), payload['messages'][1]['content'])
+        self.assertEqual(self.requests[0]['messages'][0], self.requests[1]['messages'][0])
+        self.assertNotEqual(self.requests[0]['messages'][1], self.requests[1]['messages'][1])
 
     def test_functional_failure_is_repaired(self):
         self.public_task()
