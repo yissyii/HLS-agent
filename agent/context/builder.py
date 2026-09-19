@@ -1,10 +1,11 @@
 """Source-aware prompts with an explicitly conservative fallback budget."""
 from agent.core.contracts import PromptBundle, digest, json_digest
 from agent.context.prompts import load_prompts
+from agent.core.policy import rag_options
 from serve.inference import Failure
 
 
-def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw_initial=False, *, templates=None):
+def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw_initial=False, *, templates=None, retrieval=None):
     templates = templates if templates is not None else load_prompts()
     problem = task.problem.decode('utf-8')
     provenance = [{'kind': 'problem', 'sha256': digest(task.problem)}]
@@ -33,6 +34,17 @@ def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw
         provenance.append({'kind': 'candidate', 'sha256': candidate.sha256})
     feedback = diagnostic.feedback[:policy['diagnostic_max_chars']] if diagnostic else ''
     selected = list(skills)
+    rag_hits = list((retrieval or {}).get('hits', [])) if retrieval else []
+
+    def reference_block():
+        if not rag_hits:
+            return ''
+        return '\n<REFERENCE_MATERIAL>\n' + ''.join('\n' + hit['context'] for hit in rag_hits) + '\n</REFERENCE_MATERIAL>\n'
+
+    references = reference_block()
+    while len(references.encode('utf-8')) > rag_options(policy)['rag_max_bytes'] and rag_hits:
+        rag_hits.pop()
+        references = reference_block()
     available = runtime['model']['context_tokens'] - runtime['model']['max_tokens'] - policy['context_safety_tokens']
     system_bytes = len(system.encode('utf-8'))
     overhead = 64 * (2 if system else 1)  # Heuristic role/template allowance, not exact tokenization.
@@ -42,6 +54,8 @@ def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw
 
     def assemble():
         text = mandatory
+        if references:
+            text += references
         if diagnostic:
             text += f'\n<DIAGNOSTIC category="{diagnostic.category}">\n{feedback}\n</DIAGNOSTIC>\n'
         for rule in selected:
@@ -51,6 +65,12 @@ def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw
     text = assemble()
     # Byte length is deliberately conservative for typical byte tokenizers, but
     # is not claimed to be an exact count or a guarantee for arbitrary templates.
+    # RAG is optional evidence. Drop complete references before skills and before
+    # shortening released diagnostics; required task/source/system text is never cut.
+    while budgeted_bytes(text) > available and rag_hits:
+        rag_hits.pop()
+        references = reference_block()
+        text = assemble()
     while budgeted_bytes(text) > available and selected:
         selected.pop()
         text = assemble()
@@ -63,6 +83,12 @@ def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw
         provenance.append({'kind': 'diagnostic', 'sha256': digest(feedback.encode()),
                            'fingerprint': diagnostic.fingerprint, 'trimmed': feedback != diagnostic.feedback})
     provenance += [{'kind': 'skill', 'id': rule['id'], 'sha256': rule['sha256']} for rule in selected]
+    if retrieval:
+        provenance.append({'kind': 'rag', 'release_id': retrieval.get('release_id'),
+                            'corpus_sha256': retrieval.get('corpus_sha256'),
+                            'index_fingerprint': retrieval.get('index_fingerprint'),
+                            'candidate_ids': [h['record']['id'] for h in rag_hits],
+                            'injected_bytes': len(references.encode('utf-8'))})
     messages = ([{'role': 'system', 'content': system}] if system else []) + [{'role': 'user', 'content': text}]
     return PromptBundle(text, provenance, {
         'method': 'conservative_utf8_bytes', 'token_count_verified': False,
@@ -72,6 +98,12 @@ def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw
         'stage': stage, 'prompt_templates_version': templates.version,
         'prompt_templates_sha256': templates.sha256, 'system_prompt_used': bool(system),
         'messages_sha256': json_digest(messages),
+        'rag_candidate_ids': [h['record']['id'] for h in rag_hits],
+        'rag_injected_bytes': len(references.encode('utf-8')),
+        'retrieval': ({**{k: v for k, v in retrieval.items() if k != 'hits'},
+                       'status': 'injected' if rag_hits else 'no_reference_injected',
+                       'injected_ids': [h['record']['id'] for h in rag_hits],
+                       'injected_bytes': len(references.encode('utf-8'))} if retrieval else None),
         'output_tokens': runtime['model']['max_tokens'], 'safety_tokens': policy['context_safety_tokens'],
         'note': 'Local tokenizer/chat-template verification is not installed; service overflow remains a failure.',
     }, [r['id'] for r in selected], system=system)

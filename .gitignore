@@ -11,7 +11,8 @@ __pycache__/
 serve/runtime.local.json
 rag/.cache/
 rag/.venv/
-rag/corpora/
-rag/indexes/
 rag/staging/
 rag/*.local.json
+rag/corpora/ug1399-2025.2-en.v1-backup/
+rag/corpora/ug1399-2025.2-zh/
+rag/indexes/ug1399-qwen06b-en.v1-backup/

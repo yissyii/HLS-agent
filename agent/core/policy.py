@@ -7,6 +7,13 @@ from serve.inference import Failure
 
 DEFAULT_PATH = Path(__file__).resolve().parents[1] / 'config/policy.json'
 
+RAG_DEFAULTS = dict(rag_enabled=False, rag_mode='hybrid', rag_top_k=3, rag_recall_k=20,
+                    rag_max_bytes=6000, rag_query_max_chars=1600, rag_timeout_seconds=30)
+
+
+def rag_options(policy):
+    return {name: policy.get(name, default) for name, default in RAG_DEFAULTS.items()}
+
 
 def load_policy(path=None):
     value = json.loads(Path(path or DEFAULT_PATH).read_text(encoding='utf-8'))
@@ -19,7 +26,7 @@ def validate_policy(value):
                       'stagnation_limit': (1, 10), 'max_skills': (0, 10),
                       'context_safety_tokens': (128, 8192), 'diagnostic_max_chars': (128, 12000)}
     expected = set(integer_limits) | {'validation_reserve_seconds', 'cleanup_reserve_seconds', 'skills_enabled'}
-    if set(value) != expected:
+    if not expected.issubset(value) or set(value) - expected - set(RAG_DEFAULTS):
         raise Failure('policy_error', 'Unexpected or missing policy fields')
     for name, (minimum, maximum) in integer_limits.items():
         if type(value[name]) is not int or not minimum <= value[name] <= maximum:
@@ -29,6 +36,18 @@ def validate_policy(value):
             raise Failure('policy_error', 'Invalid policy field: ' + name)
     if type(value['skills_enabled']) is not bool:
         raise Failure('policy_error', 'skills_enabled must be boolean')
+    rag = rag_options(value)
+    if type(rag['rag_enabled']) is not bool or rag['rag_mode'] not in {'bm25', 'hybrid'}:
+        raise Failure('policy_error', 'Invalid RAG mode or enable flag')
+    for key, low, high in (('rag_top_k', 1, 10), ('rag_recall_k', 1, 100),
+                           ('rag_max_bytes', 1, 20000), ('rag_query_max_chars', 128, 4000)):
+        if type(rag[key]) is not int or not low <= rag[key] <= high:
+            raise Failure('policy_error', 'Invalid RAG limit: ' + key)
+    if rag['rag_recall_k'] < rag['rag_top_k']:
+        raise Failure('policy_error', 'RAG recall count must cover top_k')
+    timeout = rag['rag_timeout_seconds']
+    if type(timeout) not in (int, float) or not math.isfinite(timeout) or not 0 < timeout <= 120:
+        raise Failure('policy_error', 'Invalid RAG timeout')
 
 
 def decide(policy, diagnostic, repairs_used, budget, stagnant):

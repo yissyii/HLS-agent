@@ -15,6 +15,7 @@ Markdown 对照：[项目结构](project_structure.md) · [Agent 流程与源码
 
 - [System prompt 接入 Agent](system-prompt-flow.canvas)：模板加载、首稿／修复组装、预算检查、真实请求和修复循环；当前已实现。
 - [Markdown / Mermaid 对照](flow.md)：程序职责和实际请求记录的查找方式。
-- [RAG 流程](RAG.canvas)：已实现的检索流程，以及尚待接入的 Agent 连接方案。
+- [RAG 流程](RAG.canvas)：已实现的检索与 Agent 修复连接。
+- [RAG 接入 Agent](rag-agent-flow.canvas)：开关、反馈权限、发布门、检索、预算及修复循环；[Markdown 对照](../../report/design/rag_agent.md)。
 
 按用户要求，今后完成新的代码模块时，同时提供一张概览流程图，优先说明输入、主要步骤、输出、必要分支和循环，并附上源码位置。明确区分已实现与计划功能；新增独立模块使用单独画布，并同步受影响的总体图，避免把所有实现细节堆在一张图中。

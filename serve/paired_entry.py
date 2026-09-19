@@ -15,6 +15,8 @@ from evaluation.task_io import load_task
 from agent.core.policy import load_policy
 from agent.context.skills import Skills
 from agent.context.prompts import load_prompts
+from agent.context.retrieval import input_artifacts, Retrieval
+from agent.core.policy import rag_options
 from evaluation.lifecycle import evaluate as development_evaluation, output_path
 
 
@@ -27,6 +29,7 @@ def main():
     parser.add_argument('--task-manifest', help='Explicit public validation materials for the agent')
     parser.add_argument('--policy', help='Frozen agent policy JSON')
     parser.add_argument('--skills-dir', help='Read-only independently validated rule pack')
+    parser.add_argument('--rag-runtime', help='Local RAG runtime paths')
     parser.add_argument('--cpu-only', action='store_true')
     args = parser.parse_args()
     return development_evaluation(args, lambda current: _evaluate(current, parser), output=args.output)
@@ -56,6 +59,15 @@ def _evaluate(args, parser):
     expected['prompt_templates_sha256'] = prompt_templates.sha256
     write_json(output / 'prompt_templates.json', prompt_templates.snapshot())
     frozen_files = {}
+    for path in input_artifacts(policy, args.rag_runtime):
+        frozen_files[str(path.resolve())] = digest(path.read_bytes())
+    rag_snapshot = None
+    if rag_options(policy)['rag_enabled']:
+        rag = Retrieval(policy, args.rag_runtime)
+        expected['rag_config_sha256'] = rag.sha256
+        rag_snapshot = output / 'rag_runtime.json'
+        write_json(rag_snapshot, rag.runtime)
+        frozen_files[str(rag_snapshot)] = digest(rag_snapshot.read_bytes())
     manifest_snapshot = None
     if task.manifest is not None:
         task_root = output / 'task_snapshot'
@@ -109,6 +121,8 @@ def _evaluate(args, parser):
             command += ['--task-manifest', str(manifest_snapshot)]
         if skills_snapshot:
             command += ['--skills-dir', str(skills_snapshot)]
+        if rag_snapshot:
+            command += ['--rag-runtime', str(rag_snapshot)]
         if args.cpu_only:
             command += ['--cpu-only']
         execution = run_process(command, ROOT, env, output / 'agent.log', config['hls']['total_timeout_seconds'] + 20)

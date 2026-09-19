@@ -22,7 +22,7 @@ from serve.inference import Failure, ROOT, load_config, validate_config
 
 def run(problem, output, *, config=None, run_id=None, manifest=None, policy=None,
         skills_dir=None, cpu_only=False, initial_source=None, raw_initial=False,
-        model=None, validator=None):
+        model=None, validator=None, rag_runtime=None):
     started = time.monotonic()
     artifacts = Artifacts(output)  # Never overwrite previous evidence, even on failure.
     run_id = run_id or uuid.uuid4().hex
@@ -46,7 +46,7 @@ def run(problem, output, *, config=None, run_id=None, manifest=None, policy=None
         source = Path(initial_source).read_bytes().decode('utf-8') if initial_source is not None else None
         return solve(task, runtime, selected_policy, model or ModelClient(),
                      validator or HLSValidator(cpu_only), artifacts, skill_pack, run_id,
-                     initial_source=source, raw_initial=raw_initial, started=started)
+                     initial_source=source, raw_initial=raw_initial, started=started, rag_runtime=rag_runtime)
     except (Failure, OSError, ValueError, KeyError, TypeError) as error:
         category = error.category if isinstance(error, Failure) else 'configuration_or_io_error'
         receipt.update(status='failed', category=category, message=str(error), stop_reason=category,
@@ -68,6 +68,7 @@ def main():
     parser.add_argument('--task-manifest')
     parser.add_argument('--policy')
     parser.add_argument('--skills-dir')
+    parser.add_argument('--rag-runtime', help='Local RAG paths JSON; read only when RAG is enabled in policy')
     parser.add_argument('--cpu-only', action='store_true', help='Hide GPUs from HLS only, not from the model server')
     args = parser.parse_args()
     return development_evaluation(args, _evaluate, output=args.output)
@@ -77,7 +78,7 @@ def _evaluate(args):
     try:
         code, receipt = run(args.problem, output_path(args.output), config=args.config, run_id=args.run_id,
                             manifest=args.task_manifest, policy=args.policy,
-                            skills_dir=args.skills_dir, cpu_only=args.cpu_only)
+                            skills_dir=args.skills_dir, cpu_only=args.cpu_only, rag_runtime=args.rag_runtime)
         print(json.dumps(receipt, ensure_ascii=False))
         return code
     except (Failure, OSError, ValueError) as error:

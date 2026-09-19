@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "release_id": "ug1399-2025.2-en-reference-1",
+  "status": "reference",
+  "reviewed_at": "2026-09-19",
+  "reviewed_by": "assistant-source-audit",
+  "corpus": "rag/corpora/ug1399-2025.2-en",
+  "index": "rag/indexes/ug1399-qwen06b-en",
+  "corpus_manifest_sha256": "89ac2ca879739e19649068e46bd6bea649f1ef0de7d3a500c1aa639191672cd8",
+  "records_sha256": "79778e1393914794575071150c9fde64cbc679fe6fac05c859a4971df6c02d0c",
+  "index_manifest_sha256": "4f69ddfddbc9163d0a6d409108f0cf2ddb7bba27636a1efa0f046bb6f963bd09",
+  "index_fingerprint": "51cfeaa9a9dcfadab20c43db07bae0dcd4f485506dcb47e8c8361cf0bce6e756",
+  "vectors_sha256": "6baf6495b88e871b95423a7f094ca7f565cbba785c78277c6e1ede0a6166f1e7",
+  "note": "UG1399 official English manual; reference-only, no local HLS validation; staging is excluded."
+}

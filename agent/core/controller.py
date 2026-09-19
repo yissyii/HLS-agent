@@ -7,6 +7,7 @@ import time
 from agent.candidates.manager import Candidates
 from agent.context.builder import build
 from agent.context.prompts import load_prompts
+from agent.context.retrieval import Retrieval
 from agent.core.contracts import Budget, digest, empty_checks, json_digest
 from agent.core.policy import decide
 from agent.feedback.diagnostics import classify
@@ -15,17 +16,19 @@ from serve.inference import Failure
 
 
 def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
-          *, initial_source=None, raw_initial=False, started=None):
+          *, initial_source=None, raw_initial=False, started=None, rag_runtime=None):
     started = time.monotonic() if started is None else started
     budget = Budget(started, started + runtime['hls']['total_timeout_seconds'] - policy['cleanup_reserve_seconds'])
     candidates = Candidates(task.fingerprint, json_digest(runtime['hls']))
     templates = load_prompts()  # One immutable prompt snapshot for all attempts in this run.
+    rag = Retrieval(policy, rag_runtime)
     summary = dict(schema_version=1, branch='agent', run_id=run_id, status='running',
                    problem_sha256=digest(task.problem), config_sha256=json_digest(runtime),
                    policy_sha256=json_digest(policy), task_sha256=task.fingerprint,
                    skills_sha256=skills.sha256, model=runtime['model'], agent_used=True,
                    prompt_templates_version=templates.version, prompt_templates_sha256=templates.sha256,
                    raw_initial=raw_initial,
+                   rag_enabled=rag.enabled, rag_config_sha256=rag.sha256, rag_history=[],
                    skills_used=False, started_at=datetime.now(timezone.utc).isoformat(),
                    checks=empty_checks(), generation_requests=0, tool_calls=0,
                    repair_attempts_allowed=policy['max_repairs'], repair_attempts_used=0,
@@ -38,6 +41,7 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
     artifacts.json('config.json', runtime)
     artifacts.json('policy.json', policy)
     artifacts.json('prompt_templates.json', templates.snapshot())
+    artifacts.json('rag.json', rag.snapshot)
     artifacts.json('task.json', task.snapshot())
     for material in task.materials:
         artifacts.bytes('materials/' + material.name, material.content)
@@ -64,7 +68,22 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
                 summary['stages']['generation'] = {'status': 'skipped', 'requests': 0}
             else:
                 selected_skills = skills.select(diagnostic, policy['max_skills'])
-                prompt = build(task, runtime, policy, previous, diagnostic, selected_skills, raw_initial, templates=templates)
+                retrieval = None
+                if diagnostic is not None and rag.enabled:
+                    try:
+                        retrieval = rag.select(task, diagnostic, directory, budget.deadline,
+                                               policy['validation_reserve_seconds'])
+                    finally:
+                        evidence_path = directory / 'retrieval.json'
+                        if evidence_path.is_file():
+                            evidence = json.loads(evidence_path.read_text(encoding='utf-8'))
+                            summary['rag_history'].append({k: v for k, v in evidence.items() if k != 'hits'})
+                            artifacts.event('rag_search_finished', attempt=number, status=evidence['status'],
+                                            category=evidence.get('category'), query=evidence['query'],
+                                            mode=evidence['mode'], rag_config_sha256=rag.sha256)
+                            artifacts.json('result.json', summary)
+                prompt = build(task, runtime, policy, previous, diagnostic, selected_skills, raw_initial,
+                               templates=templates, retrieval=retrieval)
                 summary['skills_used'] |= bool(prompt.skills)
                 budget.requests += 1
                 summary['repair_attempts_used'] = number
@@ -72,6 +91,16 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
                                 prompt_sha256=digest(prompt.text.encode()), messages_sha256=json_digest(prompt.messages),
                                 system_prompt_sha256=digest(prompt.system.encode()),
                                 prompt_templates_sha256=templates.sha256, skills=prompt.skills)
+                if retrieval:
+                    retrieval['injected_ids'] = prompt.context['rag_candidate_ids']
+                    retrieval['injected_bytes'] = prompt.context['rag_injected_bytes']
+                    retrieval['status'] = 'injected' if retrieval['injected_ids'] else 'no_reference_injected'
+                    artifacts.json(directory / 'retrieval.json', retrieval)
+                    summary['rag_history'][-1] = {k: v for k, v in retrieval.items() if k != 'hits'}
+                    artifacts.event('rag_retrieved', attempt=number, query_sha256=digest(retrieval['query'].encode()),
+                                    candidate_ids=retrieval['retrieved_ids'], injected_ids=retrieval['injected_ids'],
+                                    injected_bytes=retrieval['injected_bytes'], corpus_sha256=retrieval['corpus_sha256'],
+                                    index_fingerprint=retrieval['index_fingerprint'])
                 summary['requests'].append({'attempt': number, 'state': 'dispatched',
                                             'request_outcome_unknown': True})
                 summary['generation_requests'] = budget.requests

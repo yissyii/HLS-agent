@@ -13,19 +13,20 @@
 | 向量索引 | `rag/indexes/ug1399-qwen06b-en` |
 | 开发检索问题 | `rag/eval_queries.json` |
 | 实测报告 | [UG1399 检索方案实测](../report/model_selection/UG1399-2025.2.md) |
+| 发布注册表 | `rag/releases/`；仅注册表白名单可被 Agent 检索 |
 | 原始核验与检索证据 | `rag/reports/` 中的 JSON |
 | 后续任务 | `rag/TASKS.md` |
 
 模型 revision 固定为 `97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3`，权重文件约 1.19 GB（运行环境和缓存另占空间）。使用 CPU、float32 推理、1024 维、模型自带 last-token pooling 和 L2 归一化。查询添加检索 instruction，文档不添加 instruction。依赖版本保存在 `requirements.lock.txt`。无需启动 vLLM，也无需在线 embedding API；安装过程需要联网，建库和检索本身离线运行。
 
-原始 PDF、提取全文、模型、向量和下载缓存不提交到 Git。代码、任务清单、哈希清单与检索报告可由队友审查。中文版保留在上级 docs 中，本版英文索引不混入中文重复材料。
+仓库为私有，提取语料（`rag/corpora/`）与向量索引（`rag/indexes/`）已入库，供队友直接复现检索；原始 PDF、模型权重与下载缓存不入库，需按下方 `install_local.ps1`／`download_model.py` 在新环境自行安装。代码、任务清单、哈希清单与检索报告可由队友审查。中文版保留在上级 docs 中，本版英文索引不混入中文重复材料。
 
 ## 处理方式与边界
 
 1. 从封面核验 UG1399 v2025.2，记录 PDF SHA256。按 PDF 书签目录和页面坐标划分章节，去除该版固定页眉页脚。
 2. 每个章节按页保留原文，再优先沿空行分成约 1700 字符的块。保留标题路径、父章节 ID、页码、语言、版本及文本哈希。跨页章节保存为 `sections.json`，可按需展开。
 3. PDF 文本不是 C++ AST。代码可能是片段，表格仍是布局文本，插图不做 OCR。大段落被拆开时有质量标记；没有把手册代码当成可直接执行的完整示例。抽查不能代表全书人工校对。
-4. `records.jsonl` 是规范语料；`pages.json` 保留整页提取文本，`outline.json` 保留目录，`coverage.json` 记录各页覆盖情况。向量对应的输入为末三级标题加空白归一化正文，展示时保留原文布局。
+4. `records.jsonl` 是规范语料；`pages.json` 保留整页提取文本，`outline.json` 保留目录，`coverage.json` 记录各页覆盖情况。向量对应的输入为末三级标题加空白归一化正文，展示时保留原文布局。Agent 只读取 `rag/releases/` 中显式注册且哈希匹配的发布库；`rag/staging/` 不可见。
 5. 编码输入设 2048 tokens 上限；超长时报错，避免静默截断。建库按长度分批编码、逐批保存，可用相同命令恢复中断任务；已完成索引不可原位覆盖。
 
 ## BM25 与混合检索
@@ -82,9 +83,11 @@ context = ''.join(hit['context'] for hit in result['hits'])
 
 ## 评估与 Agent 接入
 
+启用命令、路径配置、流程和验证范围见 [Agent RAG 接入说明](../report/design/rag_agent.md)。
+
 `evaluate.py` 比较同一份语料、同一份人工问题上的 BM25、dense、hybrid。报告章节级 Hit@1/3/5，保留每个问题检索到的条目和页码。24 个问题是开发 smoke set，标签只表明章节相关；命中该章节中的某块不保证其包含完整答案。评估使用较宽的 top-5 / 20000 字节预算，不能直接代表默认 top-3 / 6000 字节运行效果。
 
-此阶段没有改动 Agent 默认提示、反馈权限或评测流程。接入时应显式启用 RAG，并记录查询、候选 ID、索引指纹和实际上下文预算；只能使用该轮允许暴露的反馈生成查询。手册摘录应放入参考资料区域，不能冒充 `agent/context/skills.py` 中独立验证过的规则。后续须在固定首稿与反馈条件下比较无 RAG、BM25 和混合检索的实际修复收益。Vitis 验证仍在远程工具链执行。
+Agent 接入默认关闭；只有 policy 中显式设置 `rag_enabled=true` 才读取注册表和模型。当前查询只由题目和该轮验证器释放的诊断组成，遵守 `category_only`／`compiler_diagnostics`／`public_diagnostics` 的反馈权限，不读取原始日志或隐藏测试材料。检索失败会显式终止该轮，不静默改成无 RAG。手册摘录进入参考资料区域，不能冒充 `agent/context/skills.py` 中独立验证过的规则。后续须在固定首稿与反馈条件下比较无 RAG、BM25 和混合检索的实际修复收益。Vitis 验证仍在远程工具链执行。
 
 ## 来源
 

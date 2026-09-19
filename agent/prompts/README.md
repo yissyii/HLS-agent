@@ -1,6 +1,6 @@
 # Agent 提示词 v1.0.0
 
-标准 Agent 的首次生成与每次修复均发送 `system + user` 两条消息。system 保持一致；当轮任务、源码与允许公开的诊断放在 user 消息中。当前尚未接入 RAG。
+标准 Agent 的首次生成与每次修复均发送 `system + user` 两条消息。system 保持一致；当轮任务、源码与允许公开的诊断放在 user 消息中。RAG 已接入修复阶段，默认关闭；参考片段加入 user 消息，system 不变。见 [接入说明](../../report/design/rag_agent.md)。
 
 先看 [程序流程图](flow.md)，再对照下面的文件和请求记录阅读。可编辑版本：`docs/Mind/system-prompt-flow.canvas`。
 

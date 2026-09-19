@@ -539,8 +539,9 @@ class AgentContract(unittest.TestCase):
         self.assertEqual(result['request_outcomes_unknown'], 1)
 
     def test_total_budget_exhausted_before_generation(self):
-        self.config['hls']['total_timeout_seconds'] = .000001
-        code, result = self.solve()
+        # Deterministic on Windows, where monotonic() may have coarse resolution.
+        with patch('agent.core.contracts.Budget.remaining', return_value=0):
+            code, result = self.solve()
         self.assertEqual(code, 1)
         self.assertEqual(result['category'], 'total_timeout')
         self.assertEqual(result['generation_requests'], 0)

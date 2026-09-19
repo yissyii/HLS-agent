@@ -6,7 +6,7 @@
 
 详细方案见 [设计文档](../report/design/design.md)，入口与各程序模块的关系见 [Agent 与裸基线流程图](../report/design/agent_flow.md)。
 
-标准 Agent 现使用版本化的英文 system prompt：首稿和修复共享固定约束，阶段指令及任务材料放在 user 消息中。编辑位置、兼容模式与记录方式见 [提示词说明](prompts/README.md)。RAG 尚未接入；严格裸基线继续原题直传。
+标准 Agent 现使用版本化的英文 system prompt：首稿和修复共享固定约束，阶段指令及任务材料放在 user 消息中。编辑位置、兼容模式与记录方式见 [提示词说明](prompts/README.md)。RAG 已接入修复阶段，默认关闭，可显式启用 BM25 或 Qwen 混合检索；见 [使用说明与流程图](../report/design/rag_agent.md)。严格裸基线继续原题直传。
 
 研发评测默认经过项目级 [评测管理模块](../local_eval/README.md)：网络故障使最外层命令对应的整轮评测作废并自动重跑。原命令直接生效，适用于任意题目和数据集。显式输出目录下先查看 `session.json`，再读取 `valid_attempt/result/` 中的 Agent 产物；提交副本删除 `local_eval/` 后恢复下面描述的单轮输出布局。
 
@@ -28,6 +28,7 @@ agent/
 ├── context/          # 模型上下文与技能选择
 │   ├── README.md
 │   ├── builder.py
+│   ├── retrieval.py  # 发布参考检索；默认关闭、仅修复阶段
 │   └── skills.py     # 只读规则检索；默认关闭
 ├── feedback/         # 验证反馈分析
 │   ├── README.md

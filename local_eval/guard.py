@@ -9,6 +9,7 @@ import uuid
 
 from agent.core.policy import load_policy
 from agent.context.prompts import PROMPT_ROOT, PROMPT_FILES
+from agent.context.retrieval import input_artifacts
 from evaluation.task_io import load_manifest
 from local_eval.retry import classify, load_settings, run_session
 from serve.inference import Failure, ROOT, load_config, write_json
@@ -98,6 +99,13 @@ def input_files(args):
     # Legacy entries load the default policy internally.
     files.add(ROOT / 'agent/config/policy.json')
     files.update(PROMPT_ROOT / name for name in PROMPT_FILES)
+    try:
+        policy = load_policy(getattr(args, 'policy', None))
+        files.update(input_artifacts(policy, getattr(args, 'rag_runtime', None)))
+    except (OSError, ValueError, KeyError, TypeError):
+        # The normal command will report the configuration error; don't mask it
+        # while identifying the files to freeze.
+        pass
     skills = Path(getattr(args, 'skills_dir', None) or ROOT / 'skill/rules')
     files.update(skills.glob('*.json'))
     return {str(path.resolve()): hashlib.sha256(path.read_bytes()).hexdigest() for path in files}

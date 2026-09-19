@@ -31,7 +31,16 @@ def project_path(value):
 def write_json(path, value):
     temporary = path.with_name(path.name + ".tmp")
     temporary.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    temporary.replace(path)
+    # Windows readers can briefly hold the previous receipt without delete sharing.
+    # Retry only the atomic rename, never an API request or a failed computation.
+    for attempt in range(6):
+        try:
+            temporary.replace(path)
+            return
+        except PermissionError as error:
+            if os.name != 'nt' or error.winerror not in (5, 32, 33) or attempt == 5:
+                raise
+            time.sleep(.01 * (attempt + 1))
 
 
 def load_config(path=None, *, frozen=False, allow_external=False):

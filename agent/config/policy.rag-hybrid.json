@@ -8,7 +8,7 @@
   "max_skills": 2,
   "context_safety_tokens": 512,
   "diagnostic_max_chars": 4000,
-  "rag_enabled": false,
+  "rag_enabled": true,
   "rag_mode": "hybrid",
   "rag_top_k": 3,
   "rag_recall_k": 20,
