@@ -1,19 +1,21 @@
 # Bench4HLS baseline vs agent 评测记录（2026-09-17 · extract_code 更新后 · 全量 170 题）
 
+> 历史实验：本轮分数和配置保持原样；当前运行方式见 [项目状态](../design/instruction.md)。两轮使用重新生成的候选，未固定随机种子，跨轮差异不能全部归因于提取器改动；要做因果归因还需固定原始响应重放或重复对照。
+
 ## 摘要
 
-在 Bench4HLS 数据集**全量 170 题**上，用**本地 vLLM 端点（127.0.0.1:8001）**重新对比「纯 baseline 一次生成」与「agent 独立生成 + 修复回路」两条入口。本轮与 9-17 沙箱版（`9-17-Bench4HLS-BLandAgent-ALL-SandBox.md`）的唯一实质差异是：**harness 的代码块提取逻辑 `extract_code` 已被重写**（由「整个响应必须恰好是一个 cpp 代码块」的严格 `fullmatch` 匹配，改为「解析全部 Markdown 围栏、按 C/C++ 结构特征打分择优」的 ranked-fences 提取）。
+在 Bench4HLS 数据集**全量 170 题**上，用**本地 vLLM 端点（127.0.0.1:8001）**重新对比「纯 baseline 一次生成」与「agent 独立生成 + 修复回路」两条入口。本轮与 9-17 沙箱版（`9-17-Bench4HLS-BLandAgent-ALL-SandBox.md`）记录的主要代码改动是：**harness 的代码块提取逻辑 `extract_code` 已被重写**（由「整个响应必须恰好是一个 cpp 代码块」的严格 `fullmatch` 匹配，改为「解析全部 Markdown 围栏、按 C/C++ 结构特征打分择优」的 ranked-fences 提取）。
 
-结果是决定性的：
+本轮观察到以下变化：
 
-- **baseline 端到端通过率 40.0% → 52.4%（+12.4pp，多通过 21 题）**，全部来自生成失败的大幅下降（68 次 → 21 次，其中 `response_format_error` 52 → 9）。
-- **agent 几乎不变**：54.7% → 55.3%（+1 题），仍在采样波动范围内。
-- **baseline vs agent 的差距从 +25 题（+14.7pp）骤缩到 +5 题（+2.9pp）**，直接证实了上一份报告的核心判断——baseline 的低绝对通过率**主要是响应格式提取问题，而非编码/修复能力差异**。
+- **baseline 端到端通过率 40.0% → 52.4%（+12.4pp，多通过 21 题）**；同时生成失败由 68 次降至 21 次，其中 `response_format_error` 52 → 9。由于重新采样，不能将新增通过逐题全部归因于提取器。
+- **agent 几乎不变**：54.7% → 55.3%（+1 题），单轮相差 1 题，尚不足以判断提取改动对 Agent 的收益。
+- **baseline vs agent 的差距从 +25 题（+14.7pp）骤缩到 +5 题（+2.9pp）**，与响应格式失败减少同时出现，支持进一步检验提取规则对比较结果的影响；尚不能据此分离提取、提示和采样因素。
 - 出现了**新的反转**：kernel 大类上 baseline 反超 agent（10/20 vs 8/20），此前为 4 vs 7。
 
 本轮仍保持零网络失败、零 csim 启动异常（与 9-17 沙箱版一致）。
 
-> 本文基于本轮沙箱完整重跑的实际结果（`output/local_eval/20260917T123237360039Z-f045ed00/`），未复用任何历史候选或日志。两条入口仍独立采样（temperature=0.7、未指定 seed），因此逐题差异同时混合了提示词差异与采样波动；agent 侧的微小波动（如 compile 152→148）应在采样噪声内解读。
+> 本文基于本轮沙箱完整重跑的实际结果（`output/local_eval/20260917T123237360039Z-f045ed00/`），未复用任何历史候选或日志。两条入口仍独立采样（temperature=0.7、未指定 seed），因此逐题差异同时混合了提示词差异与采样波动；agent 侧的变化（如 compile 152→148）也需要重复实验才能判断来源。
 
 ## 评测配置
 
@@ -28,7 +30,7 @@
 | 并行度 | 4 workers |
 | baseline 入口 | `serve/baseline_entry.py`（生成）+ `evaluation.single_task --source`（验证） |
 | agent 入口 | `agent.interface.entry --task-manifest`（生成 + 验证 + 最多 2 轮修复） |
-| **代码块提取** | **`serve/code.py::extract_code`（ranked-fences v1）**：解析所有 Markdown 围栏，按结构完整度/目标函数/包含 include/pragma/代码量打分，取最优一个；未命中时退回原文（verbatim） |
+| **代码块提取** | **`serve/code.py::extract_code`（ranked-fences v1）**：按结构特征选择一个合格代码块；仅在没有围栏时原样返回（verbatim）；有围栏但无合格块则格式失败。裸基线不读取任务清单，Agent 可使用已知顶层函数 |
 | 修复反馈 | `feedback_policy=category_only`，模型看不到日志具体报错 |
 | 停止策略 | `max_repairs=2`、`stagnation_limit=2`；重复候选立即停止 |
 | 评测规模 | 170 题 × 2 方法 = 340 次评测，单批跑完，耗时约 36 分钟 |
@@ -167,15 +169,15 @@ baseline 的编译错误从 15 增到 24，是「进入验证的题目数增加�
 | Prob043 | ✅ 通过 | ✅ 通过 | 上一轮 baseline 是格式失败，本轮格式修复后通过 |
 | Prob152 | ✅ 通过 | ❌ 功能失败 | 上一轮两边都失败；本轮 baseline 通过、agent 仍失败（FIR 状态持久化，功能缺陷） |
 
-> Prob152 的变化很有代表性：上一轮 baseline 因 `response_format_error` 被判编译失败、agent 因 FIR 状态未跨调用保存而功能失败。本轮 baseline 的格式问题被 extract_code 修复后**直接通过**，而 agent 的功能缺陷依旧——再次印证 Prob152 的根因是功能正确性（FIR 状态持久化），而非环境或提取问题。
+> Prob152 上一轮 baseline 记录为编译失败，本轮重新生成后通过；Agent 本轮仍为功能失败。两轮未复用同一份源码，不能把 baseline 的通过描述为提取器直接修好了上一轮候选。功能归因应分别依据各轮实际源码和日志。
 
 ## 关键结论
 
-1. **extract_code 更新显著且集中地提升了 baseline**：overall 68 → 89（+21，+12.4pp），生成失败 68 → 21，其中 `response_format_error` 52 → 9。
-2. **agent 几乎不受影响**（93 → 94）：其提示词本就要求「仅返回源码」，格式失败接近 0，因此提取改进对它没有可观的增益。
-3. **baseline vs agent 的差距被大幅压缩**（+25 题 → +5 题，+14.7pp → +2.9pp），**证实了上一份报告的核心结论**——baseline 的绝对通过率此前被响应格式问题系统性压低，其「弱于 agent」的表象主要来自格式提取而非编码能力。
+1. **提取更新后的本轮 baseline 通过数增加**：overall 68 → 89（+21，+12.4pp），生成失败 68 → 21，其中 `response_format_error` 52 → 9。因同时重新采样，仍需固定响应重放或重复实验量化提取器的独立贡献。
+2. **本轮 Agent 通过数变化较小**（93 → 94）：其提示词要求「仅返回源码」，观察到的格式失败较少；单轮数据不足以断言提取改进无收益。
+3. **本轮 baseline 与 Agent 的差距缩小**（+25 题 → +5 题，+14.7pp → +2.9pp）。格式提取是需要控制的比较条件；现有两轮结果不能单独确定编码能力、提示词或修复策略的贡献。
 4. **修复回路的净收益被重新审视**：修复挽回 11 → 5，且「仅 baseline 通过」升至 17 题。在公平的格式口径下，agent 的剩余优势（+5 题）既包含提示词/约束差异，也包含采样波动，不能简单归因于「修复能力」。
-5. **kernel 出现反转**（baseline 10 vs agent 8）：kernel 的失败此前以格式/截断为主，格式修复后 baseline 直接受益；agent 在 kernel 上原地踏步，反映其功能/时序错误难被 `category_only` 修复。
+5. **本轮 kernel 通过数量反转**（baseline 10 vs agent 8）。它是本轮观察；格式、截断、重新采样及类别反馈各自的影响需要独立对照，不能凭两轮计数作确定归因。
 6. **基础设施依旧干净**：本地端点 + Linux Vitis 下零网络失败、零 csim 启动异常，5 道历史启动异常题中 4 道已通过、Prob152 现由 baseline 通过。
 
 ## 环境与数据产物
