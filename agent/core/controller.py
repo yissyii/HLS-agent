@@ -8,7 +8,7 @@ from agent.candidates.manager import Candidates
 from agent.context.builder import build
 from agent.context.prompts import load_prompts
 from agent.context.retrieval import Retrieval
-from agent.core.contracts import Budget, digest, empty_checks, json_digest
+from agent.core.contracts import Budget, ValidationResult, digest, empty_checks, json_digest
 from agent.core.policy import decide
 from agent.feedback.diagnostics import classify
 from serve.code import extract_code
@@ -16,7 +16,8 @@ from serve.inference import Failure
 
 
 def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
-          *, initial_source=None, raw_initial=False, started=None, rag_runtime=None):
+          *, initial_source=None, raw_initial=False, started=None, rag_runtime=None,
+          initial_validation=None):
     started = time.monotonic() if started is None else started
     budget = Budget(started, started + runtime['hls']['total_timeout_seconds'] - policy['cleanup_reserve_seconds'])
     candidates = Candidates(task.fingerprint, json_digest(runtime['hls']))
@@ -129,12 +130,15 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
                 stop = 'no_validation_materials'
                 break
             diagnostic = None
-            for stage in task.stages:
+            for stage_index, stage in enumerate(task.stages):
                 if budget.remaining() <= 0:
                     raise Failure('total_timeout', 'Budget exhausted before ' + stage)
                 budget.tool_calls += 1
                 artifacts.event('validation_started', attempt=number, stage=stage, source_sha256=candidate.sha256)
-                outcome = validator.check(candidate, task, runtime, stage, budget.deadline)
+                if number == 0 and initial_validation is not None and stage_index < len(initial_validation):
+                    outcome = ValidationResult(**initial_validation[stage_index])
+                else:
+                    outcome = validator.check(candidate, task, runtime, stage, budget.deadline)
                 candidates.attach(candidate, outcome)
                 summary['validation_history'].append({'attempt': number, **asdict(outcome)})
                 summary['stages'][stage] = outcome.outcome

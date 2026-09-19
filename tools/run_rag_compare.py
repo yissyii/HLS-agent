@@ -61,15 +61,21 @@ def _metrics(receipt):
     }
 
 
-def _entry(task_dir, out_dir, config, condition, policy, rag_runtime, initial_source=None, timeout=PER_TASK_TIMEOUT):
+def _entry(task_dir, out_dir, config, condition, policy, rag_runtime, initial_source=None, initial_validation=None, timeout=PER_TASK_TIMEOUT):
     cmd = [sys.executable, "-B", "-m", "agent.interface.entry",
            str(task_dir / "problem.txt"), str(out_dir), "--config", config,
            "--task-manifest", str(task_dir / "task.json")]
     cmd += ["--policy", str(policy), "--rag-runtime", str(rag_runtime)]
-    if condition != "draft":
-        if initial_source is None or not Path(initial_source).is_file():
-            raise ValueError("Comparison requires a valid frozen first draft")
+    if initial_source is not None:
+        if not Path(initial_source).is_file():
+            raise ValueError("Initial source file missing")
         cmd += ["--initial-source", str(initial_source)]
+    elif condition != "draft":
+        raise ValueError("Comparison requires a valid frozen first draft")
+    if initial_validation is not None:
+        if not Path(initial_validation).is_file():
+            raise ValueError("Initial validation file missing")
+        cmd += ["--initial-validation", str(initial_validation)]
     r = _run(cmd, timeout=timeout)
     receipt_path = Path(out_dir) / "result.json"
     receipt = json.loads(receipt_path.read_text(encoding="utf-8")) if receipt_path.is_file() else _last_json(r.stdout)
@@ -101,6 +107,7 @@ def main():
                         help="Common policy; only RAG enable/mode differ between conditions")
     parser.add_argument("--config", default="serve/runtime.rag-eval.json")
     parser.add_argument("--rag-runtime", default="rag/runtime.local.json")
+    parser.add_argument("--drafts-from", help="Reuse frozen first drafts from a prior rag_compare batch dir (skip the draft phase)")
     parser.add_argument("--task", help="Run a single Prob id (e.g. Prob001)")
     parser.add_argument("--selection", help="Selection JSON from select_bench4hls_tasks.py")
     parser.add_argument("--dataset", default=str(DATASET), help="Any directory with compatible task folders")
@@ -148,6 +155,16 @@ def _valid_draft(directory):
     expected = next((c.get("source_sha256") for c in receipt.get("candidates", [])
                      if c.get("candidate_id") == 0), None)
     return source if expected == file_sha256(source) else None
+
+
+def _extract_validation(directory):
+    """Return per-stage ValidationResult dicts from a validated draft result."""
+    receipt_path = Path(directory) / "result.json"
+    if not receipt_path.is_file():
+        return None
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    history = receipt.get("validation_history", [])
+    return [{k: v for k, v in entry.items() if k != "attempt"} for entry in history]
 
 
 def summarize(rows, drafts):
@@ -210,10 +227,10 @@ def _evaluate(args):
     summary_file = batch_dir / "summary.json"
     def flush():
         write_json(summary_file, summary)
-    def execute(task, condition, source=None):
+    def execute(task, condition, source=None, validation=None):
         try:
             return _entry(task, batch_dir/task.name/condition, str(config_path), condition,
-                          policies[condition], runtime_path, source, timeout=timeout)
+                          policies[condition], runtime_path, source, validation, timeout=timeout)
         except Exception as error:
             return dict(task=task.name, method=condition, stage="runner_error", ok=False,
                         reason=type(error).__name__, message=str(error))
@@ -222,16 +239,41 @@ def _evaluate(args):
     frozen_drafts = {}
     frozen_hashes = {str(path): file_sha256(path) for path in [config_path, runtime_path, *policies.values()]}
     # Separate generation from all three repair conditions, including off.
+    validations = {}
     for task in task_dirs:
-        row = execute(task, "draft")
-        draft = _valid_draft(batch_dir/task.name/"draft")
-        if draft is not None:
-            frozen = batch_dir/task.name/"initial.cpp"
-            frozen.write_bytes(draft.read_bytes())
+        reused = None
+        if args.drafts_from:
+            reused = _valid_draft(Path(args.drafts_from) / task.name / "off")
+        if reused is not None:
+            frozen = batch_dir / task.name / "initial.cpp"
+            frozen.parent.mkdir(parents=True, exist_ok=True)
+            frozen.write_bytes(reused.read_bytes())
             frozen_drafts[task.name] = frozen
-            row["source_sha256"] = file_sha256(frozen)
+            # Validate the frozen draft once (skip generation, no repair).
+            execute(task, "draft", source=frozen)
+            val = _extract_validation(batch_dir / task.name / "draft")
+            if val:
+                val_path = batch_dir / task.name / "initial_validation.json"
+                write_json(val_path, val)
+                validations[task.name] = val_path
+            row = dict(task=task.name, method="draft", valid_source=True,
+                       source_sha256=file_sha256(frozen), reused_from=str(args.drafts_from))
             frozen_hashes[str(frozen)] = row['source_sha256']
-        row["valid_source"] = draft is not None
+        else:
+            row = execute(task, "draft")
+            draft = _valid_draft(batch_dir/task.name/"draft")
+            if draft is not None:
+                frozen = batch_dir/task.name/"initial.cpp"
+                frozen.write_bytes(draft.read_bytes())
+                frozen_drafts[task.name] = frozen
+                val = _extract_validation(batch_dir / task.name / "draft")
+                if val:
+                    val_path = batch_dir / task.name / "initial_validation.json"
+                    write_json(val_path, val)
+                    validations[task.name] = val_path
+                row["source_sha256"] = file_sha256(frozen)
+                frozen_hashes[str(frozen)] = row['source_sha256']
+            row["valid_source"] = draft is not None
         summary["drafts"].append(row)
         flush()
     jobs = []
@@ -243,7 +285,7 @@ def _evaluate(args):
                                                overall=False, api_requests=0, elapsed_seconds=None))
         else:
             for name in CONDITIONS:
-                jobs.append((task, name, frozen_drafts[task.name]))
+                jobs.append((task, name, frozen_drafts[task.name], validations.get(task.name)))
     flush()
     # All conditions share the same queue and concurrency, with workers=1 by default.
     summary['frozen_snapshot_sha256'] = frozen_hashes
