@@ -11,8 +11,11 @@ _local = root / "serve/runtime.local.json"
 _source = _local if _local.is_file() else root / "serve/runtime.json"
 config = json.loads(_source.read_text())['model']
 url = urllib.parse.urlsplit(config['base_url'])
-context = ssl._create_unverified_context() if config['tls_sha256'] else ssl.create_default_context()
-conn = http.client.HTTPSConnection(url.hostname, url.port, context=context, timeout=60)
+if url.scheme == 'https':
+    context = ssl._create_unverified_context() if config['tls_sha256'] else ssl.create_default_context()
+    conn = http.client.HTTPSConnection(url.hostname, url.port, context=context, timeout=60)
+else:
+    conn = http.client.HTTPConnection(url.hostname, url.port, timeout=60)
 conn.connect()
 if config['tls_sha256']:
     assert hashlib.sha256(conn.sock.getpeercert(binary_form=True)).hexdigest() == config['tls_sha256'], 'Certificate changed'
