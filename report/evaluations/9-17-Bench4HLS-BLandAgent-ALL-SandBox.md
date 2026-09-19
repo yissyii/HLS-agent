@@ -1,5 +1,7 @@
 # Bench4HLS baseline vs agent 评测记录（2026-09-17，全量 170 题 · 沙箱复跑）
 
+> 历史实验：本轮使用旧的严格代码块提取规则。当前已采用 `ranked_fences_v1`，更新后另行重跑的报告见 [提取更新后的评测](9-17-Bench4HLS-BLandAgent-ALL-SandBox-ExtractUpdated.md)。本轮结果继续按原口径解释。
+
 ## 摘要
 
 在 Bench4HLS 数据集**全量 170 题**上，用**本地 vLLM 端点（127.0.0.1:8001）**重新对比「纯 baseline 一次生成」与「agent 独立生成 + 修复回路」两条入口。agent 的 compile、run、synthesize、overall 均高于 baseline，端到端通过率 **40.0% → 54.7%（+14.7pp，多通过 25 题）**；combinational +20.6pp、sequential +9.8pp，kernel 由 9-16 的「持平」变为 **agent 净领先（7/20 vs 4/20）**。
@@ -155,16 +157,16 @@ agent 的功能错误绝对数高于 baseline，是因为 agent 通过生成阶�
 | Prob043 | ❌ 响应格式失败 | ✅ 通过 | agent 通过；baseline 是格式问题（非启动） |
 | Prob152 | ❌ 编译失败 | ❌ 功能失败 | 两边仍失败，根因是 FIR 状态未跨调用保存（功能），非启动 |
 
-这直接证实 9-16 的「启动异常是 Windows 环境相关、与具体候选二进制相关」的判断：换到 WSL2 Linux Vitis 后，同一批题目的启动异常**全部消失**。5 题中 4 题的 agent 现已通过；Prob152 的失败根因与 9-16 的静态复核一致（FIR 状态持久化），属于真实功能缺陷而非环境问题。
+换到 WSL2 Linux Vitis 并重新生成候选后，本轮同一批题目中未观察到启动异常；环境和候选均有变化，尚不能由此确定原 Windows 异常的根因。5 题中 4 题的 agent 现已通过；Prob152 的失败根因与 9-16 的静态复核一致（FIR 状态持久化），属于真实功能缺陷而非环境问题。
 
 ## 关键结论
 
 1. **本轮 agent 总体通过数量更高，但不是逐题严格占优**：baseline 68 题、agent 93 题，仅 agent 通过 35 题、仅 baseline 通过 10 题。
-2. **baseline 的 40% 生成失败是响应格式问题，不是编码能力**：52 次 `response_format_error` + 16 次 `generation_incomplete`，全部源于「题目原文提示词 + 严格提取规则」的组合。这使 baseline 的绝对通过率被系统性压低，baseline vs agent 的差距不宜直接解读为编码/修复能力。
+2. **baseline 有 40% 的题目未进入验证**：52 次 `response_format_error` 和 16 次 `generation_incomplete`。格式失败与截断应分别报告；不能把截断全部归因于提取规则，差距也不宜直接解读为编码或修复能力。
 3. **agent 的格式约束是其重要优势来源**：显式要求「仅返回源码」使 agent 格式失败为 0，170 题全部进入验证。
 4. **修复能力受限于 `category_only` 反馈**：本轮修复从自身首稿挽回 11 题（与 9-16 的 12 题相当），功能错误仍是主要缺口，模型看不到反例/具体报错。
-5. **kernel 本轮 agent 净领先（7/20 vs 4/20）**，推翻了 9-16「kernel 净增益为零」的观察，但绝对数量小，需重复实验确认。
-6. **沙箱环境彻底消除了网络抖动与 csim 启动异常两类基础设施问题**：本地端点 + Linux Vitis 下两者均为 0，5 道历史启动异常题中 4 道的 agent 现已通过。
+5. **kernel 本轮 agent 净领先（7/20 vs 4/20）**，与 9-16「kernel 净增益为零」的本轮观察不同，但绝对数量小，需重复实验确认。
+6. **本轮未观察到网络失败或 csim 启动异常**：本地端点 + Linux Vitis 下两者均为 0，5 道历史启动异常题中 4 道的 agent 本轮通过；这不保证后续运行不会再出现基础设施故障。
 
 ## 环境与数据产物
 

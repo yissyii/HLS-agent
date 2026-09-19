@@ -7,6 +7,7 @@ import subprocess
 import time
 import xml.etree.ElementTree as ET
 
+from evaluation.diagnostics import extract_diagnostics
 from serve.inference import Failure, project_path
 
 
@@ -89,24 +90,6 @@ def run_process(command, work, environment_values, log, timeout):
     return {"exit_code": process.returncode, "timed_out": timed_out, "elapsed_seconds": round(time.monotonic() - started, 3), "log": log.name}
 
 
-def classify(stage, execution, text):
-    lowered = text.lower()
-    if execution["timed_out"]:
-        return "tool_timeout"
-    if any(value in lowered for value in ["license checkout failed", "failed to acquire license", "no valid license", "license check failed", "failed to check out license"]):
-        return "license_error"
-    if any(value in lowered for value in ["error while loading shared libraries", "command not found", "no such file or directory", "permission denied", "couldn't create signal pipe", "win32 error 5", "access is denied"]):
-        return "environment_or_dependency_error"
-    if stage == "synthesis":
-        return "synthesis_error"
-    compiler_error = re.search(r"^(?!\s*error:\s*\[).*\b(?:fatal )?error:|undefined reference", lowered, re.MULTILINE)
-    if compiler_error:
-        return "compile_error"
-    if ("csim.exe" in lowered or "csim.out" in lowered) and any(value in lowered for value in ["linking", "running", "generating"]):
-        return "functional_or_runtime_error"
-    return "compile_or_csim_error"
-
-
 def validate_stage(stage, work, manifest, settings, cpu_only, budget):
     executable, values = environment(work, settings, cpu_only)
     flags = "-std=" + manifest["cxx_standard"]
@@ -149,7 +132,9 @@ def validate_stage(stage, work, manifest, settings, cpu_only, budget):
                 passed = False
     execution["status"] = "passed" if passed else "failed"
     if not passed:
-        execution["category"] = classify(stage, execution, text)
-        diagnostics = [line for line in text.splitlines() if re.search(r"error:|ERROR:|FAIL|mismatch|fatal", line, re.IGNORECASE)]
-        execution["diagnostic_tail"] = ("\n".join(diagnostics[:30]) + "\n" + "\n".join(text.splitlines()[-12:]))[-6000:]
+        extracted = extract_diagnostics(stage, execution, text)
+        execution["category"] = extracted["category"]
+        execution["diagnostics"] = extracted["entries"]
+        execution["compiler_text"] = extracted["compiler_text"]
+        execution["diagnostic_tail"] = extracted["diagnostic_tail"]
     return execution
