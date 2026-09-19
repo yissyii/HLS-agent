@@ -37,8 +37,8 @@ def load_manifest(path):
     if manifest['cxx_standard'] not in {'c++11', 'c++14', 'c++17'}:
         raise Failure('input_error', 'Unsupported C++ standard')
     manifest['feedback_policy'] = manifest.get('feedback_policy', 'category_only')
-    if manifest['feedback_policy'] not in {'category_only', 'compiler_diagnostics', 'public_diagnostics'}:
-        raise Failure('input_error', 'feedback_policy must be category_only, compiler_diagnostics or public_diagnostics')
+    if manifest['feedback_policy'] not in {'category_only', 'compiler_diagnostics', 'functional_diagnostics', 'public_diagnostics'}:
+        raise Failure('input_error', 'feedback_policy must be category_only, compiler_diagnostics, functional_diagnostics or public_diagnostics')
     names = [manifest['problem_file']] + sum((manifest[k] for k in ('testbench_files', 'design_files', 'support_files')), [])
     all_names = names + [manifest['source_file']]
     if len({n.casefold() for n in all_names}) != len(all_names):

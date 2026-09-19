@@ -19,3 +19,7 @@ Markdown 对照：[项目结构](project_structure.md) · [Agent 流程与源码
 - [RAG 接入 Agent](rag-agent-flow.canvas)：开关、反馈权限、发布门、检索、预算及修复循环；[Markdown 对照](../../report/design/rag_agent.md)。
 
 按用户要求，今后完成新的代码模块时，同时提供一张概览流程图，优先说明输入、主要步骤、输出、必要分支和循环，并附上源码位置。明确区分已实现与计划功能；新增独立模块使用单独画布，并同步受影响的总体图，避免把所有实现细节堆在一张图中。
+
+- [RAG 固定首稿对照实验](rag-compare-flow.canvas)：独立首稿、有效性检查、统一修复条件和配对报告；[复盘与实现](../../report/design/rag_repair_v2.md)。
+
+- [结构化功能诊断流程](functional-diagnostics-flow.canvas)：日志事实、反馈权限、事件预算和修复／检索用途。

@@ -13,8 +13,13 @@ def retrieve(job):
     retriever = Retriever(release['corpus'], release['index'] if options['rag_mode'] == 'hybrid' else None,
                           job['model'])
     reference_records(retriever.records)
+    evidence_filter = None
+    if options.get('rag_strategy') == 'diagnostic_v1':
+        from rag.query import assess
+        evidence_filter = lambda record: assess(record, job['query_plan'])
     result = retriever.search(job['query'], mode=options['rag_mode'], top_k=options['rag_top_k'],
-                              recall_k=options['rag_recall_k'], max_bytes=options['rag_max_bytes'])
+                              recall_k=options['rag_recall_k'], max_bytes=options['rag_max_bytes'],
+                              evidence_filter=evidence_filter)
     return dict(result, status='completed')
 
 

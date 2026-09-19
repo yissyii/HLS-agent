@@ -66,6 +66,12 @@ class RAGContracts(unittest.TestCase):
         self.public_task(feedback='compiler_diagnostics')
         self.model = FakeModel(['int kernel(int a){return bad;}', 'int kernel(int a){return a+1;}'])
         self.validator = FakeValidator({(0,'csim'):'compile_error'})
+        check = self.validator.check
+        def with_diagnostic(*args):
+            from dataclasses import replace
+            result = check(*args)
+            return replace(result, feedback_text='error: recursive functions cannot be synthesized')
+        self.validator.check = with_diagnostic
         self.problem.write_text('Implement int kernel(int a), returning a + 1. Recursive functions are forbidden.')
 
     def test_disabled_has_identical_messages_and_no_runtime_read(self):
@@ -199,6 +205,40 @@ class RAGContracts(unittest.TestCase):
         context=json.loads((self.directory/'agent/candidates/001/context.json').read_text())
         self.assertEqual(context['retrieval']['injected_ids'],['fixture-recursion'])
         self.assertLessEqual(context['rag_injected_bytes'],self.policy['rag_max_bytes'])
+
+    def test_category_only_feedback_skips_worker_but_repairs(self):
+        self.enable()
+        self.validator = FakeValidator({(0,'csim'):'functional_or_runtime_error'})
+        with patch('agent.context.retrieval.run_process', side_effect=AssertionError('worker must not run')):
+            code, result = self.solve(rag_runtime=self.rag_runtime)
+        self.assertEqual(code, 0)
+        self.assertEqual(len(self.model.prompts), 2)
+        self.assertEqual(result['rag_history'][0]['status'], 'skipped')
+        self.assertEqual(result['rag_history'][0]['skip_reason'], 'insufficient_diagnostic')
+        self.assertEqual(self.model.prompts[1].context['retrieval']['status'], 'skipped')
+        self.assertNotIn('<REFERENCE_MATERIAL>', self.model.prompts[1].text)
+
+    def test_irrelevant_reference_is_rejected_and_repair_continues(self):
+        self.enable()
+        check = self.validator.check
+        def unrelated(*args):
+            from dataclasses import replace
+            return replace(check(*args), feedback_text="error: no member 'parity' in 'ap_uint<100>'")
+        self.validator.check = unrelated
+        code, result = self.solve(rag_runtime=self.rag_runtime)
+        self.assertEqual(code, 0)
+        evidence = result['rag_history'][0]
+        self.assertEqual(evidence['status'], 'no_reference_injected')
+        self.assertEqual(evidence['injected_ids'], [])
+
+    def test_legacy_policy_retains_old_query_and_no_skip(self):
+        self.enable()
+        self.policy['rag_strategy'] = 'legacy'
+        self.validator = FakeValidator({(0,'csim'):'functional_or_runtime_error'})
+        code, result = self.solve(rag_runtime=self.rag_runtime)
+        self.assertEqual(code, 0)
+        self.assertEqual(result['rag_history'][0]['status'], 'injected')
+        self.assertTrue(result['rag_history'][0]['query'].startswith('Vitis HLS task:'))
 
 
 if __name__=='__main__': unittest.main()

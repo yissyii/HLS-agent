@@ -7,8 +7,9 @@ from serve.inference import Failure
 
 DEFAULT_PATH = Path(__file__).resolve().parents[1] / 'config/policy.json'
 
-RAG_DEFAULTS = dict(rag_enabled=False, rag_mode='hybrid', rag_top_k=3, rag_recall_k=20,
-                    rag_max_bytes=6000, rag_query_max_chars=1600, rag_timeout_seconds=30)
+RAG_DEFAULTS = dict(rag_enabled=False, rag_mode='hybrid', rag_top_k=2, rag_recall_k=20,
+                    rag_max_bytes=2400, rag_query_max_chars=1600, rag_timeout_seconds=30,
+                    rag_strategy='diagnostic_v1')
 
 
 def rag_options(policy):
@@ -37,6 +38,8 @@ def validate_policy(value):
     if type(value['skills_enabled']) is not bool:
         raise Failure('policy_error', 'skills_enabled must be boolean')
     rag = rag_options(value)
+    if rag['rag_strategy'] not in ('legacy', 'diagnostic_v1'):
+        raise Failure('policy_error', 'Invalid RAG strategy')
     if type(rag['rag_enabled']) is not bool or rag['rag_mode'] not in {'bm25', 'hybrid'}:
         raise Failure('policy_error', 'Invalid RAG mode or enable flag')
     for key, low, high in (('rag_top_k', 1, 10), ('rag_recall_k', 1, 100),

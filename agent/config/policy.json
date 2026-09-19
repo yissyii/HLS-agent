@@ -10,9 +10,10 @@
   "diagnostic_max_chars": 4000,
   "rag_enabled": false,
   "rag_mode": "hybrid",
-  "rag_top_k": 3,
+  "rag_top_k": 2,
   "rag_recall_k": 20,
-  "rag_max_bytes": 6000,
+  "rag_max_bytes": 2400,
   "rag_query_max_chars": 1600,
-  "rag_timeout_seconds": 30
+  "rag_timeout_seconds": 30,
+  "rag_strategy": "diagnostic_v1"
 }

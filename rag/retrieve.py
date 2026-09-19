@@ -96,7 +96,7 @@ class Retriever:
         return self.encoder.encode(queries, query=True)
 
     def search(self, query, mode='hybrid', top_k=3, recall_k=20, max_bytes=6000,
-               query_vector=None, diversify=True):
+               query_vector=None, diversify=True, evidence_filter=None):
         if not query.strip() or top_k < 1 or recall_k < top_k or max_bytes < 1:
             raise ValueError('Nonempty query and valid positive retrieval limits required')
         if mode not in ('bm25', 'dense', 'hybrid'):
@@ -118,8 +118,14 @@ class Retriever:
         sparse_scores, dense_scores = dict(sparse), dict(dense)
         hits, parents, hashes = [], set(), set()
         used = 0
+        selection_audit = []
         for row, score in ranking:
             r = self.records[row]
+            if evidence_filter:
+                accepted, decision = evidence_filter(r)
+                selection_audit.append(decision)
+                if not accepted:
+                    continue
             parent = r['source'].get('parent_id', r['id'])
             if r['content_sha256'] in hashes or (diversify and parent in parents):
                 continue
@@ -136,7 +142,8 @@ class Retriever:
                 break
         return dict(mode=mode, query=query, corpus_sha256=self.corpus_manifest['records_sha256'],
                     index_fingerprint=self.index_manifest['fingerprint'] if self.index_manifest and mode != 'bm25' else None,
-                    hits=hits, context_bytes=used, max_bytes=max_bytes, token_count_verified=False,
+                    hits=hits, selection_audit=selection_audit,
+                    context_bytes=used, max_bytes=max_bytes, token_count_verified=False,
                     budget_method='UTF-8 byte cap; not an exact generation-model token count',
                     elapsed_seconds=round(time.monotonic() - started, 4),
                     caution='Ranked reference candidates, not verified repairs or a calibrated confidence score.')

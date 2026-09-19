@@ -93,3 +93,5 @@ Agent 接入默认关闭；只有 policy 中显式设置 `rag_enabled=true` 才�
 
 - [AMD UG1399 2025.2](https://docs.amd.com/r/2025.2-English/ug1399-vitis-hls)：文档使用遵循 AMD 条款，模型许可证不覆盖手册。
 - [Qwen3-Embedding-0.6B 官方模型](https://huggingface.co/Qwen/Qwen3-Embedding-0.6B)：Apache-2.0，安装时保存原始模型卡及文件哈希。
+
+Agent 的诊断门和候选筛选见 [RAG 改进记录](../report/design/rag_repair_v2.md)。开发用 `rag.retrieve` CLI 保留无筛选的基础检索默认值，Agent 则使用 policy 的 2 条／2400 字节及 `diagnostic_v1`，两者用途与默认行为不同。

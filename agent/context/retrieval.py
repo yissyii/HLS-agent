@@ -70,8 +70,16 @@ class Retrieval:
             return None
         query, source = make_query(task.problem.decode('utf-8'), diagnostic.feedback,
                                    self.options['rag_query_max_chars'])
+        feedback_policy = task.manifest['feedback_policy'] if task.manifest else None
+        plan = {'strategy': 'legacy', 'skip_reason': None}
+        if self.options['rag_strategy'] == 'diagnostic_v1':
+            from rag.query import query_plan
+            query, plan = query_plan(task.problem.decode('utf-8'), diagnostic.feedback,
+                                     diagnostic.category, feedback_policy,
+                                     self.options['rag_query_max_chars'])
+            source.update({k: plan[k] for k in ('problem_trimmed', 'feedback_trimmed', 'feedback_cleaned')})
         evidence = dict(status='running', query=query, query_source=source,
-                        feedback_policy=task.manifest['feedback_policy'] if task.manifest else None,
+                        feedback_policy=feedback_policy, query_plan=plan,
                         diagnostic_fingerprint=diagnostic.fingerprint, mode=self.options['rag_mode'],
                         rag_config_sha256=self.sha256, release_id=self.release['release_id'],
                         corpus_sha256=self.release['records_sha256'],
@@ -82,10 +90,14 @@ class Retrieval:
         write_json(evidence_path, evidence)
         started = time.monotonic()
         try:
+            if plan['skip_reason']:
+                evidence.update(status='skipped', skip_reason=plan['skip_reason'], hits=[])
+                return evidence
             timeout = min(self.options['rag_timeout_seconds'], deadline - started - validation_reserve)
             if timeout <= 0:
                 raise Failure('rag_insufficient_budget', 'No retrieval time available after validation reserve')
-            job = dict(query=query, options=self.options, release=self.release, model=self.runtime['model'])
+            job = dict(query=query, options=self.options, release=self.release, model=self.runtime['model'],
+                       query_plan=plan)
             job_path = directory / 'retrieval_input.json'
             output = directory / 'retrieval_output.json'
             write_json(job_path, job)
@@ -104,7 +116,8 @@ class Retrieval:
             if result.get('corpus_sha256') != self.release['records_sha256'] or result.get('query') != query:
                 raise Failure('rag_evidence_mismatch', 'Retrieval output differs from request/release')
             evidence.update(status='retrieved', retrieved_ids=[h['record']['id'] for h in result['hits']],
-                            hits=result['hits'], retrieval_context_bytes=result['context_bytes'])
+                            hits=result['hits'], retrieval_context_bytes=result['context_bytes'],
+                            selection_audit=result.get('selection_audit', []))
             return evidence
         except (Failure, OSError, ValueError, KeyError, TypeError) as error:
             evidence.update(status='failed', category=getattr(error, 'category', 'rag_retrieval_error'), error=str(error))

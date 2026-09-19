@@ -101,6 +101,8 @@ def input_files(args):
     files.update(PROMPT_ROOT / name for name in PROMPT_FILES)
     try:
         policy = load_policy(getattr(args, 'policy', None))
+        if getattr(args, 'rag_compare', False):
+            policy = dict(policy, rag_enabled=True, rag_mode='hybrid')
         files.update(input_artifacts(policy, getattr(args, 'rag_runtime', None)))
     except (OSError, ValueError, KeyError, TypeError):
         # The normal command will report the configuration error; don't mask it

@@ -3,6 +3,7 @@ from agent.core.contracts import PromptBundle, digest, json_digest
 from agent.context.prompts import load_prompts
 from agent.core.policy import rag_options
 from serve.inference import Failure
+from evaluation.functional import fit_feedback
 
 
 def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw_initial=False, *, templates=None, retrieval=None):
@@ -32,7 +33,10 @@ def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw
     if candidate is not None:
         mandatory += '<CURRENT_SOURCE>\n' + candidate.source + '\n</CURRENT_SOURCE>\n'
         provenance.append({'kind': 'candidate', 'sha256': candidate.sha256})
-    feedback = diagnostic.feedback[:policy['diagnostic_max_chars']] if diagnostic else ''
+    structured_feedback = bool(task.manifest and task.manifest['feedback_policy'] == 'functional_diagnostics')
+    def limit_feedback(text, limit):
+        return fit_feedback(text, limit) if structured_feedback else text[:limit]
+    feedback = limit_feedback(diagnostic.feedback, policy['diagnostic_max_chars']) if diagnostic else ''
     selected = list(skills)
     rag_hits = list((retrieval or {}).get('hits', [])) if retrieval else []
 
@@ -75,7 +79,7 @@ def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw
         selected.pop()
         text = assemble()
     while budgeted_bytes(text) > available and len(feedback) > 256:
-        feedback = feedback[:max(256, len(feedback) // 2)]
+        feedback = limit_feedback(feedback, max(256, len(feedback) // 2))
         text = assemble()
     if budgeted_bytes(text) > available:
         raise Failure('context_budget_exceeded', 'Required context exceeds conservative budget; no silent source truncation')
@@ -101,7 +105,8 @@ def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw
         'rag_candidate_ids': [h['record']['id'] for h in rag_hits],
         'rag_injected_bytes': len(references.encode('utf-8')),
         'retrieval': ({**{k: v for k, v in retrieval.items() if k != 'hits'},
-                       'status': 'injected' if rag_hits else 'no_reference_injected',
+                       'status': ('skipped' if retrieval.get('status') == 'skipped' else
+                                  'injected' if rag_hits else 'no_reference_injected'),
                        'injected_ids': [h['record']['id'] for h in rag_hits],
                        'injected_bytes': len(references.encode('utf-8'))} if retrieval else None),
         'output_tokens': runtime['model']['max_tokens'], 'safety_tokens': policy['context_safety_tokens'],

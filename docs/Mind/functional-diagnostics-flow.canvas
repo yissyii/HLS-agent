@@ -1,0 +1,150 @@
+{
+  "nodes": [
+    {
+      "id": "logs",
+      "type": "text",
+      "x": 0,
+      "y": 0,
+      "width": 430,
+      "height": 175,
+      "text": "**① Vitis csim 结果**\n日志＋进程状态。\n不匹配／断言／运行异常／明确死锁／测试汇总。",
+      "color": "4"
+    },
+    {
+      "id": "extract",
+      "type": "text",
+      "x": 0,
+      "y": 260,
+      "width": 430,
+      "height": 175,
+      "text": "**② functional.py 提取事实**\n仅日志实际出现的字段；不推断输入或历史。\n去重，最多保存 20 个事件和原日志行号。\n完整证据留在 validation outcome。",
+      "color": "4"
+    },
+    {
+      "id": "policy",
+      "type": "text",
+      "x": 0,
+      "y": 520,
+      "width": 430,
+      "height": 175,
+      "text": "**③ task.json 控制释放**\ncategory_only／compiler_diagnostics：功能类别。\nfunctional_diagnostics：有界结构化事实。\npublic_diagnostics：原始尾部。",
+      "color": "3"
+    },
+    {
+      "id": "limited",
+      "type": "text",
+      "x": 600,
+      "y": 520,
+      "width": 430,
+      "height": 175,
+      "text": "**原权限保持**\n未显式允许公开的 expected／actual 不进模型。\n未知权限测试不自动切换；没有改写测试台。",
+      "color": "3"
+    },
+    {
+      "id": "format",
+      "type": "text",
+      "x": 0,
+      "y": 780,
+      "width": 430,
+      "height": 175,
+      "text": "**④ 结构化反馈预算**\n最多 3 条，优先具体事件，最长 2800 字符。\n总提示预算继续按完整事件缩减。\n无可用事实／放不下：明确退回类别。",
+      "color": "4"
+    },
+    {
+      "id": "query",
+      "type": "text",
+      "x": 600,
+      "y": 780,
+      "width": 430,
+      "height": 175,
+      "text": "**⑤ RAG 用途判断**\n反例数值：不强行查手册，继续修复。\n明确运行异常／死锁消息：诊断优先查询。\n原文仍需通过既有词项门和预算。",
+      "color": "4"
+    },
+    {
+      "id": "model",
+      "type": "text",
+      "x": 0,
+      "y": 1040,
+      "width": 430,
+      "height": 175,
+      "text": "**⑥ 修复请求**\n相同 system＋题目／代码／已释放功能事实。\n生成新候选，再验证。\n不改变修复次数和停止机制。",
+      "color": "5"
+    },
+    {
+      "id": "docs",
+      "type": "text",
+      "x": 600,
+      "y": 1040,
+      "width": 430,
+      "height": 175,
+      "text": "**理解与查证**\nrequest.json：实际模型输入。\nresult.json：内部结构化事件。\n[[zcomp/report/design/functional_diagnostics.md|配置、字段和验证说明]]",
+      "color": "6"
+    }
+  ],
+  "edges": [
+    {
+      "id": "logs-extract",
+      "fromNode": "logs",
+      "fromSide": "bottom",
+      "toNode": "extract",
+      "toSide": "top",
+      "label": ""
+    },
+    {
+      "id": "extract-policy",
+      "fromNode": "extract",
+      "fromSide": "bottom",
+      "toNode": "policy",
+      "toSide": "top",
+      "label": ""
+    },
+    {
+      "id": "policy-format",
+      "fromNode": "policy",
+      "fromSide": "bottom",
+      "toNode": "format",
+      "toSide": "top",
+      "label": ""
+    },
+    {
+      "id": "format-model",
+      "fromNode": "format",
+      "fromSide": "bottom",
+      "toNode": "model",
+      "toSide": "top",
+      "label": ""
+    },
+    {
+      "id": "policy-limited",
+      "fromNode": "policy",
+      "fromSide": "right",
+      "toNode": "limited",
+      "toSide": "left",
+      "label": "按权限"
+    },
+    {
+      "id": "format-query",
+      "fromNode": "format",
+      "fromSide": "right",
+      "toNode": "query",
+      "toSide": "left",
+      "label": "已释放反馈"
+    },
+    {
+      "id": "query-model",
+      "fromNode": "query",
+      "fromSide": "bottom",
+      "toNode": "model",
+      "toSide": "right",
+      "label": "可选参考"
+    },
+    {
+      "id": "model-logs",
+      "fromNode": "model",
+      "fromSide": "left",
+      "toNode": "logs",
+      "toSide": "left",
+      "label": "再次验证"
+    }
+  ]
+}

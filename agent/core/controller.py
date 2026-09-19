@@ -94,7 +94,8 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
                 if retrieval:
                     retrieval['injected_ids'] = prompt.context['rag_candidate_ids']
                     retrieval['injected_bytes'] = prompt.context['rag_injected_bytes']
-                    retrieval['status'] = 'injected' if retrieval['injected_ids'] else 'no_reference_injected'
+                    if retrieval['status'] != 'skipped':
+                        retrieval['status'] = 'injected' if retrieval['injected_ids'] else 'no_reference_injected'
                     artifacts.json(directory / 'retrieval.json', retrieval)
                     summary['rag_history'][-1] = {k: v for k, v in retrieval.items() if k != 'hits'}
                     artifacts.event('rag_retrieved', attempt=number, query_sha256=digest(retrieval['query'].encode()),
