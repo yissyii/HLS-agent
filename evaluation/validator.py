@@ -55,8 +55,12 @@ class HLSValidator:
         else:
             checks.update(parse='unknown', compile='unknown', run='not_run')
         category = outcome.get('category', 'passed')
-        feedback = f'{stage}: {category}. Detailed diagnostics are not released by this task.'
-        if task.manifest['feedback_policy'] == 'public_diagnostics':
+        policy = task.manifest['feedback_policy']
+        if policy == 'public_diagnostics':
             feedback = outcome.get('diagnostic_tail', category)
+        elif policy == 'compiler_diagnostics':
+            feedback = outcome.get('compiler_text') or category
+        else:
+            feedback = f'{stage}: {category}. Detailed diagnostics are not released by this task.'
         return ValidationResult(candidate.sha256, task.fingerprint, json_digest(runtime['hls']),
                                 stage, outcome, checks, feedback)

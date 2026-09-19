@@ -295,8 +295,10 @@ class AgentContract(unittest.TestCase):
         task = load_task(self.problem, self.manifest)
         validator = HLSValidator()
         secret = 'SENSITIVE_REFERENCE_OUTPUT'
+        code_hint = 'kernel.cpp:1:1: error: no matching function for call'
         def fake_stage(stage, work, manifest, settings, cpu_only, budget):
-            return {'status': 'failed', 'category': 'functional_or_runtime_error', 'diagnostic_tail': secret}
+            return {'status': 'failed', 'category': 'functional_or_runtime_error',
+                    'diagnostic_tail': secret, 'compiler_text': code_hint}
         works = []
         with patch('evaluation.validator.validate_stage', side_effect=fake_stage):
             for i in range(2):
@@ -305,6 +307,11 @@ class AgentContract(unittest.TestCase):
                 result = validator.check(candidate, task, self.config, 'csim', time.monotonic() + 3)
                 works.append(path.parent / 'work')
                 self.assertNotIn(secret, result.feedback_text)
+            # compiler_diagnostics releases code errors, holds back the functional oracle.
+            task.manifest['feedback_policy'] = 'compiler_diagnostics'
+            result = validator.check(candidate, task, self.config, 'csim', time.monotonic() + 3)
+            self.assertIn(code_hint, result.feedback_text)
+            self.assertNotIn(secret, result.feedback_text)
             task.manifest['feedback_policy'] = 'public_diagnostics'
             result = validator.check(candidate, task, self.config, 'csim', time.monotonic() + 3)
             self.assertIn(secret, result.feedback_text)
@@ -375,9 +382,9 @@ class AgentContract(unittest.TestCase):
         self.assertEqual(self.model.prompts, [])
 
     def test_msys_permission_failure_is_not_code_error(self):
-        from evaluation.hls import classify
+        from evaluation.diagnostics import classify_category
         log = "cat.exe: *** fatal error - couldn't create signal pipe, Win32 error 5"
-        self.assertEqual(classify('csim', {'timed_out': False}, log), 'environment_or_dependency_error')
+        self.assertEqual(classify_category('csim', {'timed_out': False}, log), 'environment_or_dependency_error')
 
     def test_enabled_rules_are_read_only_and_only_used_on_repair(self):
         self.public_task(feedback='public_diagnostics')
