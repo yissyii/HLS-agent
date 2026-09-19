@@ -1,0 +1,38 @@
+{
+	"nodes":[
+		{"id":"n0000000000000006","type":"text","text":"*agent/core/contracts.py*\n`ValidationResult`\n（携带 feedback_text）","x":-420,"y":-120,"width":250,"height":100,"color":"2"},
+		{"id":"n000000000000000c","type":"text","text":"*agent/feedback/diagnostics.py*\n`classify(outcome)`\n错误指纹（停滞判断）","x":-110,"y":80,"width":280,"height":145,"color":"2"},
+		{"id":"n000000000000000e","type":"text","text":"**Vitis/Vivado**","x":-1160,"y":85,"width":180,"height":80,"color":"1"},
+		{"id":"n000000000000000f","type":"text","text":"*evaluation/diagnostics.py* — kind 分级\n\n| kind | 例子 | 可释放给模型 |\n| --- | --- | --- |\n| `compiler` | `kernel.cpp:17:9: error: ...` + 源码行 + note | ✅ 中档 |\n| `synthesis` | `ERROR: [SYNCHK …]`、`ERROR: [HLS 214-…]` | ✅ 中档 |\n| `functional` | `Mismatch ... expected/got`、`Test Failed` | ❌ 仅 public |\n| `environment`/`license`/`timeout` | signal pipe、license、超时 | ❌ 不进模型 |","x":-730,"y":490,"width":760,"height":350,"color":"3"},
+		{"id":"n000000000000000b","type":"text","text":"*evaluation/diagnostics.py*\n`extract_diagnostics()`\n日志 → 结构化条目","x":-730,"y":300,"width":310,"height":90,"color":"2"},
+		{"id":"n000000000000000a","type":"text","text":"*evaluation/hls.py*\n`validate_stage()`\n跑 Vitis csim / csynth","x":-750,"y":125,"width":270,"height":100,"color":"2"},
+		{"id":"n0000000000000001","type":"text","text":"**题目 + 任务清单**","x":-1800,"y":-340,"width":180,"height":80,"color":"1"},
+		{"id":"n0000000000000002","type":"text","text":"*agent/interface/entry.py*\n`run()`","x":-1925,"y":-90,"width":250,"height":80,"color":"2"},
+		{"id":"n0000000000000003","type":"text","text":"*evaluation/task_io.py*\n`load_manifest()`\n校验 `feedback_policy` 三档","x":-1540,"y":-95,"width":270,"height":90,"color":"2"},
+		{"id":"n0000000000000004","type":"text","text":"*agent/core/controller.py*\n`solve()`\n生成候选 → 验证 → 修复","x":-1195,"y":-95,"width":250,"height":90,"color":"2"},
+		{"id":"n0000000000000005","type":"text","text":"*evaluation/validator.py*\n`HLSValidator.check()`\n按 `feedback_policy` 组装 feedback","x":-800,"y":-155,"width":280,"height":150,"color":"2"},
+		{"id":"n0000000000000007","type":"text","text":"*agent/core/controller.py*\n`solve()`（修复阶段）","x":-110,"y":-110,"width":250,"height":80,"color":"2"},
+		{"id":"n0000000000000009","type":"text","text":"**模型**\n（下一版候选回到 solve）","x":670,"y":-75,"width":280,"height":90,"color":"1"},
+		{"id":"n000000000000000d","type":"text","text":"*agent/core/policy.py*\n+ *config/policy.json*\n`diagnostic_max_chars = 4000`","x":240,"y":153,"width":380,"height":144,"color":"2"},
+		{"id":"n0000000000000008","type":"text","text":"*agent/context/builder.py*\n`build()`\n`feedback[:diagnostic_max_chars]`","x":263,"y":-380,"width":335,"height":130,"color":"2"},
+		{"id":"n0000000000000010","type":"text","text":"*evaluation/validator.py* — feedback_policy 三档\n\n| 值 | 释放给模型的文本 |\n| --- | --- |\n| `category_only`（默认） | `csim: compile_error. Detailed diagnostics are not released by this task.` |\n| `compiler_diagnostics`（新增） | `compiler` + `synthesis` 条目的结构化文本（`compiler_text`） |\n| `public_diagnostics` | 原始 `diagnostic_tail`（全部） |","x":-1580,"y":360,"width":720,"height":260,"color":"3"},
+		{"id":"n0000000000000011","type":"text","text":"**csim.log 结构** (举例)\n\n|区段|行|内容|\n|---|---|---|\n|头部/搭工程|1–29|vitis-run 横幅、`open_project`/`set_top`/`add_files`/`open_solution`/`set_part`/`create_clock`，全是 INFO/WARNING|\n|**真正诊断**|30–108|clang 编译，含错误块|\n|收尾|109–120|`ERROR: [SIM 211-100]` 汇总、CSIM Failed、Tcl 栈、INFO 计时|\n\n真正有价值的是第 2 段。单个错误（`kernel.cpp:17:9`）的完整 clang 块长这样：\n\n```\n../../../../input/kernel.cpp:17:9: error: no matching function for call to object of type 'ap_uint<3>'\n        ena(0) = ena0;\n        ^~~\nD:/FPGA/AMDDesignTools/2025.2/Vitis/include\\etc\\ap_int_base.h:1098:51: note: candidate function not viable: requires 2 arguments, but 1 was provided\n  AP_INLINE AP_NODEBUG ap_range_ref<_AP_W, _AP_S> operator()(int Hi, int Lo) {\n        ^\nD:/FPGA/AMDDesignTools/2025.2/Vitis/include\\etc\\ap_int_base.h:1102:51: note: candidate function not viable: requires 2 arguments, but 1 was provided\n  AP_INLINE AP_NODEBUG ap_range_ref<_AP_W, _AP_S> operator()(int Hi, int Lo) const {\n        ^\nD:/FPGA/AMDDesignTools/2025.2/Vitis/include\\etc\\ap_int_base.h:1107:51: note: candidate function template not viable: requires 2 arguments, but 1 was provided\n  AP_INLINE AP_NODEBUG ap_range_ref<_AP_W, _AP_S> operator()(\n        ^\nD:/FPGA/AMDDesignTools/2025.2/Vitis/include\\etc\\ap_int_base.h:1116:51: note: candidate function template not viable: requires 2 arguments, but 1 was provided\n  AP_INLINE AP_NODEBUG ap_range_ref<_AP_W, _AP_S> operator()(\n        ^\n```\n\n同样结构重复三次（17:9 / 18:9 / 19:9，对应 `ena(0)/ena(1)/ena(2)`），然后收尾：\n\n```\n1 warning and 3 errors generated.\nmingw32-make: *** [csim.mk:97: obj/kernel.o] Error 1\n```","x":1000,"y":-250,"width":980,"height":1013,"color":"3"}
+	],
+	"edges":[
+		{"id":"e000000000000002","fromNode":"n0000000000000002","fromSide":"right","toNode":"n0000000000000003","toSide":"left"},
+		{"id":"e000000000000003","fromNode":"n0000000000000003","fromSide":"right","toNode":"n0000000000000004","toSide":"left"},
+		{"id":"e000000000000004","fromNode":"n0000000000000004","fromSide":"right","toNode":"n0000000000000005","toSide":"left","label":"验证"},
+		{"id":"e000000000000005","fromNode":"n0000000000000005","fromSide":"right","toNode":"n0000000000000006","toSide":"left"},
+		{"id":"e000000000000006","fromNode":"n0000000000000006","fromSide":"right","toNode":"n0000000000000007","toSide":"left"},
+		{"id":"e000000000000007","fromNode":"n0000000000000007","fromSide":"right","toNode":"n0000000000000008","toSide":"left","label":"组装提示词"},
+		{"id":"e000000000000008","fromNode":"n0000000000000008","fromSide":"right","toNode":"n0000000000000009","toSide":"left","label":"提示词"},
+		{"id":"e000000000000009","fromNode":"n0000000000000005","fromSide":"bottom","toNode":"n000000000000000a","toSide":"top","label":"validate_stage"},
+		{"id":"e00000000000000a","fromNode":"n000000000000000a","fromSide":"bottom","toNode":"n000000000000000b","toSide":"top","label":"失败时"},
+		{"id":"e00000000000000b","fromNode":"n000000000000000e","fromSide":"right","toNode":"n000000000000000a","toSide":"left","label":"csim.log"},
+		{"id":"e00000000000000c","fromNode":"n0000000000000007","fromSide":"bottom","toNode":"n000000000000000c","toSide":"top","label":"classify"},
+		{"id":"e00000000000000d","fromNode":"n000000000000000d","fromSide":"top","toNode":"n0000000000000008","toSide":"bottom","label":"diagnostic_max_chars"},
+		{"id":"e00000000000000e","fromNode":"n000000000000000b","fromSide":"bottom","toNode":"n000000000000000f","toSide":"top","label":"kind 分级"},
+		{"id":"3b3438b531d3de1e","fromNode":"n0000000000000001","fromSide":"bottom","toNode":"n0000000000000002","toSide":"top"},
+		{"id":"af12c88a96e68500","fromNode":"n000000000000000f","fromSide":"left","toNode":"n0000000000000010","toSide":"right"}
+	]
+}

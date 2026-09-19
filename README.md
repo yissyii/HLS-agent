@@ -1,31 +1,35 @@
-# Windows HLS Harness
+# HLS Agent Harness
 
-用于 HLS C/C++ 代码生成、Vitis 验证和有限次数修复的 Windows 框架。仓库不包含赛题、参考实现、测试台、模型权重、数据集或历史运行产物。
+用于 HLS C/C++ 代码生成、Vitis 验证和有限次数修复的框架，提供 Windows PowerShell 和 Linux Shell 入口。源码仓库不提交题集、模型权重或运行产物；本地数据与输出目录由 Git 忽略。
+
+文档导航：[报告与证据索引](report/README.md) · [项目结构思维导图](report/design/project_structure.md) · [Agent 与裸基线入口流程图](report/design/agent_flow.md)。
 
 ## Directory layout
 
 ```text
-zcomp-windows-harness/
+zcomp/
 ├── README.md                 # Project overview and reproduction guide
 ├── Dockerfile                # Container build contract placeholder
 ├── model/                    # Model declaration; no weights are committed
 ├── agent/                    # Agent control-flow source and documentation
 ├── skill/                    # Reusable HLS skills and validation notes
+├── rag/                      # Offline UG1399 retrieval, local embeddings and retrieval evaluation
 ├── serve/                    # OpenAI-compatible inference client and runtime config
 ├── evaluation/               # Manifest loading, C simulation, HLS synthesis and repair
 ├── local_eval/               # Mandatory development network-failure restart lifecycle; removable
 ├── tools/                    # Standalone operational checks
 ├── src/                      # Source-code map for the current Python layout
 ├── sim/                      # Simulation and verification conventions
-├── build/                    # Reproducible build scripts; generated artifacts ignored
+├── build/                    # Build conventions; generated artifacts ignored
 ├── board/                    # Board, toolchain and implementation-output conventions
 ├── data/                     # Dataset manifests and split metadata; datasets ignored
 ├── report/                   # Design report and model-collaboration records
 ├── output/                   # Per-run artifacts; ignored except .gitkeep
+├── run.sh / run_baseline.sh / run_paired.sh  # Agent, baseline and paired entries
 └── run_*.ps1                 # Windows PowerShell entry points
 ```
 
-All repository paths use lowercase English names. The README files in placeholder directories state what may be committed there and what must remain ignored.
+Code directories use lowercase English names; archived reports retain their historical filenames. Directory README files explain their responsibilities and what may be committed.
 
 ## Current implementation
 
@@ -33,21 +37,23 @@ All repository paths use lowercase English names. The README files in placeholde
 - `agent/core/controller.py` implements bounded generation, public validation, repair and evidence-based candidate selection.
 - `evaluation/single_task.py` preserves the legacy manifest CLI and validation exit codes using the shared agent controller.
 - `evaluation/batch.py` runs manifests sequentially.
-- `evaluation/hls.py` starts `E:/2025.2/Vitis/bin/vitis-run.bat`, isolates child environment variables and terminates timed-out Windows process trees.
+- `evaluation/hls.py` reads the configured Vitis path, selects `bin/vitis-run.bat` on Windows or `bin/vitis-run` on Linux, isolates child environments and terminates timed-out process trees.
 - `tools/check_endpoint.py` is a minimal endpoint diagnostic. It may contact the configured model endpoint.
+
+英文 UG1399 知识库与本地 Qwen3-Embedding-0.6B 的安装、建库、BM25/混合检索和离线检索评估见 [RAG 使用说明](rag/README.md)，进度见 [任务清单](rag/TASKS.md)。该模块目前独立运行，Agent 默认流程尚未接入检索。
 
 The checked-in `serve/runtime.json` contains machine-specific development defaults: `E:/2025.2`, part `xczu3eg-sbva484-1-e`, 5 ns clock, and the current development endpoint. Before sharing outside the team, replace local paths and endpoint settings with a portable configuration or document the required overrides.
 
 ## Task contract
 
-Tasks are intentionally external to this repository. A task directory supplied to `evaluation/single_task.py` must contain `task.json`, its problem text, a self-checking C/C++ testbench and every declared dependency. The manifest format is implemented in `evaluation/single_task.py`; model-facing prompts must include only permitted task material. Do not add official hidden-test answers, reference implementations or answer-derived ASTs to `skill/`, `data/`, prompts or retrieval material.
+Tasks are supplied explicitly and are not committed with the framework. A task directory supplied to `evaluation/single_task.py` must contain `task.json`, its problem text, a self-checking C/C++ testbench and every declared dependency. The shared manifest loader is `evaluation/task_io.py`. The Agent entry also supports problem-only generation or a manifest without a testbench for synthesis-only validation. Model-facing prompts include only permitted material; do not add hidden-test answers, reference implementations or answer-derived ASTs to skills or retrieval material.
 
 ## Running locally
 
 Use Python 3.10+ and Vitis 2025.2. The PowerShell scripts set UTF-8 output and disable bytecode creation for their child process.
 
 ```powershell
-cd C:\Users\yissyii\zcomp-windows-harness
+cd F:\Projects\ADMCmpt\zcomp
 
 # Validate a supplied task and an existing candidate; no model call.
 .\run_eval.ps1 <task-directory>\task.json --source <candidate.cpp> --cpu-only
@@ -62,7 +68,7 @@ cd C:\Users\yissyii\zcomp-windows-harness
 .\run_batch.ps1 <task-root> --cpu-only
 ```
 
-`output/` is recreated automatically. Do not commit response text, generated code, logs, synthesized RTL, reports, credentials or tool caches.
+`output/` is recreated automatically. Do not commit raw responses, generated code, logs, synthesized RTL, tool reports, credentials or caches. Curated Markdown reports belong in `report/`.
 
 研发期间，上述入口以及 Agent、严格基线、配对、对比评测入口默认必经统一的评测管理模块，无须额外开启。遇到 503 等临时 HTTP 错误或网络异常，整轮作废并自动从头重跑；批量/配对命令由最外层统一重跑，子任务不单独重试。默认最多重跑两次，参数位于 `local_eval/retry.json`。
 
@@ -74,7 +80,7 @@ cd C:\Users\yissyii\zcomp-windows-harness
 directory and complete request/result artifacts. `run_paired.sh` coordinates it
 with `run.sh` under one configuration snapshot and run ID. The agent also has a
 Windows `run_agent.ps1` entry and accepts explicit `--task-manifest` public inputs.
-See [agent usage](agent/README.md) and [baseline protocol](report/baseline_protocol.md) for usage,
+See [agent usage](agent/README.md) and [baseline protocol](report/reproducibility/baseline_protocol.md) for usage,
 historical-data limitations and the agent receipt contract.
 
 `python -B tools/test_baseline_contract.py` uses a local mock service only.

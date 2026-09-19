@@ -1,5 +1,7 @@
 # Bench4HLS baseline vs agent 评测记录（2026-09-16，全量 170 题）
 
+> 历史实验：正文的“当前”指本轮实现和配置。后续 [沙箱复跑](9-17-Bench4HLS-BLandAgent-ALL-SandBox.md) 和 [提取更新后评测](9-17-Bench4HLS-BLandAgent-ALL-SandBox-ExtractUpdated.md) 独立归档；历史分数保留。
+
 ## 摘要
 
 在 Bench4HLS 数据集**全量 170 题**上，对比「纯 baseline 一次生成」与「agent 独立生成 + 修复回路」两条入口。按 503/404 案例复测修正后的口径，agent 的 compile、run、synthesize、overall 汇总指标均高于 baseline，端到端通过率 **39.4% → 50.6%（+11.2pp，多通过 19 题）**；combinational +14.7pp、sequential +11.0pp，kernel 类通过数量持平（均为 3/20）。
@@ -194,6 +196,8 @@ synthesis: synthesis_error. Detailed diagnostics are not released by this task.
 6. **评测仍存在需要修正的口径和基础设施问题**：包括 Prob121 的 don't-care 判定、多道题的仿真启动异常被误分类为编译失败（034、039、040、043），以及耗时统计口径不一致。503/404 案例已复测并更正数字，但启动异常根因未明，需结合系统事件进一步复测。
 
 ## 优化建议与验证顺序
+
+状态更新（2026-09-18）：网络故障的整轮作废与有限重跑已由 `local_eval/` 实现；9-17 的 Linux 复跑中未观察到原 Windows 启动异常，但未定位其原始根因。源码提取规则也已更新。下面的建议保留本轮提出时的背景，不再把上述已完成的机制视为待开发；测试台修正、反馈对照、停滞策略和成本统计仍需各自的验证证据。
 
 | 优先级 | 建议 | 验证方式与注意事项 |
 |---|---|---|
