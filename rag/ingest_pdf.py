@@ -8,6 +8,31 @@ import textwrap
 from rag.common import record, sha256, write_corpus, write_json
 
 
+def classify_section(path):
+    """Assign the active repair/general profile or exclude low-value front matter.
+
+    Chapter numbers moved between UG1399 releases, so the repair set uses the
+    stable chapter titles as well as the known 2025.2/2026.1 numbers.
+    """
+    joined = ' > '.join(path)
+    if path and (path[0].startswith('Sec. I: Introduction')
+                 or any(item.startswith('Ch. 1: Design Principles') for item in path)):
+        return None, 0, 'intro/design-principles excluded from active repair corpus'
+    repair_prefixes = (
+        'Ch. 7: Unsupported C/C++ Constructs',
+        'Ch. 11: Optimizing Techniques and Troubleshooting Tips',
+        'Ch. 35: Deprecated and Unsupported Features',
+        'Ch. 36: Unsupported Features',
+        'Ch. 36: Deprecated and Unsupported Features',
+        'Ch. 37: Unsupported Features',
+    )
+    for item in path:
+        if item.startswith(repair_prefixes):
+            priority = 100 if item.startswith('Ch. 7:') else 95 if item.startswith('Ch. 37:') else 90 if 'Deprecated' in item else 80
+            return 'fix', priority, 'unsupported constructs/features or optimization troubleshooting'
+    return 'general', 50, 'shared HLS flow, interface, pragma, command, and reference guidance'
+
+
 def bookmarks(reader):
     result = []
 
@@ -80,7 +105,7 @@ def split_text(text, max_chars=1700):
     return chunks
 
 
-def ingest(pdf_path, output, max_chars=1700, language='en-US'):
+def ingest(pdf_path, output, max_chars=1700, language='en-US', expected_version=None):
     from pypdf import PdfReader
     import pypdf
     import pdfplumber
@@ -89,14 +114,19 @@ def ingest(pdf_path, output, max_chars=1700, language='en-US'):
     path = Path(pdf_path).resolve()
     digest = sha256(path.read_bytes())
     reader = PdfReader(path)
-    if not re.search(r'UG1399\s*\(v2025\.2\)', reader.pages[0].extract_text()):
-        raise ValueError('Expected UG1399 v2025.2 on the cover; filename is not sufficient')
+    cover = reader.pages[0].extract_text() or ''
+    match = re.search(r'UG1399\s*\(v(\d+\.\d+)\)', cover)
+    if not match:
+        raise ValueError('Expected a versioned UG1399 cover; filename is not sufficient')
+    version = match.group(1)
+    if expected_version and version != expected_version:
+        raise ValueError(f'Expected UG1399 v{expected_version}, found v{version}')
     if Path(output).exists():
         raise FileExistsError('Use a new corpus directory to preserve previous evidence')
     headings = bookmarks(reader)
     by_page = defaultdict(list)
     for i, h in enumerate(headings):
-        h['section_id'] = f'ug1399-2025.2-{language[:2]}-s{i:04d}'
+        h['section_id'] = f'ug1399-{version}-{language[:2]}-s{i:04d}'
         by_page[h['page']].append(h)
     segments = defaultdict(list)
     current = None
@@ -135,29 +165,41 @@ def ingest(pdf_path, output, max_chars=1700, language='en-US'):
             if page_no % 50 == 0:
                 print(f'PDF extraction {page_no}/{len(reader.pages)}', flush=True)
     records = []
+    class_counts = defaultdict(int)
+    excluded = 0
     for h in headings:
+        corpus_class, priority, reason = classify_section(h['path'])
+        if corpus_class is None:
+            excluded += 1
+            continue
         parts = segments.get(h['section_id'], [])
         if not parts:
             continue
         for page_no, text in parts:
             for n, (chunk, flags) in enumerate(split_text(text, max_chars)):
                 identifier = f'{h["section_id"]}-p{page_no:04d}-{n:02d}'
-                source = dict(document='UG1399', version='2025.2', language=language,
+                source = dict(document='UG1399', version=version, language=language,
                               file=path.name, file_sha256=digest, page_start=page_no, page_end=page_no,
                               section_path=h['path'], parent_id=h['section_id'],
-                              url='https://docs.amd.com/r/2025.2-' + ('English' if language == 'en-US' else 'Chinese') + '/ug1399-vitis-hls',
+                              url=f'https://docs.amd.com/r/{version}-' + ('English' if language == 'en-US' else 'Chinese') + '/ug1399-vitis-hls',
                               license='AMD documentation terms; not assumed Apache-2.0')
-                records.append(record(identifier, h['title'], chunk, source, kind='document_section', role='doc',
-                                      tool={'target_version': '2025.2', 'upstream_version': '2025.2', 'measured_version': None},
-                                      release={'status': 'reference',
-                                               'note': 'UG1399 v2025.2 official manual; source-reviewed, not locally HLS-validated'},
-                                      validation={'status': 'unvalidated'},
-                                      quality=['pdf_extracted_not_executable', *flags]))
+                item = record(identifier, h['title'], chunk, source, kind='document_section', role='doc',
+                              tool={'target_version': version, 'upstream_version': version, 'measured_version': None},
+                              release={'status': 'reference',
+                                       'note': f'UG1399 v{version} official manual; source-reviewed, not locally HLS-validated'},
+                              validation={'status': 'unvalidated'},
+                              quality=['pdf_extracted_not_executable', *flags])
+                item.update(corpus_class=corpus_class, corpus_priority=priority,
+                            corpus_reason=reason)
+                records.append(item)
+                class_counts[corpus_class] += 1
     metadata = dict(source_type='pdf', source_file=path.name, source_sha256=digest,
                     source_pages=len(reader.pages), language=language, extraction='pdfplumber-layout-bookmarks-v2',
                     extraction_versions=dict(pdfplumber=pdfplumber.__version__, pypdf=pypdf.__version__, pdfminer=pdfminer.__version__),
                     max_chars=max_chars, skipped_front_matter=True,
-                    validation_note='Document excerpts only; no HLS repair effectiveness claim.')
+                    validation_note='Document excerpts only; no HLS repair effectiveness claim.',
+                    document_version=version, profile='repair-general-v1',
+                    class_counts=dict(class_counts), excluded_sections=excluded)
     manifest = write_corpus(output, records, metadata)
     write_json(Path(output) / 'outline.json', headings)
     write_json(Path(output) / 'coverage.json', coverage)
@@ -172,10 +214,11 @@ def main():
     parser.add_argument('output')
     parser.add_argument('--max-chars', type=int, default=1700)
     parser.add_argument('--language', choices=['en-US', 'zh-CN'], default='en-US')
+    parser.add_argument('--version', help='Require this UG1399 version, e.g. 2026.1')
     args = parser.parse_args()
     if args.max_chars < 200:
         parser.error('--max-chars must be >= 200')
-    print(ingest(args.pdf, args.output, args.max_chars, args.language))
+    print(ingest(args.pdf, args.output, args.max_chars, args.language, args.version))
 
 
 if __name__ == '__main__':
