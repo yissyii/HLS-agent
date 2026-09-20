@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "release_id": "ug1399-2026.1-en-curated-reference-1",
+  "status": "reference",
+  "reviewed_at": "2026-09-20",
+  "reviewed_by": "assistant-source-audit",
+  "corpus": "rag/corpora/ug1399-2026.1-en-curated",
+  "index": "rag/indexes/ug1399-qwen06b-2026.1-curated",
+  "corpus_manifest_sha256": "6907d866903e5eb822f864f3d9fb520e3abf68a2dd6162f9ae487efd5aa6e1d6",
+  "records_sha256": "2fa0452b1dfb9ec153a2c3c123965897d5bcf44b2feb980f98649fafeff76b0e",
+  "index_manifest_sha256": "e9a5eb607500bfb19d43ba58a8ce933a77644249ee1f6c92253e61c352b29c19",
+  "index_fingerprint": "c621f64717ea52d277425dae434a01f3db7dd4a8e1859b3cd6db1246d1871b11",
+  "vectors_sha256": "5a495d81fa2f0eedfe93833939d4ff8008852066d698d71dc3b9edba47d2d484",
+  "source_version": "2026.1",
+  "profile": "repair-general-v1",
+  "class_counts": {
+    "fix": 153,
+    "general": 1454
+  },
+  "note": "UG1399 official English manual v2026.1; intro and Design Principles excluded; repair/general labels are retrieval priors, not HLS validation."
+}
