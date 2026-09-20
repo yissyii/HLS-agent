@@ -1,0 +1,163 @@
+{
+  "corpus": {
+    "schema_version": 2,
+    "records": 1607,
+    "records_sha256": "2fa0452b1dfb9ec153a2c3c123965897d5bcf44b2feb980f98649fafeff76b0e",
+    "source_type": "pdf",
+    "source_file": "ug1399-vitis-hls-en-us-2026.1.pdf",
+    "source_sha256": "7da1b9ffdca0b259d96781c25a3acd222429556daf269cf847e3993679abf6cf",
+    "source_pages": 855,
+    "language": "en-US",
+    "extraction": "pdfplumber-layout-bookmarks-v2",
+    "extraction_versions": {
+      "pdfplumber": "0.11.9",
+      "pypdf": "6.10.0",
+      "pdfminer": "20251230"
+    },
+    "max_chars": 1700,
+    "skipped_front_matter": true,
+    "validation_note": "Document excerpts only; no HLS repair effectiveness claim.",
+    "document_version": "2026.1",
+    "profile": "repair-general-v1",
+    "class_counts": {
+      "general": 1454,
+      "fix": 153
+    },
+    "excluded_sections": 7
+  },
+  "model": {
+    "repository": "Qwen/Qwen3-Embedding-0.6B",
+    "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+    "license": "Apache-2.0",
+    "quantization": "none",
+    "dimensions": 1024,
+    "files": {
+      "1_Pooling/config.json": {
+        "sha256": "37bf193fa101f19101bfad9c31d3eb0f786e247b7b1e5cb7f007d730eed1ddbd",
+        "bytes": 313
+      },
+      "config.json": {
+        "sha256": "b5bf1f51fc45be473a54718cef92448d90a1be001bf9b9a44b8c7f10a19feaa9",
+        "bytes": 727
+      },
+      "config_sentence_transformers.json": {
+        "sha256": "10667c72ddb772627bf1780cb7f86af8e2ae0032b8c243c731172064105c6961",
+        "bytes": 215
+      },
+      "generation_config.json": {
+        "sha256": "28396d421a2108acce96383f6a7de78008f7f1b17f807958f3c14c51dbfb65fb",
+        "bytes": 117
+      },
+      "merges.txt": {
+        "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+        "bytes": 1671853
+      },
+      "model.safetensors": {
+        "sha256": "0437e45c94563b09e13cb7a64478fc406947a93cb34a7e05870fc8dcd48e23fd",
+        "bytes": 1191586416
+      },
+      "modules.json": {
+        "sha256": "84e40c8e006c9b1d6c122e02cba9b02458120b5fb0c87b746c41e0207cf642cf",
+        "bytes": 349
+      },
+      "README.md": {
+        "sha256": "c34d9b7e5a267ad3fdd13227a253686bc90844ff4744a2a6a86c7c905e3d06f3",
+        "bytes": 17237
+      },
+      "tokenizer.json": {
+        "sha256": "def76fb086971c7867b829c23a26261e38d9d74e02139253b38aeb9df8b4b50a",
+        "bytes": 11423705
+      },
+      "tokenizer_config.json": {
+        "sha256": "253153d0738ceb4c668d2eff957714dd2bea0b56de772a9fdccd96cbf517e6a0",
+        "bytes": 9706
+      },
+      "vocab.json": {
+        "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+        "bytes": 2776833
+      }
+    },
+    "purpose": "local_retrieval_only"
+  },
+  "index": {
+    "schema_version": 1,
+    "corpus_sha256": "2fa0452b1dfb9ec153a2c3c123965897d5bcf44b2feb980f98649fafeff76b0e",
+    "encoder": {
+      "repository": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+      "model_manifest_sha256": "a84491d7136cf875e1694059d6b06aad78222ad19b770bfe99d1e2d3badaaf60",
+      "dimensions": 1024,
+      "pooling": "last_token_from_model_config",
+      "normalized": true,
+      "document_format": "last_three_headings_plus_whitespace_normalized_body_v1",
+      "query_instruction": "Given a Vitis HLS question, compiler diagnostic, or C++ coding issue, retrieve relevant official manual passages explaining the applicable semantics, restrictions, or correct usage.",
+      "max_length": 2048,
+      "device": "cpu",
+      "dtype": "float32",
+      "quantization": "none",
+      "sentence_transformers": "5.7.0",
+      "transformers": "4.57.6",
+      "torch": "2.8.0+cpu"
+    },
+    "fingerprint": "c621f64717ea52d277425dae434a01f3db7dd4a8e1859b3cd6db1246d1871b11",
+    "vectors_sha256": "5a495d81fa2f0eedfe93833939d4ff8008852066d698d71dc3b9edba47d2d484",
+    "rows": 1607,
+    "dimensions": 1024,
+    "max_document_tokens": 652,
+    "total_document_tokens": 355773,
+    "this_run_seconds": 995.234
+  },
+  "source_pages_with_chunks": 831,
+  "pages_without_section_text": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "quality_counts": {
+    "pdf_extracted_not_executable": 1607,
+    "oversized_block_split": 30,
+    "expand_parent_for_context": 30
+  },
+  "manual_visual_spot_checks": {
+    "125": "Statics code and initialization/reset text checked against rendered page.",
+    "129": "Table 5 AP types and required headers checked; layout text, not structured cells.",
+    "154": "Pointer limitations and recursive function example checked against page.",
+    "547": "array_partition pragma syntax checked; remaining options continue on following page."
+  },
+  "corpus_auxiliary_sha256": {
+    "coverage.json": "a84fcaf20161dc20076efea18bdfd4b2f9d1982ed1ff1e3d9fc46eb3b12e3837",
+    "manifest.json": "6907d866903e5eb822f864f3d9fb520e3abf68a2dd6162f9ae487efd5aa6e1d6",
+    "outline.json": "a835a116a7a10dc65ac0be56b8bb5b607cfbd22370b2e601ff5f57593f90e9d3",
+    "pages.json": "14ec8cf540888f2da3414ea9abe550ee14298a48c6f4a92b37c7c4787dc10474",
+    "sections.json": "4dd80d2fe8376d5c73fee2fa738f0a036c021ad5dd70f28607f9ef23ac70b226"
+  },
+  "build_code_sha256": {
+    "audit.py": "8c4d1ca65009a01f8c5bd6664ced21bcb97cbd81ef85fed5d298546359461c87",
+    "build_index.py": "fe4bcbfed487b563198fa32306199644040b068c0b6511820e89dbd8d98d619d",
+    "common.py": "c7fb2bb0fcd12a3d1fdef7d6b10e6c06de9f2927081ca65d54a643c63fb3025b",
+    "download_model.py": "5e8ce0d072e65044e165ddd6695630b2f81739ae0f1875d434312f423ea039d2",
+    "download_reranker.py": "27f8a79494d0f44116a4d1d022542b1716d5a0b4aa20b13fe578bc5bf016b7c7",
+    "embedding.py": "5954f66e08e254b582aadd6565c68674c3e97552d3e130f81e3eafc626cb4aea",
+    "evaluate.py": "771948178ae481f04a640baa3f6eb958fa10291775265cdf376c1ec2bfde6d8b",
+    "ingest_pdf.py": "a39fc96ab6285ae8ab00a6b3e16348e336c2716f3551821caf3d5b86fc238bbb",
+    "query.py": "44d95006409ad95fd92e024f3a4ddd763022fcea5d2eff15849fa26981548666",
+    "release.py": "af3e065c1b39b0d94aeff63d63c683e02eb7fe0781fd5b6157440b9470618024",
+    "reranker.py": "7bcaf334e05fec78bb7cf048b3a41753b5a0dd97e540ab1eb2a66ee9602c72c2",
+    "retrieve.py": "88b9d819d58ed33f637135af21b6c8c3eef8c32f0461ded2ea797db20cbeb2ca",
+    "test_retrieval.py": "316d4504fea30eda9948acc49d60fb1e99360774fe62c686075e32ba1342e8f7",
+    "worker.py": "b1cb252024f35e0584dc2a7055d7b3025f8f9306fe11ce467b3ec126a593e8de",
+    "__init__.py": "5f7ddca1570b981ead6e801779447eaeb982d7ae301fe4a2155c4a9da0bef113"
+  },
+  "dependency_lock_sha256": "86c21338018413e29e6511f839377a5025ef353b48e6846eedeaf2d2bedd0e76",
+  "caveats": [
+    "Spot checks are not exhaustive PDF QA.",
+    "Figures are not OCR-indexed.",
+    "No remote Vitis run or Agent success-rate experiment was performed."
+  ]
+}

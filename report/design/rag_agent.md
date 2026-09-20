@@ -1,6 +1,6 @@
 # UG1399 接入 Agent 修复流程
 
-2026-09-19，分支 `feat/rag`。本版完成任务 B6：复用现有 UG1399 英文 2025.2 语料、Qwen3-Embedding-0.6B、BM25／混合检索。默认关闭，仅在验证失败且策略允许修复时检索；首次生成和严格裸基线不加入 RAG。官方示例、Vitis Libraries、案例采集与论文迁移仍是后续任务。
+2026-09-20，分支 `feat/rag`。活动库已切换为 UG1399 英文 2026.1 的筛选语料，保留 `fix/general` 分类，并使用 Qwen3-Embedding-0.6B、BM25／混合检索。默认关闭，仅在验证失败且策略允许修复时检索；首次生成和严格裸基线不加入 RAG。官方示例、Vitis Libraries、案例采集与论文迁移仍是后续任务。
 
 当前策略已更新为 `diagnostic_v1`：低信息诊断跳过，诊断优先查询，候选先过词项门；见 [首轮复盘与改进](rag_repair_v2.md)。末尾验证数字保留初版历史记录。
 
@@ -19,8 +19,13 @@ flowchart TD
     Q -->|不足：记录跳过| J
     Q -->|足够| H[核对发布语料和索引哈希]
     H --> I[独立进程：BM25 或 BM25 + Qwen 向量 + RRF]
-    I --> K[词项证据门、去重、Top-k、参考资料字节预算]
-    K --> J
+    I --> K[fix/general 优先级、词项证据门、去重]
+    K --> R{显式启用重排器？}
+    R -->|是| S[Qwen3-Reranker-0.6B 重排候选]
+    R -->|否| T[保留召回顺序]
+    S --> U[Top-k 与参考资料字节预算]
+    T --> U
+    U --> J
     J --> L[总预算检查：先移除 RAG，再技能，再缩短诊断]
     L --> M[记录查询、来源、实际注入条目和字节]
     M --> N[相同 system + 新 user → 生成修复候选]
@@ -60,7 +65,7 @@ python -B -m agent.interface.entry path/to/problem.txt output/rag_run_01 --confi
 
 ```json
 {
-  "registry": "rag/releases/ug1399-2025.2-en.json",
+  "registry": "rag/releases/ug1399-2026.1-en-curated.json",
   "python": "F:/Workspace/hls-rag/venv/Scripts/python.exe",
   "model": "F:/Workspace/hls-rag/models/Qwen3-Embedding-0.6B"
 }
@@ -68,7 +73,7 @@ python -B -m agent.interface.entry path/to/problem.txt output/rag_run_01 --confi
 
 配置优先级：显式 `--rag-runtime` → 本机文件 → 模板。相对路径基于仓库根目录；换电脑需放置相同发布语料／索引并修改本机配置。模板的空模型路径不能用于混合检索。没有验证材料的运行不会触发修复，因此也不会产生检索调用。
 
-默认每路召回 20 条、最终最多 2 条、参考区含包装不超过 2400 UTF-8 字节；查询最多 1600 字符。每次检索最多 30 秒，并扣除剩余总时间与验证预留。Qwen 运行在本地 CPU，worker 每次修复重新加载；后续可用常驻服务减少冷启动，但本版优先保证独立进程可超时终止。未增加模型重排器，混合排序仍是 RRF。
+默认每路召回 20 条、最终最多 2 条、参考区含包装不超过 2400 UTF-8 字节；修复阶段使用 `fix_first`，查询最多 1600 字符。每次检索最多 30 秒，并扣除剩余总时间与验证预留。Qwen 运行在本地 CPU，worker 每次修复重新加载；重排器可通过 `rag_reranker=qwen3-reranker-0.6b` 显式启用，默认不改变旧策略。
 
 超时、哈希变化、离线模型不可用都显式记为失败并停止本轮；不会伪装成成功的无 RAG 实验。合法检索没有命中或参考被预算全部移除时可以继续修复，记录 `no_reference_injected`。总提示预算沿用保守字节估计，不宣称精确 token 计数。
 

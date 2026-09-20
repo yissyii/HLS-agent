@@ -32,6 +32,9 @@ class RetrievalTests(unittest.TestCase):
             record('c', 'Dynamic Memory Usage', 'malloc and free are not synthesizable.',
                    source(20, 20, 'p2'), kind='document_section', release={'status': 'reference'}),
         ]
+        self.records[0].update(corpus_class='general', corpus_priority=50)
+        self.records[1].update(corpus_class='general', corpus_priority=50)
+        self.records[2].update(corpus_class='fix', corpus_priority=100)
         write_corpus(self.path, self.records, {})
 
     def tearDown(self):
@@ -57,6 +60,27 @@ class RetrievalTests(unittest.TestCase):
     def test_parent_diversity(self):
         result = Retriever(self.path).search('array_partition banks', mode='bm25')
         self.assertEqual(len(result['hits']), 1)
+
+    def test_profile_filter_and_fix_first_metadata(self):
+        retrieval = Retriever(self.path)
+        fix = retrieval.search('malloc', mode='bm25', profile='fix_first')
+        self.assertEqual(fix['hits'][0]['record']['corpus_class'], 'fix')
+        self.assertEqual(fix['profile'], 'fix_first')
+        general = retrieval.search('malloc', mode='bm25', profile='general_only')
+        self.assertEqual(general['hits'], [])
+
+    def test_reranker_can_overturn_profile_prior(self):
+        class FakeReranker:
+            identity = {'repository': 'test-reranker'}
+
+            def score(self, query, passages):
+                return [0.1 if 'malloc' in passage else 0.9 for passage in passages]
+
+        result = Retriever(self.path).search('malloc array_partition', mode='bm25', top_k=2,
+                                             max_bytes=4000, profile='fix_first',
+                                             reranker=FakeReranker(), rerank_k=3)
+        self.assertEqual(result['hits'][0]['record']['corpus_class'], 'general')
+        self.assertEqual(result['reranker']['repository'], 'test-reranker')
 
     def test_corpus_tampering_rejected(self):
         with (self.path / 'records.jsonl').open('ab') as stream:

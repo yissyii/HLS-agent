@@ -1,16 +1,19 @@
 # RAG 首次测评任务交接（远程 AI）
 
-2026-09-19，分支 `feat/rag`。RAG 已接入 Agent（修复阶段、默认关闭、显式启用、全程留痕），88 项测试通过，本地完成真实 UG1399＋本地 Qwen 的完整修复链路 smoke，但生成服务为模拟 HTTP、验证器为 FakeValidator，**未调用真实 Vitis，不能据此宣称修复成功率提升**。本文档指导远程 AI 安装 embedding 模型并完成首次 RAG 测评。
+Ubuntu 远程主机请先阅读 [远程 Ubuntu/5090D 运行指南](UBUNTU_REMOTE_GUIDE.md)。
+
+2026-09-20，分支 `feat/rag`。活动库已切换至 UG1399 v2026.1，并按 `fix/general` 标记；RAG 已接入 Agent（修复阶段、默认关闭、显式启用、全程留痕），本地完成真实 UG1399＋本地 Qwen 的检索 smoke，但生成服务为模拟 HTTP、验证器为 FakeValidator，**未调用真实 Vitis，不能据此宣称修复成功率提升**。本文档指导远程 AI 安装 embedding 模型并完成首次 RAG 测评。
 
 ## 交接时点的产物状态
 
 | 内容 | 位置 | 是否已入库 |
 | --- | --- | --- |
-| 提取语料 | `rag/corpora/ug1399-2025.2-en`（约 7.5 MB） | ✅ 已入库 |
-| 向量索引 | `rag/indexes/ug1399-qwen06b-en`（约 7.0 MB） | ✅ 已入库 |
-| 发布注册表 | `rag/releases/ug1399-2025.2-en.json` | ✅ 已入库 |
+| 提取语料 | `rag/corpora/ug1399-2026.1-en-curated`（fix/general，约 7 MB） | ✅ 已入库 |
+| 向量索引 | `rag/indexes/ug1399-qwen06b-2026.1-curated`（约 6.3 MB） | ✅ 已入库 |
+| 发布注册表 | `rag/releases/ug1399-2026.1-en-curated.json` | ✅ 已入库 |
 | 便携模板 | `rag/runtime.json`（model/python 为 null） | ✅ 已入库 |
 | 模型权重 | `Qwen3-Embedding-0.6B`（约 1.8 GB，11 文件） | ❌ 需远程安装 |
+| 可选重排模型 | `Qwen3-Reranker-0.6B`（约 1.21 GB，13 文件） | ✅ 本机已安装，Agent 默认关闭 |
 | 独立 Python 环境 | `hls-rag/venv`（torch 2.8.0 CPU 等） | ❌ 需远程安装 |
 | 本机路径配置 | `rag/runtime.local.json` | ❌ gitignore，远程自建 |
 
@@ -59,7 +62,7 @@ Windows 网络不稳时 `install_local.ps1` 会用 `--range-download` 对大权�
 
 ```json
 {
-  "registry": "rag/releases/ug1399-2025.2-en.json",
+  "registry": "rag/releases/ug1399-2026.1-en-curated.json",
   "python": "/path/to/hls-rag/venv/bin/python",
   "model": "/path/to/hls-rag/models/Qwen3-Embedding-0.6B"
 }
@@ -71,7 +74,7 @@ Windows 的 `python` 路径形如 `F:/Workspace/hls-rag/venv/Scripts/python.exe`
 
 ```bash
 # 发布完整性（主环境即可，纯 stdlib）
-python -B -c "from rag.release import load_release, verify_release; verify_release(load_release('rag/releases/ug1399-2025.2-en.json')); print('OK')"
+python -B -c "from rag.release import load_release, verify_release; verify_release(load_release('rag/releases/ug1399-2026.1-en-curated.json')); print('OK')"
 
 # 检索 smoke（用 RAG venv 的 python）
 /path/to/hls-rag/venv/bin/python -X utf8 -B -m rag.retrieve 'Can a recursive function be synthesized?' --mode hybrid
@@ -92,7 +95,8 @@ hybrid 应返回带来源的条目、不报错且完全离线（不联网）。�
 | --- | --- | --- |
 | 关闭 | `agent/config/policy.json`（默认） | `rag_enabled=false` |
 | BM25 | 复制 hybrid policy，仅 `rag_mode` 改 `bm25` | 不需模型/索引 |
-| hybrid | `agent/config/policy.rag-hybrid.json` | 需模型 + 索引 |
+| hybrid | `agent/config/policy.rag-hybrid.json` | 需 embedding 模型 + 索引 |
+| hybrid + rerank | `agent/config/policy.rag-hybrid-rerank.json` | 需 embedding、重排模型 + 索引；候选重排上限 5 |
 
 保持不变的量：同一 generation config 与 temperature、同一 `feedback_policy` 档位、同一预算（`rag_recall_k=20`、`rag_top_k=3`、`rag_max_bytes=6000`、`rag_query_max_chars=1600`、`rag_timeout_seconds=30`）。RAG 只在修复阶段生效，首次生成三者构造上完全相同；为让首稿确定，建议固定 temperature（或种子），把结论落在修复步骤增量上。
 

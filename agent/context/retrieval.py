@@ -16,8 +16,9 @@ def load_runtime(path=None):
     source = Path(path) if path else local if local.is_file() else ROOT / 'rag/runtime.json'
     source = (ROOT / source).resolve() if not source.is_absolute() else source.resolve()
     data = json.loads(source.read_text(encoding='utf-8'))
-    if not isinstance(data, dict) or set(data) != {'registry', 'python', 'model'}:
+    if not isinstance(data, dict) or not {'registry', 'python', 'model'}.issubset(data):
         raise ValueError('RAG runtime requires registry, python, model')
+    data.setdefault('reranker', None)
     for key in data:
         if data[key] is None and key != 'registry':
             continue
@@ -60,6 +61,8 @@ class Retrieval:
             verify_release(self.release)
             if self.options['rag_mode'] == 'hybrid' and not self.runtime['model']:
                 raise ValueError('Hybrid RAG requires an explicit local model path')
+            if self.options['rag_reranker'] != 'none' and not self.runtime.get('reranker'):
+                raise ValueError('RAG reranker is enabled but no local reranker path was supplied')
             self.snapshot = dict(enabled=True, options=self.options, runtime=self.runtime, release=self.release)
             self.sha256 = json_digest(self.snapshot)
         except (OSError, ValueError, KeyError, TypeError) as error:
@@ -81,6 +84,7 @@ class Retrieval:
         evidence = dict(status='running', query=query, query_source=source,
                         feedback_policy=feedback_policy, query_plan=plan,
                         diagnostic_fingerprint=diagnostic.fingerprint, mode=self.options['rag_mode'],
+                        profile=self.options['rag_profile'], reranker=self.options['rag_reranker'],
                         rag_config_sha256=self.sha256, release_id=self.release['release_id'],
                         corpus_sha256=self.release['records_sha256'],
                         index_fingerprint=self.release['index_fingerprint'],
@@ -97,6 +101,7 @@ class Retrieval:
             if timeout <= 0:
                 raise Failure('rag_insufficient_budget', 'No retrieval time available after validation reserve')
             job = dict(query=query, options=self.options, release=self.release, model=self.runtime['model'],
+                       reranker=self.runtime.get('reranker'),
                        query_plan=plan)
             job_path = directory / 'retrieval_input.json'
             output = directory / 'retrieval_output.json'
@@ -146,5 +151,15 @@ def input_artifacts(policy, runtime_path=None):
             target = (model_root / name).resolve()
             if not target.is_relative_to(model_root):
                 raise ValueError('Model manifest path escapes model directory')
+            paths.append(target)
+    if rag_options(policy)['rag_reranker'] != 'none' and runtime.get('reranker'):
+        reranker_root = Path(runtime['reranker']).resolve()
+        manifest_path = reranker_root / 'rag-reranker-manifest.json'
+        manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+        paths.append(manifest_path)
+        for name in manifest['files']:
+            target = (reranker_root / name).resolve()
+            if not target.is_relative_to(reranker_root):
+                raise ValueError('Reranker manifest path escapes model directory')
             paths.append(target)
     return paths
