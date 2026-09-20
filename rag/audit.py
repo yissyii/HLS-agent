@@ -9,10 +9,11 @@ from rag.retrieve import Retriever
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--corpus', default='rag/corpora/ug1399-2025.2-en')
-    p.add_argument('--index', default='rag/indexes/ug1399-qwen06b-en')
+    p.add_argument('--corpus', default='rag/corpora/ug1399-2026.1-en-curated')
+    p.add_argument('--index', default='rag/indexes/ug1399-qwen06b-2026.1-curated')
     p.add_argument('--model', default='F:/Workspace/hls-rag/models/Qwen3-Embedding-0.6B')
-    p.add_argument('--pdf', default='../docs/ug1399-vitis-hls-en-us-2025.2.pdf')
+    p.add_argument('--pdf', default='docs/ug1399-vitis-hls-en-us-2026.1.pdf')
+    p.add_argument('--version', default='2026.1')
     p.add_argument('--output', required=True)
     a = p.parse_args()
     if Path(a.output).exists():
@@ -38,7 +39,7 @@ def main():
     for r in records:
         s = r['source']
         if (s['file_sha256'] != source['source_sha256'] or s['language'] != 'en-US'
-                or s['version'] != '2025.2' or s['parent_id'] not in sections
+                or s['version'] != a.version or s['parent_id'] not in sections
                 or not 1 <= s['page_start'] <= s['page_end'] <= source['source_pages']):
             raise ValueError('Invalid record provenance: ' + r['id'])
     report = dict(

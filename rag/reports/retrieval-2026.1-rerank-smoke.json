@@ -1,0 +1,156 @@
+{
+  "description": "Author-curated retrieval smoke set, not independent held-out HLS tasks. Labels identify useful manual sections, not complete answers or repair correctness.",
+  "corpus_sha256": "2fa0452b1dfb9ec153a2c3c123965897d5bcf44b2feb980f98649fafeff76b0e",
+  "queries_sha256": "ad597e728014246e9267b429a75088d279e1397537475d68def72df1d865c0e6",
+  "configuration": {
+    "top_k": 2,
+    "recall_k": 5,
+    "max_bytes": 8000,
+    "reranker": {
+      "repository": "Qwen/Qwen3-Reranker-0.6B",
+      "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+      "model_manifest_sha256": "9f61054a56f0fa8aa76515cfc3acf5347a1a2d4e2f99191dce8da224563bbf42",
+      "max_length": 2048,
+      "device": "cpu",
+      "dtype": "float32",
+      "sentence_transformers": "5.7.0",
+      "torch": "2.8.0+cpu"
+    },
+    "rerank_k": 5
+  },
+  "index_fingerprint": "c621f64717ea52d277425dae434a01f3db7dd4a8e1859b3cd6db1246d1871b11",
+  "query_encoding_and_cold_load_seconds": 2.1719999999986612,
+  "summary": {
+    "hybrid": {
+      "all": {
+        "queries": 4,
+        "hit_at_1": 0.75
+      },
+      "english_semantic": {
+        "queries": 4,
+        "hit_at_1": 0.75
+      }
+    }
+  },
+  "runs": [
+    {
+      "query_id": "state",
+      "kind": "english_semantic",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Statics"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2026.1-en-s0076-p0125-00",
+          "title": "Statics",
+          "page": 125,
+          "score": 0.015873015873015872
+        },
+        {
+          "id": "ug1399-2026.1-en-s0480-p0794-00",
+          "title": "Accumulation",
+          "page": 794,
+          "score": 0.016129032258064516
+        }
+      ],
+      "context_bytes": 1868,
+      "search_seconds": 5.375
+    },
+    {
+      "query_id": "malloc",
+      "kind": "english_semantic",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Dynamic Memory Usage"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2026.1-en-s0101-p0152-00",
+          "title": "Dynamic Memory Usage",
+          "page": 152,
+          "score": 0.03278688524590164
+        },
+        {
+          "id": "ug1399-2026.1-en-s0056-p0098-01",
+          "title": "C Simulation with Arrays",
+          "page": 98,
+          "score": 0.015625
+        }
+      ],
+      "context_bytes": 1905,
+      "search_seconds": 7.531
+    },
+    {
+      "query_id": "recursion",
+      "kind": "english_semantic",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Recursive Functions"
+      ],
+      "first_relevant_rank": 1,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2026.1-en-s0103-p0154-00",
+          "title": "Recursive Functions",
+          "page": 154,
+          "score": 0.03278688524590164
+        },
+        {
+          "id": "ug1399-2026.1-en-s0071-p0120-00",
+          "title": "Using Templates to Create Unique Instances",
+          "page": 120,
+          "score": 0.016129032258064516
+        }
+      ],
+      "context_bytes": 2810,
+      "search_seconds": 5.625
+    },
+    {
+      "query_id": "pointer",
+      "kind": "english_semantic",
+      "mode": "hybrid",
+      "gold_titles": [
+        "Pointer Limitations",
+        "Pointers on the Interface"
+      ],
+      "first_relevant_rank": 2,
+      "hit_at_1": false,
+      "hit_at_3": true,
+      "hit_at_5": true,
+      "retrieved": [
+        {
+          "id": "ug1399-2026.1-en-s0089-p0138-00",
+          "title": "Pointers",
+          "page": 138,
+          "score": 0.03177805800756621
+        },
+        {
+          "id": "ug1399-2026.1-en-s0102-p0154-00",
+          "title": "Pointer Limitations",
+          "page": 154,
+          "score": 0.031754032258064516
+        }
+      ],
+      "context_bytes": 2679,
+      "search_seconds": 7.203
+    }
+  ],
+  "limitations": [
+    "Author-curated small development smoke set; not independent hold-out.",
+    "Gold labels are at section level; a retrieved chunk may not contain all required details.",
+    "These are retrieval hit rates, not HLS correctness or Agent repair gains.",
+    "Search timing excludes cached query encoding; cold-load time reported separately."
+  ]
+}

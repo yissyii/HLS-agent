@@ -12,6 +12,12 @@ def retrieve(job):
     verify_release(release)
     retriever = Retriever(release['corpus'], release['index'] if options['rag_mode'] == 'hybrid' else None,
                           job['model'])
+    reranker = None
+    if options.get('rag_reranker') == 'qwen3-reranker-0.6b':
+        if not job.get('reranker'):
+            raise ValueError('RAG reranker is enabled but no local model path was supplied')
+        from rag.reranker import QwenReranker
+        reranker = QwenReranker(job['reranker'])
     reference_records(retriever.records)
     evidence_filter = None
     if options.get('rag_strategy') == 'diagnostic_v1':
@@ -19,7 +25,8 @@ def retrieve(job):
         evidence_filter = lambda record: assess(record, job['query_plan'])
     result = retriever.search(job['query'], mode=options['rag_mode'], top_k=options['rag_top_k'],
                               recall_k=options['rag_recall_k'], max_bytes=options['rag_max_bytes'],
-                              evidence_filter=evidence_filter)
+                              evidence_filter=evidence_filter, profile=options.get('rag_profile', 'fix_first'),
+                              reranker=reranker, rerank_k=options.get('rag_rerank_k', options['rag_recall_k']))
     return dict(result, status='completed')
 
 
