@@ -480,7 +480,7 @@ class AgentContract(unittest.TestCase):
         rules = self.directory / 'rules'
         rules.mkdir()
         # Synthetic rule tests the retrieval contract, not a claimed competition skill.
-        rule = dict(id='synthetic-rule', version='test', tool_version='2025.2', categories=['compile_error'],
+        rule = dict(id='synthetic-rule', version='test', tool_version='2026.1', categories=['compile_error'],
                     keywords=['compile_error'], guidance='SYNTHETIC_RULE_MARKER', preconditions='fixture only',
                     failure_modes='not for real tasks', source='synthetic fixture', license='test fixture',
                     validation={'held_out_passed': True, 'split': 'independent_development'})

@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 from agent.core.contracts import digest, json_digest
+from agent.toolchain import VITIS_VERSION
 from serve.inference import Failure, ROOT
 
 
@@ -33,8 +34,8 @@ class Skills:
                     raise Failure('skill_error', 'Only independently validated rules may be enabled')
                 if rule['validation'].get('split') != 'independent_development':
                     raise Failure('skill_error', 'Rule provenance must exclude frozen evaluation data')
-                if rule['tool_version'] != '2025.2':
-                    raise Failure('skill_error', 'Rule tool version does not match Vitis 2025.2')
+                if rule['tool_version'] != VITIS_VERSION:
+                    raise Failure('skill_error', 'Rule tool version does not match Vitis ' + VITIS_VERSION)
                 rule['sha256'] = digest(raw)
                 # Preconditions remain visible to the model; keywords alone do not prove them.
                 rule['guidance'] = ('Apply only if: ' + str(rule['preconditions']) + '\n'

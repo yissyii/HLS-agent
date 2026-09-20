@@ -15,7 +15,7 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parent
 MANIFEST = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))
-VITIS = Path(MANIFEST.get("vitis_root", "/home/dingjy/sxt/zcomp-agent/vivado/2025.2/Vitis"))
+VITIS = Path(MANIFEST.get("vitis_root", "/home/dingjy/sxt/zcomp-agent/vivado/2026.1/Vitis"))
 VIVADO = VITIS.parent / "Vivado"
 LICENSE = MANIFEST.get("license_file", "/home/dingjy/sxt/zcomp-agent/vivado/vivado_license.lic")
 
@@ -208,7 +208,7 @@ def main():
         raise ValueError("workers must be positive")
     tasks = [task for task in MANIFEST["tasks"] if args.task is None or task["task_id"] == args.task]
     summary = dict(status="running", task_count=len(tasks), completed=0, results=[], workers=args.workers,
-                   note="Vitis HLS 2025.2 graded eval; parse inferred from csim setup. Exact reference testbench bytes; no hidden tests.",
+                   note="Vitis HLS 2026.1 graded eval; parse inferred from csim setup. Exact reference testbench bytes; no hidden tests.",
                    started_at=datetime.now(timezone.utc).isoformat())
     summary_file = ROOT / ("pilot_summary.json" if args.task else "summary.json")
     with ThreadPoolExecutor(max_workers=args.workers) as pool:

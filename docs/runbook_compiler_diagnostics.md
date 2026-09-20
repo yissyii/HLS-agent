@@ -15,7 +15,7 @@
 
 ## 前置条件（先自检）
 
-1. Vitis HLS 2025.2 已装，知道 `vitis_root` / `vivado_root` 的绝对路径。
+1. Vitis HLS 2026.1 已装，知道 `vitis_root` / `vivado_root` 的绝对路径。
 2. vLLM 正在 `127.0.0.1:8001` 服务模型，用 `curl http://127.0.0.1:8001/v1/models` 确认模型名（`name` 字段要和下面配置一致）。
 3. Python 环境能跑 `python -B tools/...`。
 
@@ -54,8 +54,8 @@ python -B tools/test_agent_contract.py   # 协议测试通过
     "tls_sha256": ""
   },
   "hls": {
-    "vitis_root": "/path/to/2025.2/Vitis",
-    "vivado_root": "/path/to/2025.2/Vivado",
+    "vitis_root": "/path/to/2026.1/Vitis",
+    "vivado_root": "/path/to/2026.1/Vivado",
     "license_file": null,
     "part": "xczu3eg-sbva484-1-e",
     "clock_ns": 5,

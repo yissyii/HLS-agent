@@ -107,7 +107,7 @@ def main():
         "synth_timeout": 300,
         "source_mutations": False,
         "model_requests": 0,
-        "vitis_root": "/home/dingjy/sxt/zcomp-agent/vivado/2025.2/Vitis",
+        "vitis_root": "/home/dingjy/sxt/zcomp-agent/vivado/2026.1/Vitis",
         "license_file": "/home/dingjy/sxt/zcomp-agent/vivado/vivado_license.lic",
         "records": tasks,
         "tasks": tasks,

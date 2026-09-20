@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from agent.core.contracts import digest, json_digest
+from agent.toolchain import VITIS_VERSION
 from serve.inference import Failure
 
 PROMPT_ROOT = Path(__file__).resolve().parents[1] / 'prompts'
@@ -19,7 +20,7 @@ class PromptTemplates:
 
     def snapshot(self):
         return dict(schema_version=1, id='vitis-hls-cpp', version=self.version,
-                    tool_version='2025.2', files={
+                    tool_version=VITIS_VERSION, files={
                         name + '.txt': {'text': text, 'sha256': digest(text.encode('utf-8'))}
                         for name, text in (('system', self.system), ('initial', self.initial), ('repair', self.repair))})
 
@@ -35,7 +36,7 @@ def load_prompts(directory=None):
         if (not isinstance(manifest, dict)
                 or set(manifest) != {'schema_version', 'id', 'version', 'tool_version'}
                 or type(manifest['schema_version']) is not int or manifest['schema_version'] != 1
-                or manifest['id'] != 'vitis-hls-cpp' or manifest['tool_version'] != '2025.2'
+                or manifest['id'] != 'vitis-hls-cpp' or manifest['tool_version'] != VITIS_VERSION
                 or not isinstance(manifest['version'], str) or not manifest['version'].strip()):
             raise ValueError('Invalid prompt manifest or Vitis version')
         texts = {}

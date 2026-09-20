@@ -11,8 +11,8 @@
     "tls_sha256": ""
   },
   "hls": {
-    "vitis_root": "/tools/Xilinx/2025.2/Vitis",
-    "vivado_root": "/tools/Xilinx/2025.2/Vivado",
+    "vitis_root": "/tools/Xilinx/2026.1/Vitis",
+    "vivado_root": "/tools/Xilinx/2026.1/Vivado",
     "license_file": null,
     "part": "xczu3eg-sbva484-1-e",
     "clock_ns": 5,

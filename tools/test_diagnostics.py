@@ -23,19 +23,19 @@ from evaluation.diagnostics import (
 COMPILER_LOG = r"""../../../../input/kernel.cpp:23:9: error: no matching function for call to object of type 'ap_uint<3>'
         new_ena(0) = ena_tens;
         ^~~~~~~
-D:/FPGA/AMDDesignTools/2025.2/Vitis/include\etc\ap_int_base.h:1098:51: note: candidate function not viable: requires 2 arguments, but 1 was provided
+D:/AMDDesignTools/2026.1/Vitis/include\etc\ap_int_base.h:1098:51: note: candidate function not viable: requires 2 arguments, but 1 was provided
   AP_INLINE AP_NODEBUG ap_range_ref<_AP_W, _AP_S> operator()(int Hi, int Lo) {
                                                   ^
-D:/FPGA/AMDDesignTools/2025.2/Vitis/include\etc\ap_int_base.h:1107:51: note: candidate function template not viable: requires 2 arguments, but 1 was provided
+D:/AMDDesignTools/2026.1/Vitis/include\etc\ap_int_base.h:1107:51: note: candidate function template not viable: requires 2 arguments, but 1 was provided
   AP_INLINE AP_NODEBUG ap_range_ref<_AP_W, _AP_S> operator()(
                                                   ^
 ../../../../input/kernel.cpp:24:9: error: no matching function for call to object of type 'ap_uint<3>'
         new_ena(1) = ena_hundreds;
         ^~~~~~~
-D:/FPGA/AMDDesignTools/2025.2/Vitis/include\etc\ap_int_base.h:1098:51: note: candidate function not viable: requires 2 arguments, but 1 was provided
+D:/AMDDesignTools/2026.1/Vitis/include\etc\ap_int_base.h:1098:51: note: candidate function not viable: requires 2 arguments, but 1 was provided
   AP_INLINE AP_NODEBUG ap_range_ref<_AP_W, _AP_S> operator()(int Hi, int Lo) {
                                                   ^
-D:/FPGA/AMDDesignTools/2025.2/Vitis/include\etc\ap_int_base.h:1107:51: note: candidate function template not viable: requires 2 arguments, but 1 was provided
+D:/AMDDesignTools/2026.1/Vitis/include\etc\ap_int_base.h:1107:51: note: candidate function template not viable: requires 2 arguments, but 1 was provided
   AP_INLINE AP_NODEBUG ap_range_ref<_AP_W, _AP_S> operator()(
                                                   ^
 """
