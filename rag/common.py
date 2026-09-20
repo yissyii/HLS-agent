@@ -66,6 +66,7 @@ def load_corpus(directory):
 RELEASE_STATUSES = {'pending', 'reference', 'withdrawn'}
 VALIDATION_STATUSES = {'unvalidated', 'compile_only', 'csim_passed', 'synthesis_passed'}
 ROLES = {'doc', 'design', 'testbench', 'build_script', 'config', 'other'}
+SUPPORTED_TOOL_VERSIONS = {'2025.2', '2026.1'}
 
 # Required provenance keys per record kind. New kinds (official examples, library
 # components, experiment cases) are added alongside their ingesters; the contract turns
@@ -102,8 +103,9 @@ def validate_record(record):
     if record['role'] not in ROLES:
         raise ValueError('Unknown record role: ' + record['role'])
     validate_source(record['kind'], record['source'])
-    if not isinstance(record['tool'], dict) or record['tool'].get('target_version') != '2025.2':
-        raise ValueError('Record tool target_version must be 2025.2')
+    if (not isinstance(record['tool'], dict)
+            or record['tool'].get('target_version') not in SUPPORTED_TOOL_VERSIONS):
+        raise ValueError('Record tool target_version must be a supported Vitis version')
     if not isinstance(record['release'], dict) or record['release'].get('status') not in RELEASE_STATUSES:
         raise ValueError('Invalid record release status')
     if not isinstance(record['validation'], dict) or record['validation'].get('status') not in VALIDATION_STATUSES:
