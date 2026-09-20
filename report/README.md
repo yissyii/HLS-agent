@@ -18,6 +18,10 @@
 
 ## 设计与实现
 
+- [结构化功能诊断](design/functional_diagnostics.md)：csim 事件、四档反馈权限、完整事件预算与 RAG 查询分工。
+
+- [Bench4HLS RAG 首轮复盘与逻辑修正](design/rag_repair_v2.md)：结论边界、检索门控、固定首稿对照协议和验证证据。
+
 | 文档 | 内容与状态 |
 | --- | --- |
 | [项目结构思维导图](design/project_structure.md) | 工作区、框架、知识资料、报告和本地产物之间的关系 |

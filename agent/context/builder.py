@@ -1,16 +1,27 @@
 """Source-aware prompts with an explicitly conservative fallback budget."""
-from agent.core.contracts import PromptBundle, digest
+from agent.core.contracts import PromptBundle, digest, json_digest
+from agent.context.prompts import load_prompts
+from agent.core.policy import rag_options
 from serve.inference import Failure
+from evaluation.functional import fit_feedback
 
 
-def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw_initial=False):
+def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw_initial=False, *, templates=None, retrieval=None):
+    templates = templates if templates is not None else load_prompts()
     problem = task.problem.decode('utf-8')
     provenance = [{'kind': 'problem', 'sha256': digest(task.problem)}]
-    if raw_initial and candidate is None:
+    raw = raw_initial and candidate is None
+    stage = 'raw_initial' if raw else 'repair' if candidate is not None else 'initial'
+    system = '' if raw else templates.system
+    if raw:
         mandatory = problem
     else:
-        mandatory = ('Write a complete Vitis HLS C++ source file. Return source only, optionally in one cpp fence. '
-                     'Preserve the exact required interface and behavior. Do not output a testbench or scripts.\n'
+        instruction = templates.repair if candidate is not None else templates.initial
+        provenance.extend([
+            {'kind': 'system_prompt', 'version': templates.version, 'sha256': digest(system.encode('utf-8'))},
+            {'kind': 'stage_prompt', 'stage': stage, 'sha256': digest(instruction.encode('utf-8'))},
+        ])
+        mandatory = (f'<STAGE>{stage}</STAGE>\n' + instruction + '\n'
                      f'Target: {runtime["hls"]["part"]}; clock: {runtime["hls"]["clock_ns"]} ns.\n'
                      '<PROBLEM>\n' + problem + '\n</PROBLEM>\n')
         if task.manifest:
@@ -20,15 +31,35 @@ def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw
                 mandatory += f'<PUBLIC_FILE name="{material.name}">\n{material.content.decode("utf-8")}\n</PUBLIC_FILE>\n'
                 provenance.append({'kind': 'public_file', 'name': material.name, 'sha256': digest(material.content)})
     if candidate is not None:
-        mandatory += '\nRepair the following candidate using the permitted diagnostic. Return its complete replacement.\n'
         mandatory += '<CURRENT_SOURCE>\n' + candidate.source + '\n</CURRENT_SOURCE>\n'
         provenance.append({'kind': 'candidate', 'sha256': candidate.sha256})
-    feedback = diagnostic.feedback[:policy['diagnostic_max_chars']] if diagnostic else ''
+    structured_feedback = bool(task.manifest and task.manifest['feedback_policy'] == 'functional_diagnostics')
+    def limit_feedback(text, limit):
+        return fit_feedback(text, limit) if structured_feedback else text[:limit]
+    feedback = limit_feedback(diagnostic.feedback, policy['diagnostic_max_chars']) if diagnostic else ''
     selected = list(skills)
+    rag_hits = list((retrieval or {}).get('hits', [])) if retrieval else []
+
+    def reference_block():
+        if not rag_hits:
+            return ''
+        return '\n<REFERENCE_MATERIAL>\n' + ''.join('\n' + hit['context'] for hit in rag_hits) + '\n</REFERENCE_MATERIAL>\n'
+
+    references = reference_block()
+    while len(references.encode('utf-8')) > rag_options(policy)['rag_max_bytes'] and rag_hits:
+        rag_hits.pop()
+        references = reference_block()
     available = runtime['model']['context_tokens'] - runtime['model']['max_tokens'] - policy['context_safety_tokens']
+    system_bytes = len(system.encode('utf-8'))
+    overhead = 64 * (2 if system else 1)  # Heuristic role/template allowance, not exact tokenization.
+
+    def budgeted_bytes(text):
+        return system_bytes + len(text.encode('utf-8')) + overhead
 
     def assemble():
         text = mandatory
+        if references:
+            text += references
         if diagnostic:
             text += f'\n<DIAGNOSTIC category="{diagnostic.category}">\n{feedback}\n</DIAGNOSTIC>\n'
         for rule in selected:
@@ -38,21 +69,46 @@ def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw
     text = assemble()
     # Byte length is deliberately conservative for typical byte tokenizers, but
     # is not claimed to be an exact count or a guarantee for arbitrary templates.
-    while len(text.encode('utf-8')) > available and selected:
+    # RAG is optional evidence. Drop complete references before skills and before
+    # shortening released diagnostics; required task/source/system text is never cut.
+    while budgeted_bytes(text) > available and rag_hits:
+        rag_hits.pop()
+        references = reference_block()
+        text = assemble()
+    while budgeted_bytes(text) > available and selected:
         selected.pop()
         text = assemble()
-    while len(text.encode('utf-8')) > available and len(feedback) > 256:
-        feedback = feedback[:max(256, len(feedback) // 2)]
+    while budgeted_bytes(text) > available and len(feedback) > 256:
+        feedback = limit_feedback(feedback, max(256, len(feedback) // 2))
         text = assemble()
-    if len(text.encode('utf-8')) > available:
+    if budgeted_bytes(text) > available:
         raise Failure('context_budget_exceeded', 'Required context exceeds conservative budget; no silent source truncation')
     if diagnostic:
         provenance.append({'kind': 'diagnostic', 'sha256': digest(feedback.encode()),
                            'fingerprint': diagnostic.fingerprint, 'trimmed': feedback != diagnostic.feedback})
     provenance += [{'kind': 'skill', 'id': rule['id'], 'sha256': rule['sha256']} for rule in selected]
+    if retrieval:
+        provenance.append({'kind': 'rag', 'release_id': retrieval.get('release_id'),
+                            'corpus_sha256': retrieval.get('corpus_sha256'),
+                            'index_fingerprint': retrieval.get('index_fingerprint'),
+                            'candidate_ids': [h['record']['id'] for h in rag_hits],
+                            'injected_bytes': len(references.encode('utf-8'))})
+    messages = ([{'role': 'system', 'content': system}] if system else []) + [{'role': 'user', 'content': text}]
     return PromptBundle(text, provenance, {
         'method': 'conservative_utf8_bytes', 'token_count_verified': False,
-        'input_bytes': len(text.encode('utf-8')), 'input_budget': available,
+        'input_bytes': system_bytes + len(text.encode('utf-8')), 'input_budget': available,
+        'system_bytes': system_bytes, 'user_bytes': len(text.encode('utf-8')),
+        'message_overhead_bytes': overhead, 'budgeted_input_bytes': budgeted_bytes(text),
+        'stage': stage, 'prompt_templates_version': templates.version,
+        'prompt_templates_sha256': templates.sha256, 'system_prompt_used': bool(system),
+        'messages_sha256': json_digest(messages),
+        'rag_candidate_ids': [h['record']['id'] for h in rag_hits],
+        'rag_injected_bytes': len(references.encode('utf-8')),
+        'retrieval': ({**{k: v for k, v in retrieval.items() if k != 'hits'},
+                       'status': ('skipped' if retrieval.get('status') == 'skipped' else
+                                  'injected' if rag_hits else 'no_reference_injected'),
+                       'injected_ids': [h['record']['id'] for h in rag_hits],
+                       'injected_bytes': len(references.encode('utf-8'))} if retrieval else None),
         'output_tokens': runtime['model']['max_tokens'], 'safety_tokens': policy['context_safety_tokens'],
         'note': 'Local tokenizer/chat-template verification is not installed; service overflow remains a failure.',
-    }, [r['id'] for r in selected])
+    }, [r['id'] for r in selected], system=system)

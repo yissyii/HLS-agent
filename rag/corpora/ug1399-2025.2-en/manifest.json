@@ -1,0 +1,19 @@
+{
+  "schema_version": 2,
+  "records": 1756,
+  "records_sha256": "79778e1393914794575071150c9fde64cbc679fe6fac05c859a4971df6c02d0c",
+  "source_type": "pdf",
+  "source_file": "ug1399-vitis-hls-en-us-2025.2.pdf",
+  "source_sha256": "a7ce9855528cd121f25f7f55e532d907f58a46a8ad9d012f837bfc553f7ba2ea",
+  "source_pages": 904,
+  "language": "en-US",
+  "extraction": "pdfplumber-layout-bookmarks-v2",
+  "extraction_versions": {
+    "pdfplumber": "0.11.9",
+    "pypdf": "6.10.0",
+    "pdfminer": "20251230"
+  },
+  "max_chars": 1700,
+  "skipped_front_matter": true,
+  "validation_note": "Document excerpts only; no HLS repair effectiveness claim."
+}

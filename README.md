@@ -42,7 +42,7 @@ Code directories use lowercase English names; archived reports retain their hist
 
 英文 UG1399 知识库与本地 Qwen3-Embedding-0.6B 的安装、建库、BM25/混合检索和离线检索评估见 [RAG 使用说明](rag/README.md)，进度见 [任务清单](rag/TASKS.md)。该模块目前独立运行，Agent 默认流程尚未接入检索。
 
-The checked-in `serve/runtime.json` contains machine-specific development defaults: `E:/2025.2`, part `xczu3eg-sbva484-1-e`, 5 ns clock, and the current development endpoint. Before sharing outside the team, replace local paths and endpoint settings with a portable configuration or document the required overrides.
+The checked-in `serve/runtime.json` contains machine-specific development defaults: `E:/2026.1`, part `xczu3eg-sbva484-1-e`, 5 ns clock, and the current development endpoint. Before sharing outside the team, replace local paths and endpoint settings with a portable configuration or document the required overrides.
 
 ## Task contract
 
@@ -50,7 +50,7 @@ Tasks are supplied explicitly and are not committed with the framework. A task d
 
 ## Running locally
 
-Use Python 3.10+ and Vitis 2025.2. The PowerShell scripts set UTF-8 output and disable bytecode creation for their child process.
+Use Python 3.10+ and Vitis 2026.1. The PowerShell scripts set UTF-8 output and disable bytecode creation for their child process.
 
 ```powershell
 cd F:\Projects\ADMCmpt\zcomp

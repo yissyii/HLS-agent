@@ -107,8 +107,10 @@ class BaselineContract(unittest.TestCase):
             code,receipt=run(problem,output,config,command[7])
             from agent.core.policy import load_policy
             from agent.context.skills import Skills
+            from agent.context.prompts import load_prompts
             from serve.baseline_entry import config_digest
-            receipt.update(policy_sha256=config_digest(load_policy()), skills_sha256=Skills().sha256)
+            receipt.update(policy_sha256=config_digest(load_policy()), skills_sha256=Skills().sha256,
+                           prompt_templates_sha256=load_prompts().sha256)
             (Path(output)/'result.json').write_text(json.dumps(receipt), encoding='utf-8')
             return {'exit_code': code, 'timed_out': False, 'elapsed_seconds': 0, 'log': 'agent.log'}
         def fake_process(command, work, environment, log, timeout):

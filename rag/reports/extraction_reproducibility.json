@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "coverage.json": true,
+    "outline.json": true,
+    "pages.json": true,
+    "records.jsonl": true,
+    "sections.json": true,
+    "manifest_semantic_equality": true
+  },
+  "extraction_versions": {
+    "pdfplumber": "0.11.9",
+    "pypdf": "6.10.0",
+    "pdfminer": "20251230"
+  },
+  "records_sha256": "bd00aa1331204e759ef6097f9c8267279016fed8804b93ee1394de257ff05633",
+  "note": "Manifest JSON field order differs; parsed objects are identical. All extracted text files are byte-identical."
+}

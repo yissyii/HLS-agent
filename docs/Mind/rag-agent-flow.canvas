@@ -1,0 +1,194 @@
+{
+  "nodes": [
+    {
+      "id": "policy",
+      "type": "text",
+      "x": 0,
+      "y": 0,
+      "width": 400,
+      "height": 170,
+      "text": "**① 开关与发布配置**\n默认 rag_enabled=false。\n显式启用：选择发布条目，校验语料／索引哈希。\n关闭时不读取语料或加载模型。",
+      "color": "4"
+    },
+    {
+      "id": "initial",
+      "type": "text",
+      "x": 0,
+      "y": 260,
+      "width": 400,
+      "height": 130,
+      "text": "**② 首次生成**\n固定 system＋原任务和允许的公开材料。\n首稿不加入 RAG，便于比较修复效果。",
+      "color": "4"
+    },
+    {
+      "id": "validate",
+      "type": "text",
+      "x": 0,
+      "y": 480,
+      "width": 400,
+      "height": 170,
+      "text": "**③ Vitis 验证与反馈权限**\n验证器释放 Diagnostic.feedback：\n类别／编译诊断／允许公开的完整诊断。\n检索不能自行读取隐藏测试或原始日志。",
+      "color": "4"
+    },
+    {
+      "id": "decide",
+      "type": "text",
+      "x": 0,
+      "y": 740,
+      "width": 400,
+      "height": 160,
+      "text": "**④ 是否继续修复？**\n通过、次数耗尽、不可修复 → 交付并记录。\n允许修复＋RAG 开启 → 检索。\n关闭 → 直接组装修复提示。",
+      "color": "3"
+    },
+    {
+      "id": "query",
+      "type": "text",
+      "x": 580,
+      "y": 740,
+      "width": 440,
+      "height": 160,
+      "text": "**⑤ 诊断门与有界查询**\n仅类别反馈 → 记录 skipped，不启动 worker。\n有具体诊断 → 清理位置噪声、重复，优先错误。\n题目最多 256 字符；查询总计 ≤1600 字符。",
+      "color": "4"
+    },
+    {
+      "id": "worker",
+      "type": "text",
+      "x": 580,
+      "y": 1010,
+      "width": 440,
+      "height": 200,
+      "text": "**⑥ 检索与词项证据门**\nBM25 或 BM25＋Qwen＋RRF。\n至少两个诊断词匹配；缺失成员须匹配成员名。\n先筛选，再去重／预算／Top-2。\n空结果继续修复；超时／哈希错误明确失败。",
+      "color": "4"
+    },
+    {
+      "id": "builder",
+      "type": "text",
+      "x": 0,
+      "y": 1040,
+      "width": 400,
+      "height": 180,
+      "text": "**⑦ builder 组装 user 消息**\n参考区 ≤2400 字节（含包装）。\n总预算先丢参考，再技能，再缩短诊断。\n题目／源码／system 不截断。\nsystem 与首稿相同。",
+      "color": "5"
+    },
+    {
+      "id": "repair",
+      "type": "text",
+      "x": 0,
+      "y": 1320,
+      "width": 400,
+      "height": 135,
+      "text": "**⑧ 生成修复候选**\n固定 system＋修复 user → 生成模型。\n新候选重新执行验证，沿用停止策略。",
+      "color": "5"
+    },
+    {
+      "id": "evidence",
+      "type": "text",
+      "x": 580,
+      "y": 1350,
+      "width": 440,
+      "height": 225,
+      "text": "**运行证据**\nquery_plan：诊断词、策略与跳过原因。\nselection_audit：词项门通过／拒绝原因。\ninjected_ids：实际进入模型的参考。\n[[zcomp/report/design/rag_repair_v2.md|复盘、实现与验证]]",
+      "color": "6"
+    },
+    {
+      "id": "scope",
+      "type": "text",
+      "x": 580,
+      "y": 0,
+      "width": 440,
+      "height": 190,
+      "text": "**本版范围 · 已实现**\n现有 UG1399 英文 2025.2 语料仍按原版本冻结，修复阶段接入；运行工具链为 Vitis 2026.1。\n待审区不会自动进入 Agent 检索。\n官方示例、库组件、案例采集仍待完成。\n工程链路跑通不等于修复成功率提高。",
+      "color": "3"
+    }
+  ],
+  "edges": [
+    {
+      "id": "policy-initial",
+      "fromNode": "policy",
+      "fromSide": "bottom",
+      "toNode": "initial",
+      "toSide": "top",
+      "label": ""
+    },
+    {
+      "id": "initial-validate",
+      "fromNode": "initial",
+      "fromSide": "bottom",
+      "toNode": "validate",
+      "toSide": "top",
+      "label": ""
+    },
+    {
+      "id": "validate-decide",
+      "fromNode": "validate",
+      "fromSide": "bottom",
+      "toNode": "decide",
+      "toSide": "top",
+      "label": ""
+    },
+    {
+      "id": "query-worker",
+      "fromNode": "query",
+      "fromSide": "bottom",
+      "toNode": "worker",
+      "toSide": "top",
+      "label": ""
+    },
+    {
+      "id": "builder-repair",
+      "fromNode": "builder",
+      "fromSide": "bottom",
+      "toNode": "repair",
+      "toSide": "top",
+      "label": ""
+    },
+    {
+      "id": "decide-query",
+      "fromNode": "decide",
+      "fromSide": "right",
+      "toNode": "query",
+      "toSide": "left",
+      "label": "开启"
+    },
+    {
+      "id": "decide-builder",
+      "fromNode": "decide",
+      "fromSide": "bottom",
+      "toNode": "builder",
+      "toSide": "top",
+      "label": "关闭"
+    },
+    {
+      "id": "worker-builder",
+      "fromNode": "worker",
+      "fromSide": "left",
+      "toNode": "builder",
+      "toSide": "right",
+      "label": "参考原文与来源"
+    },
+    {
+      "id": "builder-evidence",
+      "fromNode": "builder",
+      "fromSide": "right",
+      "toNode": "evidence",
+      "toSide": "left",
+      "label": "实际注入证据"
+    },
+    {
+      "id": "repair-validate",
+      "fromNode": "repair",
+      "fromSide": "left",
+      "toNode": "validate",
+      "toSide": "left",
+      "label": "重新验证"
+    },
+    {
+      "id": "query-skip-builder",
+      "fromNode": "query",
+      "fromSide": "left",
+      "toNode": "builder",
+      "toSide": "top",
+      "label": "信息不足：跳过检索"
+    }
+  ]
+}

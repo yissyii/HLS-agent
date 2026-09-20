@@ -5,6 +5,7 @@ import time
 from agent.core.contracts import ValidationResult, digest, json_digest
 from evaluation.hls import environment, validate_stage
 from serve.inference import Failure
+from evaluation.functional import format_functional
 
 
 class HLSValidator:
@@ -60,6 +61,14 @@ class HLSValidator:
             feedback = outcome.get('diagnostic_tail', category)
         elif policy == 'compiler_diagnostics':
             feedback = outcome.get('compiler_text') or category
+        elif policy == 'functional_diagnostics':
+            # This opt-in policy authorizes structured functional facts, not a raw log tail.
+            if category in {'compile_error', 'synthesis_error', 'compile_or_csim_error'}:
+                feedback = outcome.get('compiler_text') or category
+            elif category == 'functional_or_runtime_error':
+                feedback = format_functional(outcome.get('functional_diagnostics')) or category
+            else:
+                feedback = category
         else:
             feedback = f'{stage}: {category}. Detailed diagnostics are not released by this task.'
         return ValidationResult(candidate.sha256, task.fingerprint, json_digest(runtime['hls']),

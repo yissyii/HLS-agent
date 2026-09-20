@@ -1,0 +1,1 @@
+Repair the current candidate using only the supplied task, public materials, and permitted diagnostic. Identify a cause supported by that evidence and make a targeted correction, including a broader rewrite if necessary for correctness. Preserve unaffected interfaces and behavior. Return the complete replacement source file, not a diff.

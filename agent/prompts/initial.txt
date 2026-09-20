@@ -1,0 +1,1 @@
+Implement the specified design as a complete Vitis HLS C++ source file. Follow the task, target constraints, and supplied public interfaces. Check the design for functional correctness and synthesis compatibility before returning the source.

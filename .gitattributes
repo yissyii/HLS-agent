@@ -1,0 +1,7 @@
+# RAG artifacts are byte-addressed by SHA256 (release manifest, corpus and dense
+# index). Git must never apply CRLF/LF conversion to them, or the pinned hashes
+# break on Windows/autocrlf checkouts.
+rag/corpora/** -text
+rag/indexes/** -text
+rag/releases/** -text
+rag/reports/** -text

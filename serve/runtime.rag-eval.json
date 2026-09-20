@@ -1,0 +1,23 @@
+{
+  "model": {
+    "base_url": "http://127.0.0.1:8001/v1",
+    "name": "qwen38",
+    "max_tokens": 4096,
+    "temperature": 0.0,
+    "enable_thinking": false,
+    "timeout_seconds": 180,
+    "context_tokens": 16384,
+    "context_note": "local vLLM qwen38 on 8001; temperature=0 pins the first draft across RAG conditions",
+    "tls_sha256": ""
+  },
+  "hls": {
+    "vitis_root": "/tools/Xilinx/2026.1/Vitis",
+    "vivado_root": "/tools/Xilinx/2026.1/Vivado",
+    "license_file": null,
+    "part": "xczu3eg-sbva484-1-e",
+    "clock_ns": 5,
+    "csim_timeout_seconds": 120,
+    "synthesis_timeout_seconds": 300,
+    "total_timeout_seconds": 600
+  }
+}

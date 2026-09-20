@@ -6,7 +6,7 @@
 
 详细方案见 [设计文档](../report/design/design.md)，入口与各程序模块的关系见 [Agent 与裸基线流程图](../report/design/agent_flow.md)。
 
-标准 Agent 现使用版本化的英文 system prompt：首稿和修复共享固定约束，阶段指令及任务材料放在 user 消息中。编辑位置、兼容模式与记录方式见 [提示词说明](prompts/README.md)。RAG 尚未接入；严格裸基线继续原题直传。
+标准 Agent 现使用版本化的英文 system prompt：首稿和修复共享固定约束，阶段指令及任务材料放在 user 消息中。编辑位置、兼容模式与记录方式见 [提示词说明](prompts/README.md)。RAG 已接入修复阶段，默认关闭，可显式启用 BM25 或 Qwen 混合检索；见 [使用说明与流程图](../report/design/rag_agent.md)。严格裸基线继续原题直传。
 
 研发评测默认经过项目级 [评测管理模块](../local_eval/README.md)：网络故障使最外层命令对应的整轮评测作废并自动重跑。原命令直接生效，适用于任意题目和数据集。显式输出目录下先查看 `session.json`，再读取 `valid_attempt/result/` 中的 Agent 产物；提交副本删除 `local_eval/` 后恢复下面描述的单轮输出布局。
 
@@ -28,6 +28,7 @@ agent/
 ├── context/          # 模型上下文与技能选择
 │   ├── README.md
 │   ├── builder.py
+│   ├── retrieval.py  # 发布参考检索；默认关闭、仅修复阶段
 │   └── skills.py     # 只读规则检索；默认关闭
 ├── feedback/         # 验证反馈分析
 │   ├── README.md
@@ -83,7 +84,7 @@ Linux 对应 `bash run.sh ...` 和 `bash run_paired.sh ...`。`--cpu-only` 仅�
 }
 ```
 
-所有依赖路径相对于清单目录，必须显式声明。默认 `model_visible=[]`，不向模型提供任何依赖文件。`feedback_policy` 三档控制验证失败后放行给模型的诊断文本：默认 `category_only` 只反馈错误类别；`compiler_diagnostics` 额外给出编译与综合的具体错误（源码行 + 脱字符 + 去重后的 note），仍扣下功能测试的 `Mismatch` 等隐藏测试反例；只有确认测试诊断允许公开时才用 `public_diagnostics` 释放原始 `diagnostic_tail` 全部内容。可省略 testbench，此时显式清单提供的顶层和依赖只用于综合，功能仍标为未验证。
+所有依赖路径相对于清单目录，必须显式声明。默认 `model_visible=[]`，不向模型提供任何依赖文件。`feedback_policy` 四档控制验证失败后放行给模型的诊断文本：默认 `category_only` 只反馈错误类别；`compiler_diagnostics` 额外给出编译与综合的具体错误（源码行 + 脱字符 + 去重后的 note），仍扣下功能测试的 `Mismatch` 等隐藏测试反例；允许公开结构化功能事件时使用 `functional_diagnostics`，保留周期／期望值／实际值和明确运行异常，不释放原始日志尾部；只有确认测试诊断允许公开时才用 `public_diagnostics` 释放原始 `diagnostic_tail` 全部内容。可省略 testbench，此时显式清单提供的顶层和依赖只用于综合，功能仍标为未验证。
 
 ## 输出与退出码
 
@@ -107,3 +108,5 @@ python -B tools/smoke_agent_hls.py --config serve/runtime.local.json
 ```
 
 当前上下文预算使用 UTF-8 字节数与预留量作保守检查，明确标记 `token_count_verified=false`，尚未接入模型专用 tokenizer。规则检索代码已实现，但没有附带宣称已验证的比赛技能包。单卡 AMD/ROCm 离线容器、技能增益实验和官方 pass@k 统计仍需在对应环境单独验证。
+
+结构化功能反馈的启用方式、支持日志、字段限制和流程见 [功能诊断说明](../report/design/functional_diagnostics.md)。

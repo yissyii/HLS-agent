@@ -136,5 +136,6 @@ def validate_stage(stage, work, manifest, settings, cpu_only, budget):
         execution["category"] = extracted["category"]
         execution["diagnostics"] = extracted["entries"]
         execution["compiler_text"] = extracted["compiler_text"]
+        execution['functional_diagnostics'] = extracted['functional_diagnostics']
         execution["diagnostic_tail"] = extracted["diagnostic_tail"]
     return execution

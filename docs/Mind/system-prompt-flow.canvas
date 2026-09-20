@@ -4,7 +4,7 @@
 		{"id":"load","type":"text","text":"**② 每次运行加载一次**\ncontroller.py → prompts.py\n校验非空文本和版本，统一换行，计算哈希。\n生成不可变 PromptTemplates；本轮修复不重读磁盘。\n加载失败：模型调用前终止。","x":45,"y":360,"width":430,"height":205,"color":"4"},
 		{"id":"initial","type":"text","text":"**③ A · 首次生成**\ninitial.txt＋题目＋目标器件／时钟＋公开材料。\n没有当前候选，也没有上一轮诊断。","x":740,"y":-27,"width":430,"height":120,"color":"4"},
 		{"id":"bundle","type":"text","text":"**④ builder.py 组装 PromptBundle**\nsystem：冻结的 system.txt\ntext：当轮 user 内容\nmessages：带角色的完整消息列表\n同时记录阶段、来源、模板版本与哈希。","x":920,"y":340,"width":360,"height":170,"color":"4"},
-		{"id":"budget","type":"text","text":"**⑤ 检查完整提示预算**\nsystem＋user＋消息开销都计入。\n超限：先移除可选技能，再缩短诊断。\n必要内容仍超限 → 停止本次生成。\n这是保守字节估算，不是精确 token 数。","x":920,"y":640,"width":440,"height":175,"color":"3"},
+		{"id":"budget","type":"text","text":"**⑤ 检查完整提示预算**\nsystem＋user＋消息开销都计入。\n超限：先移除 RAG 参考，再可选技能，再缩短诊断。\n必要内容仍超限 → 停止本次生成。\n这是保守字节估算，不是精确 token 数。","x":920,"y":640,"width":440,"height":175,"color":"3"},
 		{"id":"client","type":"text","text":"**⑥ agent_model.py · ModelClient**\n保存 system_prompt.txt／prompt.txt、request.json、context.json。\n启动有超时限制的 worker，读取本次保存的文本和配置。","x":1000,"y":1043,"width":440,"height":175,"color":"5"},
 		{"id":"validate","type":"text","text":"**⑧ 有材料时执行 Vitis 验证**\n有测试台：csim → csynth。\n无测试台的显式清单：仅综合。\n无验证材料：直接交付，标为未验证。\n只向 Agent 释放允许的反馈。","x":1360,"y":1340,"width":340,"height":140,"color":"4"},
 		{"id":"records","type":"text","text":"**运行证据：看这里理解实际输入**\n运行根目录 prompt_templates.json：冻结模板全文／版本／哈希。\n候选目录 system_prompt.txt：system。\nprompt.txt：仅 user，不是完整请求。\nrequest.json：完整角色与内容。\ncontext.json：来源、阶段、预算和哈希。\nresponse.txt.meta.json：实际传输消息哈希与结果。","x":-520,"y":832,"width":610,"height":310,"color":"6"},

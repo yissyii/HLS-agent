@@ -31,7 +31,16 @@ def project_path(value):
 def write_json(path, value):
     temporary = path.with_name(path.name + ".tmp")
     temporary.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    temporary.replace(path)
+    # Windows readers can briefly hold the previous receipt without delete sharing.
+    # Retry only the atomic rename, never an API request or a failed computation.
+    for attempt in range(6):
+        try:
+            temporary.replace(path)
+            return
+        except PermissionError as error:
+            if os.name != 'nt' or error.winerror not in (5, 32, 33) or attempt == 5:
+                raise
+            time.sleep(.01 * (attempt + 1))
 
 
 def load_config(path=None, *, frozen=False, allow_external=False):
@@ -85,16 +94,20 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
-def request_payload(problem, config):
+def request_payload(problem, config, *, system_prompt=''):
+    if not isinstance(problem, str) or not isinstance(system_prompt, str):
+        raise Failure('input_error', 'User and system prompts must be strings')
     model = config['model']
+    messages = [{'role': 'system', 'content': system_prompt}] if system_prompt else []
+    messages.append({'role': 'user', 'content': problem})
     return {
-        'model': model['name'], 'messages': [{'role': 'user', 'content': problem}],
+        'model': model['name'], 'messages': messages,
         'max_tokens': model['max_tokens'], 'temperature': model['temperature'],
         'chat_template_kwargs': {'enable_thinking': model['enable_thinking']}, 'stream': False,
     }
 
 
-def generate(problem, config, output, timeout=None):
+def generate(problem, config, output, timeout=None, *, system_prompt=''):
     from evaluation.lifecycle import before_request, observe_request
     before_request()
     if not problem.strip():
@@ -103,7 +116,7 @@ def generate(problem, config, output, timeout=None):
         raise Failure("input_error", "Refusing to overwrite a previous response")
     key = os.environ.get("LLM_API_KEY", "not-needed").strip()
     model = config["model"]
-    payload = request_payload(problem, config)
+    payload = request_payload(problem, config, system_prompt=system_prompt)
     address = urllib.parse.urlsplit(model["base_url"])
     # Pin only this connection. Never change global TLS defaults or follow redirects.
     context = ssl._create_unverified_context() if model["tls_sha256"] else ssl.create_default_context()
@@ -115,6 +128,7 @@ def generate(problem, config, output, timeout=None):
         connection = http.client.HTTPSConnection(address.hostname, address.port or 443, context=context, timeout=timeout or model['timeout_seconds'])
     started = time.monotonic()
     metadata = {"model": model, "requests": 0, "development_external_api": address.hostname not in {"localhost", "127.0.0.1", "::1"}}
+    metadata['messages_sha256'] = hashlib.sha256(json.dumps(payload['messages'], sort_keys=True, separators=(',', ':')).encode()).hexdigest()
     output.parent.mkdir(parents=True, exist_ok=True)
     try:
         connection.connect()

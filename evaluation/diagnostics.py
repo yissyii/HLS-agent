@@ -5,11 +5,13 @@ into kind-tagged entries; which kinds may reach the model is decided by
 `feedback_policy` in `evaluation/validator.py`, never hard-coded here.
 
 `functional` entries carry hidden-test oracle content (``Mismatch ... expected/got``)
-and must stay out of the model prompt except under the ``public_diagnostics`` tier.
+and stay out of code-only feedback. Structured facts may be released under
+``functional_diagnostics``; the legacy raw tail requires ``public_diagnostics``.
 ``environment`` / ``license`` / ``timeout`` signals are infrastructure noise, never
 useful to a repair.
 """
 import re
+from evaluation.functional import extract_functional, parse_line
 
 # Diagnostic kinds. `timeout` is detected from run metadata (see classify_category),
 # not from a log line, so no line maps to it here.
@@ -70,9 +72,13 @@ def classify_category(stage, execution, text):
         return "environment_or_dependency_error"
     if stage == "synthesis":
         return "synthesis_error"
-    compiler_error = re.search(r"^(?!\s*error:\s*\[).*\b(?:fatal )?error:|undefined reference", lowered, re.MULTILINE)
+    # UBSan's "runtime error:" is not a compiler failure.
+    compiler_lines = '\n'.join(line for line in text.splitlines() if not parse_line(line)).lower()
+    compiler_error = re.search(r"^(?!\s*error:\s*\[).*\b(?:fatal )?error:|undefined reference", compiler_lines, re.MULTILINE)
     if compiler_error:
         return "compile_error"
+    if any(parse_line(line) for line in text.splitlines()):
+        return 'functional_or_runtime_error'
     if ("csim.exe" in lowered or "csim.out" in lowered) and any(value in lowered for value in ["linking", "running", "generating"]):
         return "functional_or_runtime_error"
     return "compile_or_csim_error"
@@ -84,7 +90,7 @@ def _compiler_block(lines, i, match, seen_notes):
     entry = _entry('compiler', location=location, message=match.group('message'))
     i += 1
     n = len(lines)
-    if i < n and not _is_caret(lines[i]) and not _CLANG_DIAG.match(lines[i]):
+    if i < n and not _is_caret(lines[i]) and not _CLANG_DIAG.match(lines[i]) and not parse_line(lines[i]) and not _VITIS_ERROR.match(lines[i]):
         entry['source'] = lines[i].rstrip()
         i += 1
     if i < n and _is_caret(lines[i]):
@@ -100,7 +106,7 @@ def _compiler_block(lines, i, match, seen_notes):
             seen_notes.add(message)
             notes.append(message)
         i += 1
-        if i < n and not _is_caret(lines[i]) and not _CLANG_DIAG.match(lines[i]):
+        if i < n and not _is_caret(lines[i]) and not _CLANG_DIAG.match(lines[i]) and not parse_line(lines[i]) and not _VITIS_ERROR.match(lines[i]):
             i += 1  # note source line
         if i < n and _is_caret(lines[i]):
             i += 1  # note caret line
@@ -180,4 +186,5 @@ def extract_diagnostics(stage, execution, text):
         'entries': entries,
         'compiler_text': format_entries(entries, RELEASABLE_CODE_KINDS),
         'diagnostic_tail': _diagnostic_tail(text),
+        'functional_diagnostics': extract_functional(stage, execution, text),
     }
