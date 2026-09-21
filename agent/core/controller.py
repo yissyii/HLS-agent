@@ -102,7 +102,11 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
                     artifacts.event('rag_retrieved', attempt=number, query_sha256=digest(retrieval['query'].encode()),
                                     candidate_ids=retrieval['retrieved_ids'], injected_ids=retrieval['injected_ids'],
                                     injected_bytes=retrieval['injected_bytes'], corpus_sha256=retrieval['corpus_sha256'],
-                                    index_fingerprint=retrieval['index_fingerprint'])
+                                    index_fingerprint=retrieval['index_fingerprint'],
+                                    eligible_count=retrieval.get('eligible_count'),
+                                    rejected_count=retrieval.get('rejected_count'),
+                                    injection_policy=retrieval.get('injection_policy'),
+                                    no_reference_reason=retrieval.get('no_reference_reason'))
                 summary['requests'].append({'attempt': number, 'state': 'dispatched',
                                             'request_outcome_unknown': True})
                 summary['generation_requests'] = budget.requests

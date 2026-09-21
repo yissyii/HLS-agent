@@ -123,7 +123,12 @@ class Retrieval:
                 raise Failure('rag_evidence_mismatch', 'Retrieval output differs from request/release')
             evidence.update(status='retrieved', retrieved_ids=[h['record']['id'] for h in result['hits']],
                             hits=result['hits'], retrieval_context_bytes=result['context_bytes'],
-                            selection_audit=result.get('selection_audit', []))
+                            selection_audit=result.get('selection_audit', []),
+                            top_k_requested=result.get('top_k_requested'),
+                            eligible_count=result.get('eligible_count'),
+                            rejected_count=result.get('rejected_count'),
+                            injection_policy=result.get('injection_policy'),
+                            no_reference_reason=result.get('no_reference_reason'))
             return evidence
         except (Failure, OSError, ValueError, KeyError, TypeError) as error:
             evidence.update(status='failed', category=getattr(error, 'category', 'rag_retrieval_error'), error=str(error))

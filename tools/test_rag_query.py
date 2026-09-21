@@ -49,6 +49,42 @@ class QueryContracts(unittest.TestCase):
                                   evidence_filter=lambda r: assess(r, plan))
         self.assertEqual([h['record']['id'] for h in result['hits']], ['b'])
         self.assertFalse(result['selection_audit'][0]['accepted'])
+        self.assertEqual(result['eligible_count'], 1)
+        self.assertEqual(result['rejected_count'], 1)
+        self.assertEqual(result['injection_policy'], 'eligible_only')
+
+    def test_signature_gate_rejects_generic_cpp_errors(self):
+        for diagnostic, record in (
+                ("error: use of undeclared identifier 'reset'",
+                 dict(id='reset', title='Reset', text='#pragma HLS reset')),
+                ("error: expected ';' after expression",
+                 dict(id='fir', title='FIR Filter IP Library', text='FIR filter example')),
+                ("error: 'hls.h' file not found",
+                 dict(id='refactor', title='Refactoring C++ Source Code for HLS',
+                      text='#include "diamond.h" hls::stream'))):
+            _, plan = self.plan(diagnostic)
+            accepted, decision = assess(record, plan)
+            self.assertFalse(accepted)
+            self.assertFalse(decision['signature_gate']['matched'])
+
+    def test_signature_gate_accepts_bit_selection_and_rejects_bit_width(self):
+        _, plan = self.plan("error: no matching function for call to object of type 'ap_uint<4>'\nx(0)")
+        bit_select = dict(id='bits', title='Other Class Methods',
+                          text='ap_uint Bit Selection operator [] and Range Selection operator ()')
+        bit_width = dict(id='width', title='Bit-Width Propagation',
+                         text='ap_uint arguments are sized accurately for function interfaces')
+        accepted, decision = assess(bit_select, plan)
+        self.assertTrue(accepted)
+        self.assertEqual(decision['reason'], 'signature_match')
+        self.assertFalse(assess(bit_width, plan)[0])
+
+    def test_signature_gate_accepts_interface_offset_enum(self):
+        _, plan = self.plan("error: unexpected interface offset value '0x0', expects '[slave, direct, off]'")
+        exact = dict(id='offset', title='Offset and Modes of Operation',
+                     text='offset=direct offset=slave offset=off')
+        unrelated = dict(id='other', title='Interface', text='m_axi interface without offset modes')
+        self.assertTrue(assess(exact, plan)[0])
+        self.assertFalse(assess(unrelated, plan)[0])
 
     def test_public_feedback_remains_authorized_but_not_invented(self):
         query, plan = self.plan('Mismatch cycle 4: expected 7 got 3', 'functional_or_runtime_error', 'public_diagnostics')
@@ -58,8 +94,8 @@ class QueryContracts(unittest.TestCase):
     def test_provisional_annotation_distinguishes_generic_diagnostic(self):
         _, plan = self.plan("error: use of undeclared identifier 'reset'", 'compile_error')
         self.assertEqual(plan['annotation']['status'], 'provisional')
-        self.assertEqual(plan['annotation']['signal_class'], 'ambiguous')
-        self.assertEqual(plan['annotation']['recommended_action'], 'judge')
+        self.assertEqual(plan['annotation']['signal_class'], 'generic')
+        self.assertEqual(plan['annotation']['recommended_action'], 'abstain')
         self.assertIsNone(plan['annotation']['human_label'])
 
     def test_provisional_annotation_records_specific_code_and_location(self):

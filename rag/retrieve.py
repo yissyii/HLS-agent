@@ -165,10 +165,18 @@ class Retriever:
             used += size
             if len(hits) == top_k:
                 break
+        # Count candidates that survived the evidence/profile/dedup gates.  In
+        # legacy mode selection_audit is empty, but candidates are still eligible.
+        eligible_count = len(candidates)
+        rejected_count = sum(1 for decision in selection_audit if not decision.get('accepted'))
         return dict(mode=mode, query=query, corpus_sha256=self.corpus_manifest['records_sha256'],
                     index_fingerprint=self.index_manifest['fingerprint'] if self.index_manifest and mode != 'bm25' else None,
                     hits=hits, selection_audit=selection_audit, profile=profile,
                     reranker=reranker_identity,
+                    top_k_requested=top_k, eligible_count=eligible_count,
+                    rejected_count=rejected_count, injection_policy='eligible_only',
+                    no_reference_reason=('no_candidate_passed_evidence_gate' if not hits and selection_audit else
+                                         'no_retrieval_hit' if not hits else None),
                     context_bytes=used, max_bytes=max_bytes, token_count_verified=False,
                     budget_method='UTF-8 byte cap; not an exact generation-model token count',
                     elapsed_seconds=round(time.monotonic() - started, 4),

@@ -51,7 +51,11 @@ def diagnostic_annotation(feedback, plan, category, feedback_policy):
         'has_caret_or_note': bool(re.search(r'\^|~|\bnote:', feedback, re.I)),
     }
     score = sum(bool(value) for value in features.values())
-    if plan.get('skip_reason'):
+    signature = plan.get('signature', {})
+    if signature.get('hard_abstain'):
+        signal = 'generic'
+        action = 'abstain'
+    elif plan.get('skip_reason'):
         signal = 'insufficient'
         action = 'abstain'
     elif _has_code(feedback) or len(specific) >= 2:
@@ -76,13 +80,14 @@ def diagnostic_annotation(feedback, plan, category, feedback_policy):
         'features': features,
         'category': category,
         'feedback_policy': feedback_policy,
+        'signature': signature or {'family': 'generic'},
         'skip_reason': plan.get('skip_reason'),
         'human_label': None,
         'human_should_inject': None,
     }
 
 
-def candidate_annotation(record, plan, overlap, missing):
+def candidate_annotation(record, plan, overlap, missing, signature_gate=None):
     """Return lexical-support metadata without claiming semantic correctness."""
     required = set(plan.get('required_terms', ()))
     score = min(2, len(overlap))
@@ -95,6 +100,7 @@ def candidate_annotation(record, plan, overlap, missing):
         'lexical_evidence_max': 4,
         'label': 'strong_lexical_support' if score >= 3 else 'weak_or_generic_overlap',
         'record_id': record.get('id'),
+        'signature_gate': signature_gate or {'family': 'generic', 'matched': None},
         'human_label': None,
         'human_should_inject': None,
     }
