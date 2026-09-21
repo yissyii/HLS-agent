@@ -1,5 +1,7 @@
 # 远程 Claude：UG1399 fix cards 对照评测计划
 
+> 说明：`docs/handoff/environment.md` 描述的是远程 Ubuntu/5090D 主机（`/root/AMDCmpt/zcomp`）的运行环境，不是 Windows 本机环境。本机只负责维护代码、提交和推送；以下命令均在远程 Ubuntu 仓库内执行。
+
 ## 目标与结论边界
 
 本轮在远程 Ubuntu 的真实 Vitis HLS 2026.1 环境中，评估首批 18 条高精度 fix cards 对 Bench4HLS 修复阶段的作用。实验复用同一批冻结首稿，分别测量：

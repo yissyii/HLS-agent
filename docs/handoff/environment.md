@@ -1,10 +1,10 @@
-# 本机开发环境（工作交接）
+# 远程 Ubuntu/5090D 运行环境（工作交接）
 
 > 最后更新：2026-09-21 · 分支 `feat/rag`
 
 ## 一句话概览
 
-**Windows 11 + WSL Ubuntu 22.04 双环境。** 真正的开发、Vitis HLS、RAG 检索、模型推理全部发生在 **WSL Ubuntu** 内；Windows 主机只是 Claude Code 的访问层（通过 UNC 路径读写 WSL 文件系统）。本机 GPU 为 RTX 5090 D，Vitis HLS 2026.1 + 本地 vLLM `qwen38`。
+**这是远程 Ubuntu/5090D 主机的运行环境说明。** 该主机通过 Windows 侧的 Claude Code 访问；真正的开发、Vitis HLS、RAG 检索、模型推理全部发生在 **WSL Ubuntu** 内。Windows 主机只是访问层（通过 UNC 路径读写 WSL 文件系统）。远程主机 GPU 为 RTX 5090 D，运行 Vitis HLS 2026.1 和本地 vLLM `qwen38`。
 
 ## 1. 机器与系统
 
