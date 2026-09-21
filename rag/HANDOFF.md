@@ -2,6 +2,8 @@
 
 Ubuntu 远程主机请先阅读 [远程 Ubuntu/5090D 运行指南](UBUNTU_REMOTE_GUIDE.md)。
 
+本轮假匹配筛查按 [远程 Claude RAG 筛查计划](../report/design/remote_claude_rag_screening.md) 执行；标注只写入 `rag/staging/`，不直接修改活动库。
+
 2026-09-20，分支 `feat/rag`。活动库已切换至 UG1399 v2026.1，并按 `fix/general` 标记；RAG 已接入 Agent（修复阶段、默认关闭、显式启用、全程留痕），本地完成真实 UG1399＋本地 Qwen 的检索 smoke，但生成服务为模拟 HTTP、验证器为 FakeValidator，**未调用真实 Vitis，不能据此宣称修复成功率提升**。本文档指导远程 AI 安装 embedding 模型并完成首次 RAG 测评。
 
 ## 交接时点的产物状态

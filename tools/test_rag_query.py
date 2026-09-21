@@ -55,5 +55,27 @@ class QueryContracts(unittest.TestCase):
         self.assertFalse(plan['skip_reason'])
         self.assertIn('expected 7 got 3', query)
 
+    def test_provisional_annotation_distinguishes_generic_diagnostic(self):
+        _, plan = self.plan("error: use of undeclared identifier 'reset'", 'compile_error')
+        self.assertEqual(plan['annotation']['status'], 'provisional')
+        self.assertEqual(plan['annotation']['signal_class'], 'ambiguous')
+        self.assertEqual(plan['annotation']['recommended_action'], 'judge')
+        self.assertIsNone(plan['annotation']['human_label'])
+
+    def test_provisional_annotation_records_specific_code_and_location(self):
+        _, plan = self.plan('/tmp/kernel.cpp:12:3: error: [HLS 200-101] invalid option\n#pragma HLS pipeline\n  ^')
+        annotation = plan['annotation']
+        self.assertEqual(annotation['signal_class'], 'specific')
+        self.assertGreaterEqual(annotation['diagnostic_quality_score'], 4)
+        self.assertTrue(annotation['features']['has_location'])
+        self.assertTrue(annotation['features']['has_source_line'])
+
+    def test_selection_audit_contains_provisional_candidate_annotation(self):
+        _, plan = self.plan("error: no member 'parity' in 'ap_uint<100>'")
+        accepted, decision = assess(dict(id='a', title='parity', text='ap_uint parity reduction'), plan)
+        self.assertTrue(accepted)
+        self.assertEqual(decision['annotation']['status'], 'provisional')
+        self.assertEqual(decision['annotation']['record_id'], 'a')
+
 
 if __name__ == '__main__': unittest.main()

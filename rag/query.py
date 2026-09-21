@@ -2,6 +2,8 @@
 import re
 import json
 
+from rag.annotation import diagnostic_annotation
+
 
 STRATEGY = 'diagnostic_v1'
 STOP = set('the and for from with this that error warning note fatal hls vitis csim '
@@ -64,11 +66,14 @@ def query_plan(problem, feedback, category, feedback_policy, max_chars):
     required = [member.group(1).lower()] if member else []
     if not diagnostic_terms:
         reason = reason or 'no_diagnostic_terms'
-    return query, dict(strategy=STRATEGY, skip_reason=reason,
-                       diagnostic_terms=diagnostic_terms, required_terms=required,
-                       problem_trimmed=problem_size < len(problem),
-                       feedback_trimmed=diagnostic_size < len(cleaned),
-                       feedback_cleaned=cleaned != original_feedback)
+    plan = dict(strategy=STRATEGY, skip_reason=reason,
+                diagnostic_terms=diagnostic_terms, required_terms=required,
+                problem_trimmed=problem_size < len(problem),
+                feedback_trimmed=diagnostic_size < len(cleaned),
+                feedback_cleaned=cleaned != original_feedback,
+                cleaned_feedback=cleaned)
+    plan['annotation'] = diagnostic_annotation(feedback, plan, category, feedback_policy)
+    return query, plan
 
 
 def assess(record, plan):
@@ -78,6 +83,9 @@ def assess(record, plan):
     overlap = sorted(tokens.intersection(plan['diagnostic_terms']))
     missing = sorted(set(plan['required_terms']) - tokens)
     accepted = not missing and len(overlap) >= 2
-    return accepted, dict(id=record['id'], accepted=accepted, overlap=overlap,
-                          missing_required=missing,
-                          reason='diagnostic_term_match' if accepted else 'insufficient_diagnostic_match')
+    from rag.annotation import candidate_annotation
+    decision = dict(id=record['id'], accepted=accepted, overlap=overlap,
+                    missing_required=missing,
+                    reason='diagnostic_term_match' if accepted else 'insufficient_diagnostic_match')
+    decision['annotation'] = candidate_annotation(record, plan, overlap, missing)
+    return accepted, decision

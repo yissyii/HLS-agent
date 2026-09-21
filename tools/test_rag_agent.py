@@ -98,6 +98,9 @@ class RAGContracts(unittest.TestCase):
         self.assertEqual(evidence['injected_ids'],['fixture-recursion'])
         self.assertEqual(result['rag_history'][0]['injected_ids'],evidence['injected_ids'])
         self.assertEqual(evidence['feedback_policy'],'compiler_diagnostics')
+        self.assertEqual(evidence['diagnostic_annotation']['status'],'provisional')
+        self.assertIn('diagnostic_quality_score',evidence['diagnostic_annotation'])
+        self.assertEqual(evidence['selection_audit'][0]['annotation']['status'],'provisional')
         self.assertFalse((self.directory/'agent/candidates/000/retrieval.json').exists())
 
     def test_query_uses_released_feedback_not_hidden_outcome(self):

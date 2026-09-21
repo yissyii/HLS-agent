@@ -83,6 +83,7 @@ class Retrieval:
             source.update({k: plan[k] for k in ('problem_trimmed', 'feedback_trimmed', 'feedback_cleaned')})
         evidence = dict(status='running', query=query, query_source=source,
                         feedback_policy=feedback_policy, query_plan=plan,
+                        diagnostic_annotation=plan.get('annotation'),
                         diagnostic_fingerprint=diagnostic.fingerprint, mode=self.options['rag_mode'],
                         profile=self.options['rag_profile'], reranker=self.options['rag_reranker'],
                         rag_config_sha256=self.sha256, release_id=self.release['release_id'],
