@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "release_id": "ug1399-2026.1-fix-cards-v1",
+  "status": "reference",
+  "corpus": "rag/corpora/ug1399-2026.1-fix-cards-v1",
+  "index": "rag/indexes/ug1399-qwen06b-2026.1-fix-cards-v1",
+  "corpus_manifest_sha256": "246ea6868b1c8abdb1b83d56c6946f8233aebb29e9d3f251656d0e4d40d413cb",
+  "records_sha256": "9a0c9e4d8334e7c8b57731c658525f5699243f55dda1d56a20f751e417a401fd",
+  "index_manifest_sha256": "baf747aa64ed9ba1744bd904179dfd6d0aaa70cd2a570feda607102c4a7545ee",
+  "index_fingerprint": "57b9f4f7d0c633febbcd8c593f6579e8bab3c2b8da3ef023d576b3e7b4d17ffe",
+  "vectors_sha256": "94a2418e7349a10cc934e9704da8497707a8c7955e585c0c846445eeabd1d051",
+  "source_version": "2026.1",
+  "profile": "fix-cards-v1",
+  "corpus_class": "fix",
+  "validation_status": "human_reviewed",
+  "note": "18 human-reviewed, UG1399-page-anchored repair cards. Reference-only: human_reviewed does not mean compile- or synthesis-validated."
+}

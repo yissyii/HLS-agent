@@ -14,6 +14,20 @@ def document_text(record):
     path = record['source'].get('section_path', [record['title']])
     # Normalize PDF whitespace for encoding, retaining the original text for display.
     body = re.sub(r'\s+', ' ', record['text']).strip()
+    if record.get('kind') == 'fix_card':
+        # Put the structured routing fields in the embedding input.  They are
+        # deliberately also present in ``text`` for BM25 and human display,
+        # but keeping them here makes dense retrieval robust to paraphrased
+        # diagnostics (for example, "address base mode" vs. "offset=slave").
+        card = ' '.join([
+            record['error_family'],
+            ' '.join(record['signature_terms']),
+            ' '.join(record['required_constructs']),
+            ' '.join(record['exclusions']),
+            record['action'],
+            record['applicability'],
+        ])
+        body = card + '\n' + body
     return ' > '.join(path[-3:]) + '\n' + body
 
 

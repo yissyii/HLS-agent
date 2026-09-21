@@ -9,7 +9,8 @@ DEFAULT_PATH = Path(__file__).resolve().parents[1] / 'config/policy.json'
 
 RAG_DEFAULTS = dict(rag_enabled=False, rag_mode='hybrid', rag_top_k=2, rag_recall_k=20,
                     rag_max_bytes=2400, rag_query_max_chars=1600, rag_timeout_seconds=30,
-                    rag_strategy='diagnostic_v1')
+                    rag_strategy='diagnostic_v1', rag_profile='fix_first',
+                    rag_reranker='none', rag_rerank_k=20)
 
 
 def rag_options(policy):
@@ -48,6 +49,12 @@ def validate_policy(value):
             raise Failure('policy_error', 'Invalid RAG limit: ' + key)
     if rag['rag_recall_k'] < rag['rag_top_k']:
         raise Failure('policy_error', 'RAG recall count must cover top_k')
+    if rag['rag_profile'] not in {'fix_first', 'general_only', 'all'}:
+        raise Failure('policy_error', 'Invalid RAG corpus profile')
+    if rag['rag_reranker'] not in {'none', 'qwen3-reranker-0.6b'}:
+        raise Failure('policy_error', 'Invalid RAG reranker')
+    if type(rag['rag_rerank_k']) is not int or not rag['rag_top_k'] <= rag['rag_rerank_k'] <= 100:
+        raise Failure('policy_error', 'Invalid RAG rerank count')
     timeout = rag['rag_timeout_seconds']
     if type(timeout) not in (int, float) or not math.isfinite(timeout) or not 0 < timeout <= 120:
         raise Failure('policy_error', 'Invalid RAG timeout')

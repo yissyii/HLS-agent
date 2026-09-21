@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "task": "Prob071",
+  "attempt": 0,
+  "candidate": 1,
+  "source_run": "output/bench4hls_rag/run01/hybrid_rerank",
+  "stage": "compile",
+  "diagnostic": "use of undeclared identifier 'reset'",
+  "diagnostic_quality_score": 4,
+  "diagnostic_quality_status": "reviewed",
+  "has_location": true,
+  "has_source_line": true,
+  "has_caret": true,
+  "has_note": false,
+  "feedback_trimmed": false,
+  "query_trimmed": true,
+  "source_window_needed": false,
+  "candidates": [
+    {
+      "id": "ug1399-2026.1-en-s0341-p0594-00",
+      "title": "Reset",
+      "evidence_usefulness_score": 0,
+      "retrieval_label": "wrong_direction",
+      "should_inject": false,
+      "failure_stage": "gate",
+      "reason": "'reset' is a user identifier in an undeclared-identifier error; the HLS RESET pragma is a different error family."
+    }
+  ],
+  "reviewer": "claude-remote",
+  "reviewed_at": "2026-09-21T00:00:00Z",
+  "status": "pending_human_review"
+}

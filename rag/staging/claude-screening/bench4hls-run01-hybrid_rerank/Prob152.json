@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "task": "Prob152",
+  "attempt": 0,
+  "candidate": 1,
+  "source_run": "output/bench4hls_rag/run01/hybrid_rerank",
+  "stage": "compile",
+  "diagnostic": "expected ';' after expression",
+  "diagnostic_quality_score": 4,
+  "diagnostic_quality_status": "reviewed",
+  "has_location": true,
+  "has_source_line": true,
+  "has_caret": true,
+  "has_note": false,
+  "feedback_trimmed": false,
+  "query_trimmed": true,
+  "source_window_needed": false,
+  "candidates": [
+    {
+      "id": "ug1399-2026.1-en-s0484-p0807-00",
+      "title": "FIR Filter IP Library",
+      "evidence_usefulness_score": 1,
+      "retrieval_label": "topic_only",
+      "should_inject": false,
+      "failure_stage": "gate",
+      "reason": "A generic syntax error shares only the task's FIR topic with the library chapter; no FIR signature appears in the diagnostic. Candidate was retrieved but not injected (no_reference_injected)."
+    }
+  ],
+  "reviewer": "claude-remote",
+  "reviewed_at": "2026-09-21T00:00:00Z",
+  "status": "pending_human_review"
+}

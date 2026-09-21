@@ -96,7 +96,8 @@ class Retriever:
         return self.encoder.encode(queries, query=True)
 
     def search(self, query, mode='hybrid', top_k=3, recall_k=20, max_bytes=6000,
-               query_vector=None, diversify=True, evidence_filter=None):
+               query_vector=None, diversify=True, evidence_filter=None,
+               profile='fix_first', reranker=None, rerank_k=20):
         if not query.strip() or top_k < 1 or recall_k < top_k or max_bytes < 1:
             raise ValueError('Nonempty query and valid positive retrieval limits required')
         if mode not in ('bm25', 'dense', 'hybrid'):
@@ -116,11 +117,15 @@ class Retriever:
             dense = [(int(i), float(similarities[i])) for i in order]
         ranking = sparse if mode == 'bm25' else dense if mode == 'dense' else rrf([sparse, dense])
         sparse_scores, dense_scores = dict(sparse), dict(dense)
-        hits, parents, hashes = [], set(), set()
-        used = 0
         selection_audit = []
+        candidates, parents, hashes = [], set(), set()
+        if profile not in ('fix_first', 'general_only', 'all'):
+            raise ValueError('Unknown corpus profile')
         for row, score in ranking:
             r = self.records[row]
+            corpus_class = r.get('corpus_class', 'general')
+            if profile == 'general_only' and corpus_class != 'general':
+                continue
             if evidence_filter:
                 accepted, decision = evidence_filter(r)
                 selection_audit.append(decision)
@@ -130,19 +135,48 @@ class Retriever:
             if r['content_sha256'] in hashes or (diversify and parent in parents):
                 continue
             block = self.render(r)
-            size = len(block.encode('utf-8'))
-            if used + size > max_bytes:
-                continue  # Never cut a rule or code fragment to squeeze it into budget.
-            hits.append(dict(record=r, score=score, bm25_score=sparse_scores.get(row),
-                             cosine=dense_scores.get(row), context=block, bytes=size))
-            used += size
+            candidates.append(dict(record=r, score=score, bm25_score=sparse_scores.get(row),
+                                   cosine=dense_scores.get(row), context=block,
+                                   bytes=len(block.encode('utf-8'))))
             parents.add(parent)
             hashes.add(r['content_sha256'])
+            if len(candidates) == max(top_k, rerank_k):
+                break
+        if profile == 'fix_first':
+            # Profile is a prior: reranking can still overturn it when the
+            # candidate is semantically unrelated, but equal scores favor fix.
+            candidates.sort(key=lambda h: (-int(h['record'].get('corpus_class') == 'fix'),
+                                           -h['score'], h['record']['id']))
+        reranker_identity = None
+        if reranker and candidates:
+            values = reranker.score(query, [h['record']['title'] + '\n' + h['record']['text'] for h in candidates])
+            reranker_identity = reranker.identity
+            for hit, value in zip(candidates, values):
+                hit['rerank_score'] = value
+            candidates.sort(key=lambda h: (-h['rerank_score'],
+                                           -int(h['record'].get('corpus_class') == 'fix'),
+                                           h['record']['id']))
+        hits, used = [], 0
+        for candidate in candidates:
+            size = candidate['bytes']
+            if used + size > max_bytes:
+                continue  # Never cut a rule or code fragment to squeeze it into budget.
+            hits.append(candidate)
+            used += size
             if len(hits) == top_k:
                 break
+        # Count candidates that survived the evidence/profile/dedup gates.  In
+        # legacy mode selection_audit is empty, but candidates are still eligible.
+        eligible_count = len(candidates)
+        rejected_count = sum(1 for decision in selection_audit if not decision.get('accepted'))
         return dict(mode=mode, query=query, corpus_sha256=self.corpus_manifest['records_sha256'],
                     index_fingerprint=self.index_manifest['fingerprint'] if self.index_manifest and mode != 'bm25' else None,
-                    hits=hits, selection_audit=selection_audit,
+                    hits=hits, selection_audit=selection_audit, profile=profile,
+                    reranker=reranker_identity,
+                    top_k_requested=top_k, eligible_count=eligible_count,
+                    rejected_count=rejected_count, injection_policy='eligible_only',
+                    no_reference_reason=('no_candidate_passed_evidence_gate' if not hits and selection_audit else
+                                         'no_retrieval_hit' if not hits else None),
                     context_bytes=used, max_bytes=max_bytes, token_count_verified=False,
                     budget_method='UTF-8 byte cap; not an exact generation-model token count',
                     elapsed_seconds=round(time.monotonic() - started, 4),
@@ -155,13 +189,28 @@ class Retriever:
             location = (f'{s.get("document", "?")} {s.get("version", "?")} {s.get("language", "?")}; '
                         f'{s.get("file", "?")} pp.{s.get("page_start", "?")}-{s.get("page_end", "?")}')
             caution = 'PDF text may be a fragment, not a complete compilable example.'
+        elif record['kind'] == 'fix_card':
+            location = (f'{s.get("citation", record.get("source_citation", "?"))}; '
+                        f'{s.get("file", "?")} pp.{s.get("page_start", "?")}-{s.get("page_end", "?")}')
+            caution = ('Structured source-reviewed fix card; obey applicability and exclusions. '
+                       'It is not a substitute for running Vitis HLS.')
         else:
             location = s.get('repository', s.get('file', '?'))
             caution = 'Check applicability and preserve the task interface/behavior.'
+        details = ''
+        if record['kind'] == 'fix_card':
+            details = (f'Family: {record["error_family"]}\n'
+                       f'Signature terms: {", ".join(record["signature_terms"])}\n'
+                       f'Required constructs: {", ".join(record["required_constructs"]) or "none"}\n'
+                       f'Exclusions: {", ".join(record["exclusions"]) or "none"}\n'
+                       f'Applicability: {record["applicability"]}\n'
+                       f'Action: {record["action"]}\n'
+                       f'Verification: {record["verification"]}\n')
         return (f'[REFERENCE {record["id"]}] {record["title"]}\n'
                 f'Source: {location}; tool={record["tool"]["target_version"]}; '
                 f'release={record["release"]["status"]}; validation={record["validation"]["status"]}\n'
                 + caution + '\n'
+                + details
                 + record['text'] + '\n[/REFERENCE]\n')
 
     def parent(self, identifier):
@@ -173,17 +222,19 @@ class Retriever:
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('query', nargs='?', default='')
-    p.add_argument('--corpus', default='rag/corpora/ug1399-2025.2-en')
-    p.add_argument('--index', default='rag/indexes/ug1399-qwen06b-en')
+    p.add_argument('--corpus', default='rag/corpora/ug1399-2026.1-en-curated')
+    p.add_argument('--index', default='rag/indexes/ug1399-qwen06b-2026.1-curated')
     p.add_argument('--model', default='F:/Workspace/hls-rag/models/Qwen3-Embedding-0.6B')
     p.add_argument('--mode', choices=['bm25', 'dense', 'hybrid'], default='hybrid')
     p.add_argument('--top-k', type=int, default=3)
     p.add_argument('--max-bytes', type=int, default=6000)
+    p.add_argument('--profile', choices=['fix_first', 'general_only', 'all'], default='fix_first')
     p.add_argument('--expand', help='Return a full parent section by record ID, for inspection only')
     p.add_argument('--output')
     a = p.parse_args()
     retriever = Retriever(a.corpus, a.index if a.mode != 'bm25' and not a.expand else None, a.model)
-    result = retriever.parent(a.expand) if a.expand else retriever.search(a.query, a.mode, a.top_k, max_bytes=a.max_bytes)
+    result = (retriever.parent(a.expand) if a.expand else
+              retriever.search(a.query, a.mode, a.top_k, max_bytes=a.max_bytes, profile=a.profile))
     if a.output:
         from rag.common import write_json
         write_json(a.output, result)

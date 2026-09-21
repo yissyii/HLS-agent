@@ -15,5 +15,8 @@
   "rag_max_bytes": 2400,
   "rag_query_max_chars": 1600,
   "rag_timeout_seconds": 30,
-  "rag_strategy": "diagnostic_v1"
+  "rag_strategy": "diagnostic_v1",
+  "rag_profile": "fix_first",
+  "rag_reranker": "none",
+  "rag_rerank_k": 20
 }

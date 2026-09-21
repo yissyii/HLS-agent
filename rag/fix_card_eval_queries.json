@@ -1,0 +1,23 @@
+{
+  "description": "Author-curated routing smoke set for the 18 UG1399 v2026.1 fix cards. It tests retrieval identity, not repair correctness or Vitis validation.",
+  "queries": [
+    {"id":"offset_vitis","kind":"flow_specific","query":"Vitis kernel m_axi offset pragma direct slave off; which offset setting should I keep for XRT integration?","titles":["m_axi offset: let the Vitis kernel flow select the offset"]},
+    {"id":"offset_vivado","kind":"flow_specific","query":"Vivado IP m_axi base address needs fixed zero, external runtime port, or host control: offset off direct slave","titles":["m_axi offset: choose off, direct, or slave for Vivado IP"]},
+    {"id":"ap_bit","kind":"api","query":"ap_uint operator[] bit selection valid index LSB highest bit","titles":["ap_uint bit selection: use a valid zero-based bit index"]},
+    {"id":"ap_range","kind":"api","query":"ap_uint range(Hi,Lo) returns proxy and Hi less than Lo reverses bits","titles":["ap_uint range selection: use Hi/Lo order and materialize the proxy"]},
+    {"id":"system_call","kind":"unsupported","query":"synthesis fails around sleep time getc file IO system calls in the HLS function","titles":["Unsupported C/C++ system calls in synthesizable code"]},
+    {"id":"malloc","kind":"unsupported","query":"malloc free dynamic memory allocation is not synthesizable; replace with fixed bounded storage","titles":["Replace dynamic memory allocation in synthesized code"]},
+    {"id":"recursion","kind":"unsupported","query":"recursive function and tail recursion cannot be synthesized","titles":["Remove recursion from a synthesizable function"]},
+    {"id":"stl","kind":"unsupported","query":"STL container uses dynamic allocation or recursion in synthesizable C++","titles":["Avoid unsupported dynamic/recursive C++ standard template libraries"]},
+    {"id":"data_pack","kind":"migration","query":"DATA_PACK pragma unsupported; migrate to AGGREGATE packed attribute","titles":["Replace deprecated or unsupported DATA_PACK pragma"]},
+    {"id":"ap_bus","kind":"migration","query":"INTERFACE mode ap_bus is unsupported in Vitis HLS; use m_axi","titles":["Replace unsupported INTERFACE ap_bus mode"]},
+    {"id":"ap_int_header","kind":"header","query":"ap_uint undeclared or ap_int not found; which header and include path are required?","titles":["Include ap_int.h for ap_int and ap_uint types"]},
+    {"id":"hls_math","kind":"header","query":"hls_math.h included from C instead of C++; hls namespace float double conversion","titles":["Use hls_math.h only from C++ and match the math type"]},
+    {"id":"stream_blocking","kind":"api","query":"blocking hls::stream read write deadlocks because FIFO depth is too small","titles":["Use blocking hls::stream APIs for deterministic FIFO behavior"]},
+    {"id":"stream_nonblocking","kind":"api","query":"write_nb non-blocking AXI4-Stream axis is unsupported and C simulation cannot prove FIFO full behavior","titles":["Treat non-blocking hls::stream behavior as an RTL-only risk"]},
+    {"id":"dataflow_spc","kind":"optimization","query":"DATAFLOW fanout violates single producer single consumer; split task is needed","titles":["Repair dataflow single-producer/single-consumer violations"]},
+    {"id":"dataflow_exit","kind":"optimization","query":"DATAFLOW loop contains break and continue with multiple exit conditions","titles":["Remove break/continue multiple exits from a dataflow region"]},
+    {"id":"pipeline_dep","kind":"diagnostic","query":"WARNING SCHED 204-68 unable to enforce carried dependency target II 1 final II 4 RAW","titles":["Handle carried dependencies before forcing PIPELINE II=1"]},
+    {"id":"partition_ports","kind":"diagnostic","query":"WARNING SCHED 204-69 limited memory ports array load target II 1 final II 2 ARRAY_PARTITION","titles":["Use ARRAY_PARTITION for array memory-port contention"]}
+  ]
+}

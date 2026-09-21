@@ -2,12 +2,128 @@
 import re
 import json
 
+from rag.annotation import diagnostic_annotation
+
 
 STRATEGY = 'diagnostic_v1'
 STOP = set('the and for from with this that error warning note fatal hls vitis csim '
            'compile compilation synthesis failed failure function functions type '
            'no not has have member named use used using cannot could does declared '
            'candidate cpp source file line column diagnostic released task'.split())
+
+
+def _signature(problem, feedback, cleaned):
+    """Classify only diagnostic/source signatures; never infer a repair."""
+    text = '\n'.join(value for value in (feedback, cleaned, problem) if value)
+    lower = text.lower()
+    if re.search(r'\bunexpected interface offset\b', lower) and re.search(
+            r'\b(?:slave|direct|off)\b', lower):
+        return dict(family='interface_offset', exact_terms=['offset', 'slave', 'direct', 'off'],
+                    source_constructs=['m_axi', 'offset'])
+    if re.search(r'\bno matching function\b', lower) and re.search(r"\bap_(?:u)?int\s*<\s*\d+\s*>", lower):
+        single_arg = bool(re.search(r'\b[A-Za-z_]\w*\s*\(\s*(?:\d+|[A-Za-z_]\w*)\s*\)', text))
+        range_arg = bool(re.search(r'\(\s*(?:\d+|[A-Za-z_]\w*)\s*,\s*(?:\d+|[A-Za-z_]\w*)\s*\)', text))
+        if single_arg or range_arg:
+            return dict(family='ap_int_bit_selection', exact_terms=['ap_uint', 'ap_int'],
+                        source_constructs=['single_arg_call' if single_arg else 'range_call'],
+                        required_markers=['bit selection', 'operator []', 'range selection',
+                                          'operator ()'])
+        return dict(family='ap_int_no_matching_function', exact_terms=['ap_uint', 'ap_int'],
+                    source_constructs=[], required_markers=[])
+    if re.search(r'\buse of undeclared identifier\b', lower):
+        return dict(family='undeclared_identifier', exact_terms=[], source_constructs=[],
+                    hard_abstain=True)
+    if re.search(r'\bexpected\s+[\'"`]?;[\'"`]?', lower) or \
+            re.search(r'\bexpected\s+[\'"`]?\}[\'"`]?', lower):
+        return dict(family='generic_cpp_syntax', exact_terms=[], source_constructs=[],
+                    hard_abstain=True)
+    missing_header = re.search(r"['\"<]([^'\">]+\.(?:h|hpp))['\">]\s+file not found", lower)
+    if missing_header:
+        return dict(family='missing_header', exact_terms=[], source_constructs=[],
+                    required_markers=['#include', '.h', '.hpp'],
+                    missing_header=missing_header.group(1))
+    if re.search(r'\binvalid digit\b|\binvalid suffix\b|\bredefinition of\b|\bexcess elements in array initializer\b', lower):
+        return dict(family='generic_cpp_syntax', exact_terms=[], source_constructs=[],
+                    hard_abstain=True)
+    return dict(family='generic', exact_terms=[], source_constructs=[])
+
+
+def _flow_hint(text):
+    lower = text.lower()
+    if 'vitis kernel' in lower or 'xrt' in lower:
+        return 'vitis_kernel'
+    if 'vivado ip' in lower or 'vivado' in lower:
+        return 'vivado_ip'
+    return None
+
+
+def _card_family_matches(record, signature, text):
+    """Use fix-card metadata to keep mutually exclusive cards apart."""
+    card_family = record.get('error_family')
+    if not card_family:
+        return True, None
+    family = signature.get('family', 'generic')
+    if family == 'interface_offset' and card_family == 'interface_offset':
+        flow = _flow_hint(text)
+        applicability = record.get('applicability', '').lower()
+        exclusions = ' '.join(record.get('exclusions', [])).lower()
+        if flow == 'vitis_kernel' and ('vitis kernel' not in applicability or
+                                       'vitis kernel' in exclusions):
+            return False, 'flow_exclusion'
+        if flow == 'vivado_ip' and ('vivado ip' not in applicability or
+                                    'vivado ip' in exclusions):
+            return False, 'flow_exclusion'
+        if flow is None:
+            return False, 'ambiguous_interface_flow'
+        return True, None
+    if family == 'ap_int_bit_selection' and card_family in {
+            'ap_uint_bit_selection', 'ap_uint_range_selection'}:
+        construct = signature.get('source_constructs', [])
+        if 'single_arg_call' in construct and card_family != 'ap_uint_bit_selection':
+            return False, 'range_card_for_single_bit'
+        if 'range_call' in construct and card_family != 'ap_uint_range_selection':
+            return False, 'bit_card_for_range'
+        return True, None
+    return True, None
+
+
+def _signature_gate(record, plan):
+    """Apply a conservative applicability gate after lexical retrieval."""
+    signature = plan.get('signature', {})
+    family = signature.get('family', 'generic')
+    text = (record.get('title', '') + ' ' + record.get('text', '')).lower()
+    card_ok, card_reason = _card_family_matches(record, signature,
+                                                plan.get('query_text', ''))
+    if not card_ok:
+        return False, card_reason, dict(family=family, matched=False, card_family=record.get('error_family'))
+    if signature.get('hard_abstain'):
+        return False, 'generic_cpp_diagnostic', dict(family=family, matched=False)
+    if family == 'interface_offset':
+        if record.get('error_family') == 'interface_offset':
+            matched = 'm_axi' in text and 'offset' in text
+            return matched, 'signature_match' if matched else 'missing_interface_offset_signature', \
+                dict(family=family, matched=matched, card_family='interface_offset')
+        required = ('offset=slave', 'offset=direct', 'offset=off')
+        matched = all(term in text for term in required)
+        return matched, 'signature_match' if matched else 'missing_interface_offset_signature', \
+            dict(family=family, matched=matched, required=list(required))
+    if family == 'ap_int_bit_selection':
+        markers = signature.get('required_markers', ())
+        matched = any(marker in text for marker in markers) and \
+            bool(re.search(r'ap[_ ]?(?:u)?int|ap_int', text))
+        return matched, 'signature_match' if matched else 'missing_ap_int_bit_selection_signature', \
+            dict(family=family, matched=matched, required=list(markers))
+    if family == 'ap_int_no_matching_function':
+        return False, 'ambiguous_ap_int_signature', dict(family=family, matched=False)
+    if family == 'missing_header':
+        markers = signature.get('required_markers', ())
+        missing_header = signature.get('missing_header', '')
+        corrective_headers = {'hls.h': ('hls_stream.h', 'ap_int.h', 'hls_math.h')}
+        header_match = missing_header in text and any(header in text for header in corrective_headers.get(missing_header, ()))
+        matched = header_match and any(marker in text for marker in markers)
+        return matched, 'signature_match' if matched else 'missing_header_signature', \
+            dict(family=family, matched=matched, required=list(markers), missing_header=missing_header)
+    return True, 'no_signature_gate', dict(family=family, matched=None)
 
 
 def clean_feedback(feedback):
@@ -64,11 +180,16 @@ def query_plan(problem, feedback, category, feedback_policy, max_chars):
     required = [member.group(1).lower()] if member else []
     if not diagnostic_terms:
         reason = reason or 'no_diagnostic_terms'
-    return query, dict(strategy=STRATEGY, skip_reason=reason,
-                       diagnostic_terms=diagnostic_terms, required_terms=required,
-                       problem_trimmed=problem_size < len(problem),
-                       feedback_trimmed=diagnostic_size < len(cleaned),
-                       feedback_cleaned=cleaned != original_feedback)
+    plan = dict(strategy=STRATEGY, skip_reason=reason,
+                diagnostic_terms=diagnostic_terms, required_terms=required,
+                problem_trimmed=problem_size < len(problem),
+                feedback_trimmed=diagnostic_size < len(cleaned),
+                feedback_cleaned=cleaned != original_feedback,
+                cleaned_feedback=cleaned,
+                query_text=query)
+    plan['signature'] = _signature(problem, feedback, cleaned)
+    plan['annotation'] = diagnostic_annotation(feedback, plan, category, feedback_policy)
+    return query, plan
 
 
 def assess(record, plan):
@@ -77,7 +198,14 @@ def assess(record, plan):
     tokens = set(re.findall(r'[a-z_][a-z0-9_]*', text.lower()))
     overlap = sorted(tokens.intersection(plan['diagnostic_terms']))
     missing = sorted(set(plan['required_terms']) - tokens)
-    accepted = not missing and len(overlap) >= 2
-    return accepted, dict(id=record['id'], accepted=accepted, overlap=overlap,
-                          missing_required=missing,
-                          reason='diagnostic_term_match' if accepted else 'insufficient_diagnostic_match')
+    lexical = not missing and len(overlap) >= 2
+    signature_ok, signature_reason, gate = _signature_gate(record, plan)
+    accepted = not missing and signature_ok and (lexical or signature_reason == 'signature_match')
+    from rag.annotation import candidate_annotation
+    decision = dict(id=record['id'], accepted=accepted, overlap=overlap,
+                    missing_required=missing,
+                    reason=('diagnostic_term_match' if accepted and signature_reason == 'no_signature_gate'
+                            else signature_reason if not accepted else 'signature_match'),
+                    lexical_match=lexical, signature_gate=gate)
+    decision['annotation'] = candidate_annotation(record, plan, overlap, missing, gate)
+    return accepted, decision

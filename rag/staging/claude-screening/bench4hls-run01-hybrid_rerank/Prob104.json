@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "task": "Prob104",
+  "attempt": 0,
+  "candidate": 1,
+  "source_run": "output/bench4hls_rag/run01/hybrid_rerank",
+  "stage": "compile",
+  "diagnostic": "'hls.h' file not found",
+  "diagnostic_quality_score": 4,
+  "diagnostic_quality_status": "reviewed",
+  "has_location": true,
+  "has_source_line": true,
+  "has_caret": true,
+  "has_note": false,
+  "feedback_trimmed": false,
+  "query_trimmed": true,
+  "source_window_needed": false,
+  "candidates": [
+    {
+      "id": "ug1399-2026.1-en-s0009-p0021-00",
+      "title": "Refactoring C++ Source Code for HLS",
+      "evidence_usefulness_score": 1,
+      "retrieval_label": "topic_only",
+      "should_inject": false,
+      "failure_stage": "gate",
+      "reason": "The passage mentions hls::stream but does not establish the required header correction (ap_int.h / hls_stream.h) for the missing '#include <hls.h>'."
+    }
+  ],
+  "reviewer": "claude-remote",
+  "reviewed_at": "2026-09-21T00:00:00Z",
+  "status": "pending_human_review"
+}

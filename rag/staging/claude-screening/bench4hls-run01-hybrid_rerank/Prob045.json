@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "task": "Prob045",
+  "attempt": 0,
+  "candidate": 1,
+  "source_run": "output/bench4hls_rag/run01/hybrid_rerank",
+  "stage": "compile",
+  "diagnostic": "unexpected interface offset value '0x0', expects '[slave, direct, off]'",
+  "diagnostic_quality_score": 2,
+  "diagnostic_quality_status": "reviewed",
+  "has_location": true,
+  "has_source_line": false,
+  "has_caret": false,
+  "has_note": false,
+  "feedback_trimmed": false,
+  "query_trimmed": true,
+  "source_window_needed": false,
+  "candidates": [
+    {
+      "id": "ug1399-2026.1-en-s0114-p0175-00",
+      "title": "Offset and Modes of Operation",
+      "evidence_usefulness_score": 4,
+      "retrieval_label": "exact_actionable",
+      "should_inject": true,
+      "failure_stage": "none",
+      "reason": "The diagnostic enumerates slave/direct/off; the passage shows the corresponding m_axi offset pragma forms verbatim."
+    }
+  ],
+  "reviewer": "claude-remote",
+  "reviewed_at": "2026-09-21T00:00:00Z",
+  "status": "pending_human_review"
+}

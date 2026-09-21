@@ -1,0 +1,6731 @@
+[
+  {
+    "title": "Vitis High-Level Synthesis User Guide",
+    "path": [
+      "Vitis High-Level Synthesis User Guide"
+    ],
+    "page": 1,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0000"
+  },
+  {
+    "title": "Table of Contents",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Table of Contents"
+    ],
+    "page": 2,
+    "top": 144.0,
+    "section_id": "ug1399-2026.1-en-s0001"
+  },
+  {
+    "title": "Sec. I: Introduction",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. I: Introduction"
+    ],
+    "page": 10,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0002"
+  },
+  {
+    "title": "Navigating Content by Design Process",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. I: Introduction",
+      "Navigating Content by Design Process"
+    ],
+    "page": 10,
+    "top": 359.99993,
+    "section_id": "ug1399-2026.1-en-s0003"
+  },
+  {
+    "title": "Operating Systems and C++ Support",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. I: Introduction",
+      "Operating Systems and C++ Support"
+    ],
+    "page": 11,
+    "top": 97.79999999999995,
+    "section_id": "ug1399-2026.1-en-s0004"
+  },
+  {
+    "title": "Obtaining a Vitis HLS License",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. I: Introduction",
+      "Obtaining a Vitis HLS License"
+    ],
+    "page": 11,
+    "top": 613.4281,
+    "section_id": "ug1399-2026.1-en-s0005"
+  },
+  {
+    "title": "Changed Behavior",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. I: Introduction",
+      "Changed Behavior"
+    ],
+    "page": 14,
+    "top": 97.79999999999995,
+    "section_id": "ug1399-2026.1-en-s0006"
+  },
+  {
+    "title": "Benefits of High-Level Synthesis",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. I: Introduction",
+      "Benefits of High-Level Synthesis"
+    ],
+    "page": 14,
+    "top": 577.20233,
+    "section_id": "ug1399-2026.1-en-s0007"
+  },
+  {
+    "title": "Introduction to Vitis HLS Components",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. I: Introduction",
+      "Introduction to Vitis HLS Components"
+    ],
+    "page": 16,
+    "top": 245.10001,
+    "section_id": "ug1399-2026.1-en-s0008"
+  },
+  {
+    "title": "Refactoring C++ Source Code for HLS",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. I: Introduction",
+      "Introduction to Vitis HLS Components",
+      "Refactoring C++ Source Code for HLS"
+    ],
+    "page": 19,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0009"
+  },
+  {
+    "title": "Tutorials and Examples",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. I: Introduction",
+      "Tutorials and Examples"
+    ],
+    "page": 22,
+    "top": 414.8,
+    "section_id": "ug1399-2026.1-en-s0010"
+  },
+  {
+    "title": "Sec. II: HLS Programmers Guide",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide"
+    ],
+    "page": 23,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0011"
+  },
+  {
+    "title": "Ch. 1: Design Principles",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 1: Design Principles"
+    ],
+    "page": 24,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0012"
+  },
+  {
+    "title": "Three Paradigms for Programmable Logic",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 1: Design Principles",
+      "Three Paradigms for Programmable Logic"
+    ],
+    "page": 25,
+    "top": 498.49981,
+    "section_id": "ug1399-2026.1-en-s0013"
+  },
+  {
+    "title": "Producer-Consumer Paradigm",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 1: Design Principles",
+      "Three Paradigms for Programmable Logic",
+      "Producer-Consumer Paradigm"
+    ],
+    "page": 26,
+    "top": 212.39999999999998,
+    "section_id": "ug1399-2026.1-en-s0014"
+  },
+  {
+    "title": "Streaming Data Paradigm",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 1: Design Principles",
+      "Three Paradigms for Programmable Logic",
+      "Streaming Data Paradigm"
+    ],
+    "page": 29,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0015"
+  },
+  {
+    "title": "Pipelining Paradigm",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 1: Design Principles",
+      "Three Paradigms for Programmable Logic",
+      "Pipelining Paradigm"
+    ],
+    "page": 30,
+    "top": 397.4449,
+    "section_id": "ug1399-2026.1-en-s0016"
+  },
+  {
+    "title": "Combining the Three Paradigms",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 1: Design Principles",
+      "Combining the Three Paradigms"
+    ],
+    "page": 32,
+    "top": 206.79999999999995,
+    "section_id": "ug1399-2026.1-en-s0017"
+  },
+  {
+    "title": "Conclusion - A Prescription for Performance",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 1: Design Principles",
+      "Conclusion - A Prescription for Performance"
+    ],
+    "page": 36,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0018"
+  },
+  {
+    "title": "Ch. 2: Abstract Parallel Programming Model for HLS",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 2: Abstract Parallel Programming Model for HLS"
+    ],
+    "page": 39,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0019"
+  },
+  {
+    "title": "Control and Data Driven Tasks",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 2: Abstract Parallel Programming Model for HLS",
+      "Control and Data Driven Tasks"
+    ],
+    "page": 41,
+    "top": 288.3,
+    "section_id": "ug1399-2026.1-en-s0020"
+  },
+  {
+    "title": "Data-driven Task-level Parallelism",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 2: Abstract Parallel Programming Model for HLS",
+      "Data-driven Task-level Parallelism"
+    ],
+    "page": 42,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0021"
+  },
+  {
+    "title": "Control-driven Task-level Parallelism",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 2: Abstract Parallel Programming Model for HLS",
+      "Control-driven Task-level Parallelism"
+    ],
+    "page": 45,
+    "top": 477.08446,
+    "section_id": "ug1399-2026.1-en-s0022"
+  },
+  {
+    "title": "Dataflow Region Coding Style",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 2: Abstract Parallel Programming Model for HLS",
+      "Control-driven Task-level Parallelism",
+      "Dataflow Region Coding Style"
+    ],
+    "page": 48,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0023"
+  },
+  {
+    "title": "WYSIWYG Coding Style",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 2: Abstract Parallel Programming Model for HLS",
+      "Control-driven Task-level Parallelism",
+      "Dataflow Region Coding Style",
+      "WYSIWYG Coding Style"
+    ],
+    "page": 48,
+    "top": 609.09222,
+    "section_id": "ug1399-2026.1-en-s0024"
+  },
+  {
+    "title": "Nested Dataflow Region Pitfalls",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 2: Abstract Parallel Programming Model for HLS",
+      "Control-driven Task-level Parallelism",
+      "Dataflow Region Coding Style",
+      "Nested Dataflow Region Pitfalls"
+    ],
+    "page": 51,
+    "top": 499.31984,
+    "section_id": "ug1399-2026.1-en-s0025"
+  },
+  {
+    "title": "Advanced Dataflow Region Examples",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 2: Abstract Parallel Programming Model for HLS",
+      "Control-driven Task-level Parallelism",
+      "Dataflow Region Coding Style",
+      "Advanced Dataflow Region Examples"
+    ],
+    "page": 52,
+    "top": 442.19994,
+    "section_id": "ug1399-2026.1-en-s0026"
+  },
+  {
+    "title": "Configuring Dataflow Memory Channels",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 2: Abstract Parallel Programming Model for HLS",
+      "Control-driven Task-level Parallelism",
+      "Configuring Dataflow Memory Channels"
+    ],
+    "page": 55,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0027"
+  },
+  {
+    "title": "Specifying Arrays as PIPOs or FIFOs",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 2: Abstract Parallel Programming Model for HLS",
+      "Control-driven Task-level Parallelism",
+      "Specifying Arrays as PIPOs or FIFOs"
+    ],
+    "page": 56,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0028"
+  },
+  {
+    "title": "Specifying Arrays as Stream-of-Blocks",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 2: Abstract Parallel Programming Model for HLS",
+      "Control-driven Task-level Parallelism",
+      "Specifying Arrays as Stream-of-Blocks"
+    ],
+    "page": 57,
+    "top": 223.2885,
+    "section_id": "ug1399-2026.1-en-s0029"
+  },
+  {
+    "title": "Specifying Compiler-Created FIFO Depth",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 2: Abstract Parallel Programming Model for HLS",
+      "Control-driven Task-level Parallelism",
+      "Specifying Compiler-Created FIFO Depth"
+    ],
+    "page": 59,
+    "top": 476.49236,
+    "section_id": "ug1399-2026.1-en-s0030"
+  },
+  {
+    "title": "Stable Arrays",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 2: Abstract Parallel Programming Model for HLS",
+      "Control-driven Task-level Parallelism",
+      "Stable Arrays"
+    ],
+    "page": 60,
+    "top": 216.52419999999995,
+    "section_id": "ug1399-2026.1-en-s0031"
+  },
+  {
+    "title": "Mixing Data-Driven and Control-Driven Models",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 2: Abstract Parallel Programming Model for HLS",
+      "Mixing Data-Driven and Control-Driven Models"
+    ],
+    "page": 61,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0032"
+  },
+  {
+    "title": "Summary",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 2: Abstract Parallel Programming Model for HLS",
+      "Summary"
+    ],
+    "page": 63,
+    "top": 507.35027,
+    "section_id": "ug1399-2026.1-en-s0033"
+  },
+  {
+    "title": "Ch. 3: Loops Primer",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 3: Loops Primer"
+    ],
+    "page": 65,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0034"
+  },
+  {
+    "title": "Pipelining Loops",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 3: Loops Primer",
+      "Pipelining Loops"
+    ],
+    "page": 65,
+    "top": 374.0999,
+    "section_id": "ug1399-2026.1-en-s0035"
+  },
+  {
+    "title": "Automatic Loop Pipelining",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 3: Loops Primer",
+      "Pipelining Loops",
+      "Automatic Loop Pipelining"
+    ],
+    "page": 67,
+    "top": 374.49605,
+    "section_id": "ug1399-2026.1-en-s0036"
+  },
+  {
+    "title": "Rewinding Pipelined Loops for Performance",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 3: Loops Primer",
+      "Pipelining Loops",
+      "Rewinding Pipelined Loops for Performance"
+    ],
+    "page": 68,
+    "top": 573.09622,
+    "section_id": "ug1399-2026.1-en-s0037"
+  },
+  {
+    "title": "Flushing Pipelines and Pipeline Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 3: Loops Primer",
+      "Pipelining Loops",
+      "Flushing Pipelines and Pipeline Types"
+    ],
+    "page": 69,
+    "top": 312.14501,
+    "section_id": "ug1399-2026.1-en-s0038"
+  },
+  {
+    "title": "Managing Pipeline Dependencies",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 3: Loops Primer",
+      "Pipelining Loops",
+      "Managing Pipeline Dependencies"
+    ],
+    "page": 72,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0039"
+  },
+  {
+    "title": "Unrolling Loops",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 3: Loops Primer",
+      "Unrolling Loops"
+    ],
+    "page": 77,
+    "top": 453.2443,
+    "section_id": "ug1399-2026.1-en-s0040"
+  },
+  {
+    "title": "Merging Loops",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 3: Loops Primer",
+      "Merging Loops"
+    ],
+    "page": 79,
+    "top": 377.63714,
+    "section_id": "ug1399-2026.1-en-s0041"
+  },
+  {
+    "title": "Working with Nested Loops",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 3: Loops Primer",
+      "Working with Nested Loops"
+    ],
+    "page": 81,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0042"
+  },
+  {
+    "title": "Working with Variable Loop Bounds",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 3: Loops Primer",
+      "Working with Variable Loop Bounds"
+    ],
+    "page": 82,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0043"
+  },
+  {
+    "title": "Ch. 4: Arrays Primer",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 4: Arrays Primer"
+    ],
+    "page": 85,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0044"
+  },
+  {
+    "title": "Mapping Software Arrays to Hardware Memory",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 4: Arrays Primer",
+      "Mapping Software Arrays to Hardware Memory"
+    ],
+    "page": 85,
+    "top": 219.39999999999998,
+    "section_id": "ug1399-2026.1-en-s0045"
+  },
+  {
+    "title": "Array Accesses and Performance",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 4: Arrays Primer",
+      "Array Accesses and Performance"
+    ],
+    "page": 86,
+    "top": 518.6385,
+    "section_id": "ug1399-2026.1-en-s0046"
+  },
+  {
+    "title": "Array Partitioning",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 4: Arrays Primer",
+      "Array Accesses and Performance",
+      "Array Partitioning"
+    ],
+    "page": 88,
+    "top": 499.3,
+    "section_id": "ug1399-2026.1-en-s0047"
+  },
+  {
+    "title": "Automatic Array Partitioning",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 4: Arrays Primer",
+      "Array Accesses and Performance",
+      "Array Partitioning",
+      "Automatic Array Partitioning"
+    ],
+    "page": 90,
+    "top": 539.6719,
+    "section_id": "ug1399-2026.1-en-s0048"
+  },
+  {
+    "title": "Array Reshaping",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 4: Arrays Primer",
+      "Array Accesses and Performance",
+      "Array Reshaping"
+    ],
+    "page": 90,
+    "top": 642.26434,
+    "section_id": "ug1399-2026.1-en-s0049"
+  },
+  {
+    "title": "Arrays on the Interface",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 4: Arrays Primer",
+      "Arrays on the Interface"
+    ],
+    "page": 91,
+    "top": 629.72961,
+    "section_id": "ug1399-2026.1-en-s0050"
+  },
+  {
+    "title": "Array Interfaces",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 4: Arrays Primer",
+      "Arrays on the Interface",
+      "Array Interfaces"
+    ],
+    "page": 92,
+    "top": 446.58465,
+    "section_id": "ug1399-2026.1-en-s0051"
+  },
+  {
+    "title": "FIFO Interfaces",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 4: Arrays Primer",
+      "Arrays on the Interface",
+      "FIFO Interfaces"
+    ],
+    "page": 93,
+    "top": 455.38451,
+    "section_id": "ug1399-2026.1-en-s0052"
+  },
+  {
+    "title": "Memory Mapped Interfaces",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 4: Arrays Primer",
+      "Arrays on the Interface",
+      "Memory Mapped Interfaces"
+    ],
+    "page": 95,
+    "top": 291.0,
+    "section_id": "ug1399-2026.1-en-s0053"
+  },
+  {
+    "title": "Initializing and Resetting Arrays",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 4: Arrays Primer",
+      "Initializing and Resetting Arrays"
+    ],
+    "page": 95,
+    "top": 514.39986,
+    "section_id": "ug1399-2026.1-en-s0054"
+  },
+  {
+    "title": "Implementing ROMs",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 4: Arrays Primer",
+      "Implementing ROMs"
+    ],
+    "page": 97,
+    "top": 232.26919999999996,
+    "section_id": "ug1399-2026.1-en-s0055"
+  },
+  {
+    "title": "C Simulation with Arrays",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 4: Arrays Primer",
+      "C Simulation with Arrays"
+    ],
+    "page": 98,
+    "top": 150.53842999999995,
+    "section_id": "ug1399-2026.1-en-s0056"
+  },
+  {
+    "title": "Ch. 5: Functions Primer",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 5: Functions Primer"
+    ],
+    "page": 100,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0057"
+  },
+  {
+    "title": "Function Inlining",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 5: Functions Primer",
+      "Function Inlining"
+    ],
+    "page": 100,
+    "top": 409.01891,
+    "section_id": "ug1399-2026.1-en-s0058"
+  },
+  {
+    "title": "Function Pipelining",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 5: Functions Primer",
+      "Function Pipelining"
+    ],
+    "page": 101,
+    "top": 494.38073,
+    "section_id": "ug1399-2026.1-en-s0059"
+  },
+  {
+    "title": "Function Instantiation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 5: Functions Primer",
+      "Function Instantiation"
+    ],
+    "page": 102,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0060"
+  },
+  {
+    "title": "Ch. 6: Data Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types"
+    ],
+    "page": 104,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0061"
+  },
+  {
+    "title": "Standard Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Standard Types"
+    ],
+    "page": 105,
+    "top": 289.73845,
+    "section_id": "ug1399-2026.1-en-s0062"
+  },
+  {
+    "title": "Floats and Doubles",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Standard Types",
+      "Floats and Doubles"
+    ],
+    "page": 106,
+    "top": 425.85402,
+    "section_id": "ug1399-2026.1-en-s0063"
+  },
+  {
+    "title": "Composite Data Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Composite Data Types"
+    ],
+    "page": 110,
+    "top": 225.47000000000003,
+    "section_id": "ug1399-2026.1-en-s0064"
+  },
+  {
+    "title": "Structs",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Composite Data Types",
+      "Structs"
+    ],
+    "page": 110,
+    "top": 355.57003,
+    "section_id": "ug1399-2026.1-en-s0065"
+  },
+  {
+    "title": "Structs in the Interface",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Composite Data Types",
+      "Structs",
+      "Structs in the Interface"
+    ],
+    "page": 111,
+    "top": 313.89611,
+    "section_id": "ug1399-2026.1-en-s0066"
+  },
+  {
+    "title": "Struct Padding and Alignment",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Composite Data Types",
+      "Structs",
+      "Struct Padding and Alignment"
+    ],
+    "page": 112,
+    "top": 594.2345,
+    "section_id": "ug1399-2026.1-en-s0067"
+  },
+  {
+    "title": "C++ Classes and Templates",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Composite Data Types",
+      "C++ Classes and Templates"
+    ],
+    "page": 115,
+    "top": 278.96671000000003,
+    "section_id": "ug1399-2026.1-en-s0068"
+  },
+  {
+    "title": "Global Variables and Classes",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Composite Data Types",
+      "C++ Classes and Templates",
+      "Global Variables and Classes"
+    ],
+    "page": 118,
+    "top": 133.5,
+    "section_id": "ug1399-2026.1-en-s0069"
+  },
+  {
+    "title": "Templates",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Composite Data Types",
+      "C++ Classes and Templates",
+      "Templates"
+    ],
+    "page": 119,
+    "top": 591.98462,
+    "section_id": "ug1399-2026.1-en-s0070"
+  },
+  {
+    "title": "Using Templates to Create Unique Instances",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Composite Data Types",
+      "C++ Classes and Templates",
+      "Templates",
+      "Using Templates to Create Unique Instances"
+    ],
+    "page": 120,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0071"
+  },
+  {
+    "title": "Enumerated Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Composite Data Types",
+      "Enumerated Types"
+    ],
+    "page": 121,
+    "top": 171.0,
+    "section_id": "ug1399-2026.1-en-s0072"
+  },
+  {
+    "title": "Unions",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Composite Data Types",
+      "Unions"
+    ],
+    "page": 122,
+    "top": 529.38842,
+    "section_id": "ug1399-2026.1-en-s0073"
+  },
+  {
+    "title": "Type Qualifiers",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Composite Data Types",
+      "Type Qualifiers"
+    ],
+    "page": 124,
+    "top": 335.88076,
+    "section_id": "ug1399-2026.1-en-s0074"
+  },
+  {
+    "title": "Volatile",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Composite Data Types",
+      "Type Qualifiers",
+      "Volatile"
+    ],
+    "page": 124,
+    "top": 452.78072,
+    "section_id": "ug1399-2026.1-en-s0075"
+  },
+  {
+    "title": "Statics",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Composite Data Types",
+      "Type Qualifiers",
+      "Statics"
+    ],
+    "page": 125,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0076"
+  },
+  {
+    "title": "Const",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Composite Data Types",
+      "Type Qualifiers",
+      "Const"
+    ],
+    "page": 125,
+    "top": 354.59224,
+    "section_id": "ug1399-2026.1-en-s0077"
+  },
+  {
+    "title": "ROM Optimization",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Composite Data Types",
+      "Type Qualifiers",
+      "Const",
+      "ROM Optimization"
+    ],
+    "page": 125,
+    "top": 519.9768300000001,
+    "section_id": "ug1399-2026.1-en-s0078"
+  },
+  {
+    "title": "Arbitrary Precision (AP) Data Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Arbitrary Precision (AP) Data Types"
+    ],
+    "page": 126,
+    "top": 212.89620000000002,
+    "section_id": "ug1399-2026.1-en-s0079"
+  },
+  {
+    "title": "Advantages of AP Data Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Arbitrary Precision (AP) Data Types",
+      "Advantages of AP Data Types"
+    ],
+    "page": 127,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0080"
+  },
+  {
+    "title": "Overview of Arbitrary Precision Integer Data Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Arbitrary Precision (AP) Data Types",
+      "Overview of Arbitrary Precision Integer Data Types"
+    ],
+    "page": 129,
+    "top": 218.20000000000005,
+    "section_id": "ug1399-2026.1-en-s0081"
+  },
+  {
+    "title": "Overview of Arbitrary Precision Fixed-Point Data Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Arbitrary Precision (AP) Data Types",
+      "Overview of Arbitrary Precision Fixed-Point Data Types"
+    ],
+    "page": 130,
+    "top": 168.59619999999995,
+    "section_id": "ug1399-2026.1-en-s0082"
+  },
+  {
+    "title": "Arbitrary Precision Floating-Point Library ap_float<int W, int E>",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Arbitrary Precision Floating-Point Library ap_float<int W, int E>"
+    ],
+    "page": 132,
+    "top": 329.1654,
+    "section_id": "ug1399-2026.1-en-s0083"
+  },
+  {
+    "title": "Dealing with Unsupported Functions",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Arbitrary Precision Floating-Point Library ap_float<int W, int E>",
+      "Dealing with Unsupported Functions"
+    ],
+    "page": 134,
+    "top": 494.09997,
+    "section_id": "ug1399-2026.1-en-s0084"
+  },
+  {
+    "title": "Conversions of ap_float<> To and From Other Data Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Arbitrary Precision Floating-Point Library ap_float<int W, int E>",
+      "Conversions of ap_float<> To and From Other Data Types"
+    ],
+    "page": 135,
+    "top": 172.60000000000002,
+    "section_id": "ug1399-2026.1-en-s0085"
+  },
+  {
+    "title": "Accumulation of ap_float<> Using ap_float_acc<> Helper Class",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Arbitrary Precision Floating-Point Library ap_float<int W, int E>",
+      "Accumulation of ap_float<> Using ap_float_acc<> Helper Class"
+    ],
+    "page": 135,
+    "top": 350.4999,
+    "section_id": "ug1399-2026.1-en-s0086"
+  },
+  {
+    "title": "Using ap_float_acc<> Restrictions",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Arbitrary Precision Floating-Point Library ap_float<int W, int E>",
+      "Using ap_float_acc<> Restrictions"
+    ],
+    "page": 136,
+    "top": 161.0,
+    "section_id": "ug1399-2026.1-en-s0087"
+  },
+  {
+    "title": "Global Variables",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Global Variables"
+    ],
+    "page": 136,
+    "top": 354.10003,
+    "section_id": "ug1399-2026.1-en-s0088"
+  },
+  {
+    "title": "Pointers",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Pointers"
+    ],
+    "page": 137,
+    "top": 244.0,
+    "section_id": "ug1399-2026.1-en-s0089"
+  },
+  {
+    "title": "Pointers on the Interface",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Pointers",
+      "Pointers on the Interface"
+    ],
+    "page": 140,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0090"
+  },
+  {
+    "title": "Basic Pointers",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Pointers",
+      "Pointers on the Interface",
+      "Basic Pointers"
+    ],
+    "page": 140,
+    "top": 183.60001,
+    "section_id": "ug1399-2026.1-en-s0091"
+  },
+  {
+    "title": "Pointer Arithmetic",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Pointers",
+      "Pointers on the Interface",
+      "Pointer Arithmetic"
+    ],
+    "page": 141,
+    "top": 263.6,
+    "section_id": "ug1399-2026.1-en-s0092"
+  },
+  {
+    "title": "Multi-Access Pointers on the Interface",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Pointers",
+      "Pointers on the Interface",
+      "Multi-Access Pointers on the Interface"
+    ],
+    "page": 143,
+    "top": 250.60000000000002,
+    "section_id": "ug1399-2026.1-en-s0093"
+  },
+  {
+    "title": "Understanding Volatile Data",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Pointers",
+      "Pointers on the Interface",
+      "Understanding Volatile Data"
+    ],
+    "page": 144,
+    "top": 598.29236,
+    "section_id": "ug1399-2026.1-en-s0094"
+  },
+  {
+    "title": "Modeling Streaming Data Interfaces",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Pointers",
+      "Pointers on the Interface",
+      "Modeling Streaming Data Interfaces"
+    ],
+    "page": 146,
+    "top": 153.20000000000005,
+    "section_id": "ug1399-2026.1-en-s0095"
+  },
+  {
+    "title": "Multi-Access Pointers and RTL Simulation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Pointers",
+      "Pointers on the Interface",
+      "Multi-Access Pointers and RTL Simulation"
+    ],
+    "page": 148,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0096"
+  },
+  {
+    "title": "Vector Data Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Vector Data Types"
+    ],
+    "page": 148,
+    "top": 419.8922,
+    "section_id": "ug1399-2026.1-en-s0097"
+  },
+  {
+    "title": "Bit-Width Propagation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 6: Data Types",
+      "Bit-Width Propagation"
+    ],
+    "page": 149,
+    "top": 437.39614,
+    "section_id": "ug1399-2026.1-en-s0098"
+  },
+  {
+    "title": "Ch. 7: Unsupported C/C++ Constructs",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 7: Unsupported C/C++ Constructs"
+    ],
+    "page": 151,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0099"
+  },
+  {
+    "title": "System Calls",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 7: Unsupported C/C++ Constructs",
+      "System Calls"
+    ],
+    "page": 151,
+    "top": 439.69997,
+    "section_id": "ug1399-2026.1-en-s0100"
+  },
+  {
+    "title": "Dynamic Memory Usage",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 7: Unsupported C/C++ Constructs",
+      "Dynamic Memory Usage"
+    ],
+    "page": 152,
+    "top": 514.9308,
+    "section_id": "ug1399-2026.1-en-s0101"
+  },
+  {
+    "title": "Pointer Limitations",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 7: Unsupported C/C++ Constructs",
+      "Pointer Limitations"
+    ],
+    "page": 154,
+    "top": 163.89999999999998,
+    "section_id": "ug1399-2026.1-en-s0102"
+  },
+  {
+    "title": "Recursive Functions",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 7: Unsupported C/C++ Constructs",
+      "Recursive Functions"
+    ],
+    "page": 154,
+    "top": 437.19994,
+    "section_id": "ug1399-2026.1-en-s0103"
+  },
+  {
+    "title": "Standard Template Libraries",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 7: Unsupported C/C++ Constructs",
+      "Recursive Functions",
+      "Standard Template Libraries"
+    ],
+    "page": 155,
+    "top": 122.17200000000003,
+    "section_id": "ug1399-2026.1-en-s0104"
+  },
+  {
+    "title": "Undefined Behaviors",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 7: Unsupported C/C++ Constructs",
+      "Undefined Behaviors"
+    ],
+    "page": 155,
+    "top": 288.91045,
+    "section_id": "ug1399-2026.1-en-s0105"
+  },
+  {
+    "title": "Virtual Functions and Pointers",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 7: Unsupported C/C++ Constructs",
+      "Virtual Functions and Pointers"
+    ],
+    "page": 156,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0106"
+  },
+  {
+    "title": "Ch. 8: Interfaces of the HLS Design",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design"
+    ],
+    "page": 157,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0107"
+  },
+  {
+    "title": "Defining Interfaces",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces"
+    ],
+    "page": 157,
+    "top": 390.7,
+    "section_id": "ug1399-2026.1-en-s0108"
+  },
+  {
+    "title": "Introduction to Interface Synthesis",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "Introduction to Interface Synthesis"
+    ],
+    "page": 157,
+    "top": 432.90001,
+    "section_id": "ug1399-2026.1-en-s0109"
+  },
+  {
+    "title": "Interfaces for Vitis Kernel Flow",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "Interfaces for Vitis Kernel Flow"
+    ],
+    "page": 158,
+    "top": 328.3999,
+    "section_id": "ug1399-2026.1-en-s0110"
+  },
+  {
+    "title": "Interfaces for Vivado IP Flow",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "Interfaces for Vivado IP Flow"
+    ],
+    "page": 164,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0111"
+  },
+  {
+    "title": "AXI Adapter Interface Protocols",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols"
+    ],
+    "page": 169,
+    "top": 439.84612,
+    "section_id": "ug1399-2026.1-en-s0112"
+  },
+  {
+    "title": "AXI4 Master Interface",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4 Master Interface"
+    ],
+    "page": 170,
+    "top": 247.3895,
+    "section_id": "ug1399-2026.1-en-s0113"
+  },
+  {
+    "title": "Offset and Modes of Operation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4 Master Interface",
+      "Offset and Modes of Operation"
+    ],
+    "page": 172,
+    "top": 346.51046,
+    "section_id": "ug1399-2026.1-en-s0114"
+  },
+  {
+    "title": "M_AXI Bundles",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4 Master Interface",
+      "M_AXI Bundles"
+    ],
+    "page": 176,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0115"
+  },
+  {
+    "title": "M_AXI Channels",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4 Master Interface",
+      "M_AXI Bundles",
+      "M_AXI Channels"
+    ],
+    "page": 178,
+    "top": 651.0694599999999,
+    "section_id": "ug1399-2026.1-en-s0116"
+  },
+  {
+    "title": "M_AXI Resources",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4 Master Interface",
+      "M_AXI Resources"
+    ],
+    "page": 180,
+    "top": 266.20000000000005,
+    "section_id": "ug1399-2026.1-en-s0117"
+  },
+  {
+    "title": "Controlling AXI4 Burst Behavior",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4 Master Interface",
+      "Controlling AXI4 Burst Behavior"
+    ],
+    "page": 181,
+    "top": 376.83855,
+    "section_id": "ug1399-2026.1-en-s0118"
+  },
+  {
+    "title": "Automatic Port Width Resizing",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4 Master Interface",
+      "Controlling AXI4 Burst Behavior",
+      "Automatic Port Width Resizing"
+    ],
+    "page": 182,
+    "top": 507.3692,
+    "section_id": "ug1399-2026.1-en-s0119"
+  },
+  {
+    "title": "Creating an AXI4 Interface with 32-bit Address",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4 Master Interface",
+      "Creating an AXI4 Interface with 32-bit Address"
+    ],
+    "page": 184,
+    "top": 531.8885399999999,
+    "section_id": "ug1399-2026.1-en-s0120"
+  },
+  {
+    "title": "Customizing AXI4 Master Interfaces in IP Integrator",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4 Master Interface",
+      "Customizing AXI4 Master Interfaces in IP Integrator"
+    ],
+    "page": 185,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0121"
+  },
+  {
+    "title": "AXI4-Lite Interface",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Lite Interface"
+    ],
+    "page": 185,
+    "top": 559.14499,
+    "section_id": "ug1399-2026.1-en-s0122"
+  },
+  {
+    "title": "S_AXILITE Example",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Lite Interface",
+      "S_AXILITE Example"
+    ],
+    "page": 186,
+    "top": 582.31585,
+    "section_id": "ug1399-2026.1-en-s0123"
+  },
+  {
+    "title": "S_AXILITE Control Register Map",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Lite Interface",
+      "S_AXILITE Control Register Map"
+    ],
+    "page": 188,
+    "top": 535.73531,
+    "section_id": "ug1399-2026.1-en-s0124"
+  },
+  {
+    "title": "S_AXILITE and Port-Level Protocols",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Lite Interface",
+      "S_AXILITE and Port-Level Protocols"
+    ],
+    "page": 191,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0125"
+  },
+  {
+    "title": "S_AXILITE Bundle Rules",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Lite Interface",
+      "S_AXILITE Bundle Rules"
+    ],
+    "page": 191,
+    "top": 634.00201,
+    "section_id": "ug1399-2026.1-en-s0126"
+  },
+  {
+    "title": "S_AXILITE Offset Option",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Lite Interface",
+      "S_AXILITE Offset Option"
+    ],
+    "page": 193,
+    "top": 280.8885,
+    "section_id": "ug1399-2026.1-en-s0127"
+  },
+  {
+    "title": "C Driver Files",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Lite Interface",
+      "C Driver Files"
+    ],
+    "page": 194,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0128"
+  },
+  {
+    "title": "C Driver Files and Float Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Lite Interface",
+      "C Driver Files",
+      "C Driver Files and Float Types"
+    ],
+    "page": 195,
+    "top": 160.60000000000002,
+    "section_id": "ug1399-2026.1-en-s0129"
+  },
+  {
+    "title": "Controlling Hardware",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Lite Interface",
+      "Controlling Hardware"
+    ],
+    "page": 196,
+    "top": 241.89999999999998,
+    "section_id": "ug1399-2026.1-en-s0130"
+  },
+  {
+    "title": "Controlling Software",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Lite Interface",
+      "Controlling Software"
+    ],
+    "page": 198,
+    "top": 261.1847,
+    "section_id": "ug1399-2026.1-en-s0131"
+  },
+  {
+    "title": "Control Clock and Reset in AXI4-Lite Interfaces",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Lite Interface",
+      "Control Clock and Reset in AXI4-Lite Interfaces"
+    ],
+    "page": 199,
+    "top": 196.0,
+    "section_id": "ug1399-2026.1-en-s0132"
+  },
+  {
+    "title": "Customizing AXI4-Lite Slave Interfaces in IP Integrator",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Lite Interface",
+      "Customizing AXI4-Lite Slave Interfaces in IP Integrator"
+    ],
+    "page": 200,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0133"
+  },
+  {
+    "title": "AXI4-Stream Interfaces",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Stream Interfaces"
+    ],
+    "page": 200,
+    "top": 539.2231400000001,
+    "section_id": "ug1399-2026.1-en-s0134"
+  },
+  {
+    "title": "How AXI4-Stream Works",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Stream Interfaces",
+      "How AXI4-Stream Works"
+    ],
+    "page": 201,
+    "top": 493.4203,
+    "section_id": "ug1399-2026.1-en-s0135"
+  },
+  {
+    "title": "How AXI4-Stream is Implemented",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Stream Interfaces",
+      "How AXI4-Stream is Implemented"
+    ],
+    "page": 202,
+    "top": 350.05956,
+    "section_id": "ug1399-2026.1-en-s0136"
+  },
+  {
+    "title": "Registered AXI4-Stream Interfaces",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Stream Interfaces",
+      "Registered AXI4-Stream Interfaces"
+    ],
+    "page": 203,
+    "top": 531.81276,
+    "section_id": "ug1399-2026.1-en-s0137"
+  },
+  {
+    "title": "AXI4-Stream Interfaces without Side-Channels",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Stream Interfaces",
+      "AXI4-Stream Interfaces without Side-Channels"
+    ],
+    "page": 204,
+    "top": 279.19614,
+    "section_id": "ug1399-2026.1-en-s0138"
+  },
+  {
+    "title": "AXI4-Stream Interfaces with Side-Channels",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Stream Interfaces",
+      "AXI4-Stream Interfaces with Side-Channels"
+    ],
+    "page": 205,
+    "top": 199.43849999999998,
+    "section_id": "ug1399-2026.1-en-s0139"
+  },
+  {
+    "title": "Coding Style for Array to Stream",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Stream Interfaces",
+      "Coding Style for Array to Stream"
+    ],
+    "page": 207,
+    "top": 295.64501,
+    "section_id": "ug1399-2026.1-en-s0140"
+  },
+  {
+    "title": "Customizing AXI4-Stream Interfaces",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "AXI Adapter Interface Protocols",
+      "AXI4-Stream Interfaces",
+      "Customizing AXI4-Stream Interfaces"
+    ],
+    "page": 208,
+    "top": 237.89620000000002,
+    "section_id": "ug1399-2026.1-en-s0141"
+  },
+  {
+    "title": "Port-Level Protocols for Vivado IP Flow",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "Port-Level Protocols for Vivado IP Flow"
+    ],
+    "page": 210,
+    "top": 485.6,
+    "section_id": "ug1399-2026.1-en-s0142"
+  },
+  {
+    "title": "Port-Level I/O: No Protocol",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "Port-Level Protocols for Vivado IP Flow",
+      "Port-Level I/O: No Protocol"
+    ],
+    "page": 212,
+    "top": 143.48843999999997,
+    "section_id": "ug1399-2026.1-en-s0143"
+  },
+  {
+    "title": "Port-Level I/O: Wire Handshakes",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "Port-Level Protocols for Vivado IP Flow",
+      "Port-Level I/O: Wire Handshakes"
+    ],
+    "page": 212,
+    "top": 474.71236,
+    "section_id": "ug1399-2026.1-en-s0144"
+  },
+  {
+    "title": "Port-Level I/O: Memory Interface Protocol",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "Port-Level Protocols for Vivado IP Flow",
+      "Port-Level I/O: Memory Interface Protocol"
+    ],
+    "page": 216,
+    "top": 176.59231999999997,
+    "section_id": "ug1399-2026.1-en-s0145"
+  },
+  {
+    "title": "Programming Model for Multi-Port Access in HBM",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "Programming Model for Multi-Port Access in HBM"
+    ],
+    "page": 220,
+    "top": 138.48843999999997,
+    "section_id": "ug1399-2026.1-en-s0146"
+  },
+  {
+    "title": "Improving HBM Bandwidth with Multiple M_AXI Interfaces",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "Programming Model for Multi-Port Access in HBM",
+      "Improving HBM Bandwidth with Multiple M_AXI Interfaces"
+    ],
+    "page": 221,
+    "top": 145.09619999999995,
+    "section_id": "ug1399-2026.1-en-s0147"
+  },
+  {
+    "title": "Managing Interfaces with SSI Technology Devices",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Defining Interfaces",
+      "Managing Interfaces with SSI Technology Devices"
+    ],
+    "page": 224,
+    "top": 506.26922,
+    "section_id": "ug1399-2026.1-en-s0148"
+  },
+  {
+    "title": "Vitis HLS Memory Layout Model",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Vitis HLS Memory Layout Model"
+    ],
+    "page": 225,
+    "top": 164.19614,
+    "section_id": "ug1399-2026.1-en-s0149"
+  },
+  {
+    "title": "Data Alignment",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Vitis HLS Memory Layout Model",
+      "Data Alignment"
+    ],
+    "page": 225,
+    "top": 430.89596,
+    "section_id": "ug1399-2026.1-en-s0150"
+  },
+  {
+    "title": "Data Structure Padding",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Vitis HLS Memory Layout Model",
+      "Data Structure Padding"
+    ],
+    "page": 227,
+    "top": 169.79611999999997,
+    "section_id": "ug1399-2026.1-en-s0151"
+  },
+  {
+    "title": "Vitis HLS Alignment Rules and Semantics",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Vitis HLS Memory Layout Model",
+      "Vitis HLS Alignment Rules and Semantics"
+    ],
+    "page": 228,
+    "top": 455.86852,
+    "section_id": "ug1399-2026.1-en-s0152"
+  },
+  {
+    "title": "Examples of Aggregation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Vitis HLS Memory Layout Model",
+      "Examples of Aggregation"
+    ],
+    "page": 229,
+    "top": 553.8495800000001,
+    "section_id": "ug1399-2026.1-en-s0153"
+  },
+  {
+    "title": "Examples of Disaggregation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Vitis HLS Memory Layout Model",
+      "Examples of Disaggregation"
+    ],
+    "page": 232,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0154"
+  },
+  {
+    "title": "Impact of Struct Size on Pipelining",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Vitis HLS Memory Layout Model",
+      "Impact of Struct Size on Pipelining"
+    ],
+    "page": 233,
+    "top": 439.01342,
+    "section_id": "ug1399-2026.1-en-s0155"
+  },
+  {
+    "title": "Execution Modes of HLS Designs",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Execution Modes of HLS Designs"
+    ],
+    "page": 236,
+    "top": 548.625,
+    "section_id": "ug1399-2026.1-en-s0156"
+  },
+  {
+    "title": "Block-Level Control Protocols",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Execution Modes of HLS Designs",
+      "Block-Level Control Protocols"
+    ],
+    "page": 238,
+    "top": 174.29611999999997,
+    "section_id": "ug1399-2026.1-en-s0157"
+  },
+  {
+    "title": "Continuously Running Mode",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Execution Modes of HLS Designs",
+      "Continuously Running Mode"
+    ],
+    "page": 241,
+    "top": 386.24621,
+    "section_id": "ug1399-2026.1-en-s0158"
+  },
+  {
+    "title": "Auto-Restarting Mode",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Execution Modes of HLS Designs",
+      "Auto-Restarting Mode"
+    ],
+    "page": 246,
+    "top": 151.0,
+    "section_id": "ug1399-2026.1-en-s0159"
+  },
+  {
+    "title": "Working with Auto-Restarting Designs",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Execution Modes of HLS Designs",
+      "Auto-Restarting Mode",
+      "Working with Auto-Restarting Designs"
+    ],
+    "page": 246,
+    "top": 526.99593,
+    "section_id": "ug1399-2026.1-en-s0160"
+  },
+  {
+    "title": "Supported Interfaces",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Execution Modes of HLS Designs",
+      "Auto-Restarting Mode",
+      "Working with Auto-Restarting Designs",
+      "Supported Interfaces"
+    ],
+    "page": 247,
+    "top": 318.69622,
+    "section_id": "ug1399-2026.1-en-s0161"
+  },
+  {
+    "title": "Enabling Auto-Restart",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Execution Modes of HLS Designs",
+      "Auto-Restarting Mode",
+      "Working with Auto-Restarting Designs",
+      "Enabling Auto-Restart"
+    ],
+    "page": 247,
+    "top": 614.27343,
+    "section_id": "ug1399-2026.1-en-s0162"
+  },
+  {
+    "title": "Using the Mailbox",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Execution Modes of HLS Designs",
+      "Auto-Restarting Mode",
+      "Working with Auto-Restarting Designs",
+      "Using the Mailbox"
+    ],
+    "page": 248,
+    "top": 172.29999999999995,
+    "section_id": "ug1399-2026.1-en-s0163"
+  },
+  {
+    "title": "Mailbox Semantics",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Execution Modes of HLS Designs",
+      "Auto-Restarting Mode",
+      "Working with Auto-Restarting Designs",
+      "Using the Mailbox",
+      "Mailbox Semantics"
+    ],
+    "page": 249,
+    "top": 159.0,
+    "section_id": "ug1399-2026.1-en-s0164"
+  },
+  {
+    "title": "Using Auto-Restart in Cosimulation (C/RTL Cosim)",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Execution Modes of HLS Designs",
+      "Auto-Restarting Mode",
+      "Working with Auto-Restarting Designs",
+      "Using Auto-Restart in Cosimulation (C/RTL Cosim)"
+    ],
+    "page": 250,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0165"
+  },
+  {
+    "title": "Programmer’s Model",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Execution Modes of HLS Designs",
+      "Auto-Restarting Mode",
+      "Working with Auto-Restarting Designs",
+      "Programmer’s Model"
+    ],
+    "page": 250,
+    "top": 242.09619999999995,
+    "section_id": "ug1399-2026.1-en-s0166"
+  },
+  {
+    "title": "Auto-Restart Cosimulation Limitations",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Execution Modes of HLS Designs",
+      "Auto-Restarting Mode",
+      "Working with Auto-Restarting Designs",
+      "Auto-Restart Cosimulation Limitations"
+    ],
+    "page": 251,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0167"
+  },
+  {
+    "title": "Using Auto-Restart in XRT",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Execution Modes of HLS Designs",
+      "Auto-Restarting Mode",
+      "Working with Auto-Restarting Designs",
+      "Using Auto-Restart in XRT"
+    ],
+    "page": 251,
+    "top": 323.58852,
+    "section_id": "ug1399-2026.1-en-s0168"
+  },
+  {
+    "title": "Using Auto-Restart with the Mailbox",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Execution Modes of HLS Designs",
+      "Auto-Restarting Mode",
+      "Working with Auto-Restarting Designs",
+      "Using Auto-Restart in XRT",
+      "Using Auto-Restart with the Mailbox"
+    ],
+    "page": 251,
+    "top": 374.2885,
+    "section_id": "ug1399-2026.1-en-s0169"
+  },
+  {
+    "title": "Using Counted Auto-Restart",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Execution Modes of HLS Designs",
+      "Auto-Restarting Mode",
+      "Working with Auto-Restarting Designs",
+      "Using Auto-Restart in XRT",
+      "Using Counted Auto-Restart"
+    ],
+    "page": 254,
+    "top": 156.0,
+    "section_id": "ug1399-2026.1-en-s0170"
+  },
+  {
+    "title": "Controlling Initialization and Reset Behavior",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Controlling Initialization and Reset Behavior"
+    ],
+    "page": 254,
+    "top": 400.46923,
+    "section_id": "ug1399-2026.1-en-s0171"
+  },
+  {
+    "title": "Initialization Behavior",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 8: Interfaces of the HLS Design",
+      "Controlling Initialization and Reset Behavior",
+      "Initialization Behavior"
+    ],
+    "page": 256,
+    "top": 127.26919999999996,
+    "section_id": "ug1399-2026.1-en-s0172"
+  },
+  {
+    "title": "Ch. 9: Best Practices for Designing with M_AXI Interfaces",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 9: Best Practices for Designing with M_AXI Interfaces"
+    ],
+    "page": 257,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0173"
+  },
+  {
+    "title": "Ch. 10: Top-Level Performance Pragma",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 10: Top-Level Performance Pragma"
+    ],
+    "page": 260,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0174"
+  },
+  {
+    "title": "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips"
+    ],
+    "page": 265,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0175"
+  },
+  {
+    "title": "Understanding High-Level Synthesis Scheduling and Binding",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Understanding High-Level Synthesis Scheduling and Binding"
+    ],
+    "page": 267,
+    "top": 406.425,
+    "section_id": "ug1399-2026.1-en-s0176"
+  },
+  {
+    "title": "Scheduling and Binding Example",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Understanding High-Level Synthesis Scheduling and Binding",
+      "Scheduling and Binding Example"
+    ],
+    "page": 269,
+    "top": 423.20006,
+    "section_id": "ug1399-2026.1-en-s0177"
+  },
+  {
+    "title": "Extracting Control Logic and Implementing I/O Ports Example",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Understanding High-Level Synthesis Scheduling and Binding",
+      "Extracting Control Logic and Implementing I/O Ports Example"
+    ],
+    "page": 271,
+    "top": 169.5,
+    "section_id": "ug1399-2026.1-en-s0178"
+  },
+  {
+    "title": "Performance Metrics Example",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Understanding High-Level Synthesis Scheduling and Binding",
+      "Performance Metrics Example"
+    ],
+    "page": 272,
+    "top": 572.81158,
+    "section_id": "ug1399-2026.1-en-s0179"
+  },
+  {
+    "title": "Optimizing Logic",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Optimizing Logic"
+    ],
+    "page": 274,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0180"
+  },
+  {
+    "title": "Inferring Shift Registers",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Optimizing Logic",
+      "Inferring Shift Registers"
+    ],
+    "page": 274,
+    "top": 137.20000000000005,
+    "section_id": "ug1399-2026.1-en-s0181"
+  },
+  {
+    "title": "Optimizing Logic Expressions",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Optimizing Logic",
+      "Optimizing Logic Expressions"
+    ],
+    "page": 274,
+    "top": 363.49996,
+    "section_id": "ug1399-2026.1-en-s0182"
+  },
+  {
+    "title": "Optimizing AXI System Performance",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Optimizing AXI System Performance"
+    ],
+    "page": 276,
+    "top": 441.94231,
+    "section_id": "ug1399-2026.1-en-s0183"
+  },
+  {
+    "title": "AXI Burst Transfers",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Optimizing AXI System Performance",
+      "AXI Burst Transfers"
+    ],
+    "page": 277,
+    "top": 212.39999999999998,
+    "section_id": "ug1399-2026.1-en-s0184"
+  },
+  {
+    "title": "Preconditions and Limitations of Burst Transfer",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Optimizing AXI System Performance",
+      "AXI Burst Transfers",
+      "Preconditions and Limitations of Burst Transfer"
+    ],
+    "page": 281,
+    "top": 569.24347,
+    "section_id": "ug1399-2026.1-en-s0185"
+  },
+  {
+    "title": "Options for Controlling AXI4 Burst Behavior",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Optimizing AXI System Performance",
+      "AXI Burst Transfers",
+      "Options for Controlling AXI4 Burst Behavior"
+    ],
+    "page": 284,
+    "top": 288.08846,
+    "section_id": "ug1399-2026.1-en-s0186"
+  },
+  {
+    "title": "Stencil Optimizations",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Optimizing AXI System Performance",
+      "AXI Burst Transfers",
+      "Stencil Optimizations"
+    ],
+    "page": 291,
+    "top": 511.825,
+    "section_id": "ug1399-2026.1-en-s0187"
+  },
+  {
+    "title": "Examples of Recommended Coding Styles",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Optimizing AXI System Performance",
+      "AXI Burst Transfers",
+      "Examples of Recommended Coding Styles"
+    ],
+    "page": 292,
+    "top": 523.1,
+    "section_id": "ug1399-2026.1-en-s0188"
+  },
+  {
+    "title": "Summary",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Optimizing AXI System Performance",
+      "AXI Burst Transfers",
+      "Summary"
+    ],
+    "page": 296,
+    "top": 349.0,
+    "section_id": "ug1399-2026.1-en-s0189"
+  },
+  {
+    "title": "Using Manual Burst",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Optimizing AXI System Performance",
+      "Using Manual Burst"
+    ],
+    "page": 297,
+    "top": 194.39230999999995,
+    "section_id": "ug1399-2026.1-en-s0190"
+  },
+  {
+    "title": "AXI Performance Case Study",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Optimizing AXI System Performance",
+      "AXI Performance Case Study"
+    ],
+    "page": 308,
+    "top": 255.06539999999995,
+    "section_id": "ug1399-2026.1-en-s0191"
+  },
+  {
+    "title": "Managing Area and Hardware Resources",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Managing Area and Hardware Resources"
+    ],
+    "page": 313,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0192"
+  },
+  {
+    "title": "Limiting the Number of Operators",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Managing Area and Hardware Resources",
+      "Limiting the Number of Operators"
+    ],
+    "page": 313,
+    "top": 292.29992,
+    "section_id": "ug1399-2026.1-en-s0193"
+  },
+  {
+    "title": "Controlling Hardware Implementation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Managing Area and Hardware Resources",
+      "Controlling Hardware Implementation"
+    ],
+    "page": 314,
+    "top": 581.42514,
+    "section_id": "ug1399-2026.1-en-s0194"
+  },
+  {
+    "title": "DSP Multi-Operation Matching",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Managing Area and Hardware Resources",
+      "Controlling Hardware Implementation",
+      "DSP Multi-Operation Matching"
+    ],
+    "page": 316,
+    "top": 250.09231999999997,
+    "section_id": "ug1399-2026.1-en-s0195"
+  },
+  {
+    "title": "Controlling Operator Pipelining",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Managing Area and Hardware Resources",
+      "Controlling Hardware Implementation",
+      "Controlling Operator Pipelining"
+    ],
+    "page": 318,
+    "top": 319.2,
+    "section_id": "ug1399-2026.1-en-s0196"
+  },
+  {
+    "title": "Unrolling Loops in C++ Classes",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Unrolling Loops in C++ Classes"
+    ],
+    "page": 318,
+    "top": 535.99605,
+    "section_id": "ug1399-2026.1-en-s0197"
+  },
+  {
+    "title": "Limitations of Control-Driven Task-Level Parallelism",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Limitations of Control-Driven Task-Level Parallelism"
+    ],
+    "page": 319,
+    "top": 382.89614,
+    "section_id": "ug1399-2026.1-en-s0198"
+  },
+  {
+    "title": "Limitations of Pipelining with Static Variables",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Limitations of Pipelining with Static Variables"
+    ],
+    "page": 324,
+    "top": 525.2846,
+    "section_id": "ug1399-2026.1-en-s0199"
+  },
+  {
+    "title": "Canonical Dataflow",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. II: HLS Programmers Guide",
+      "Ch. 11: Optimizing Techniques and Troubleshooting Tips",
+      "Canonical Dataflow"
+    ],
+    "page": 325,
+    "top": 517.3999200000001,
+    "section_id": "ug1399-2026.1-en-s0200"
+  },
+  {
+    "title": "Sec. III: Vitis HLS Flow Steps",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps"
+    ],
+    "page": 331,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0201"
+  },
+  {
+    "title": "Ch. 12: Launching the Vitis Unified IDE",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 12: Launching the Vitis Unified IDE"
+    ],
+    "page": 332,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0202"
+  },
+  {
+    "title": "Features of the Vitis Unified IDE",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 12: Launching the Vitis Unified IDE",
+      "Features of the Vitis Unified IDE"
+    ],
+    "page": 334,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0203"
+  },
+  {
+    "title": "Using the Flow Navigator",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 12: Launching the Vitis Unified IDE",
+      "Using the Flow Navigator"
+    ],
+    "page": 335,
+    "top": 147.39999999999998,
+    "section_id": "ug1399-2026.1-en-s0204"
+  },
+  {
+    "title": "Ch. 13: Building and Running an HLS Component",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component"
+    ],
+    "page": 337,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0205"
+  },
+  {
+    "title": "Creating an HLS Component",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Creating an HLS Component"
+    ],
+    "page": 338,
+    "top": 509.33651,
+    "section_id": "ug1399-2026.1-en-s0206"
+  },
+  {
+    "title": "Working with Sources",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Creating an HLS Component",
+      "Working with Sources"
+    ],
+    "page": 344,
+    "top": 518.4508000000001,
+    "section_id": "ug1399-2026.1-en-s0207"
+  },
+  {
+    "title": "Coding C/C++ Functions",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Creating an HLS Component",
+      "Working with Sources",
+      "Coding C/C++ Functions"
+    ],
+    "page": 345,
+    "top": 153.49613,
+    "section_id": "ug1399-2026.1-en-s0208"
+  },
+  {
+    "title": "Using Libraries in HLS Components",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Creating an HLS Component",
+      "Working with Sources",
+      "Coding C/C++ Functions",
+      "Using Libraries in HLS Components"
+    ],
+    "page": 345,
+    "top": 545.8847000000001,
+    "section_id": "ug1399-2026.1-en-s0209"
+  },
+  {
+    "title": "Resolving References and Viewing #include Files",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Creating an HLS Component",
+      "Working with Sources",
+      "Coding C/C++ Functions",
+      "Resolving References and Viewing #include Files"
+    ],
+    "page": 346,
+    "top": 535.1201100000001,
+    "section_id": "ug1399-2026.1-en-s0210"
+  },
+  {
+    "title": "Resolving Comments in the Source Code",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Creating an HLS Component",
+      "Working with Sources",
+      "Coding C/C++ Functions",
+      "Resolving Comments in the Source Code"
+    ],
+    "page": 348,
+    "top": 188.06539999999995,
+    "section_id": "ug1399-2026.1-en-s0211"
+  },
+  {
+    "title": "Adding RTL Blackbox Functions",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Creating an HLS Component",
+      "Working with Sources",
+      "Adding RTL Blackbox Functions"
+    ],
+    "page": 348,
+    "top": 339.86541,
+    "section_id": "ug1399-2026.1-en-s0212"
+  },
+  {
+    "title": "Using the RTL Blackbox Wizard",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Creating an HLS Component",
+      "Working with Sources",
+      "Adding RTL Blackbox Functions",
+      "Using the RTL Blackbox Wizard"
+    ],
+    "page": 350,
+    "top": 181.92031999999995,
+    "section_id": "ug1399-2026.1-en-s0213"
+  },
+  {
+    "title": "C++ Model and Header Files",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Creating an HLS Component",
+      "Working with Sources",
+      "Adding RTL Blackbox Functions",
+      "Using the RTL Blackbox Wizard",
+      "C++ Model and Header Files"
+    ],
+    "page": 350,
+    "top": 547.17602,
+    "section_id": "ug1399-2026.1-en-s0214"
+  },
+  {
+    "title": "RTL IP Definition",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Creating an HLS Component",
+      "Working with Sources",
+      "Adding RTL Blackbox Functions",
+      "Using the RTL Blackbox Wizard",
+      "RTL IP Definition"
+    ],
+    "page": 352,
+    "top": 393.15816,
+    "section_id": "ug1399-2026.1-en-s0215"
+  },
+  {
+    "title": "JSON File for RTL Blackbox",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Creating an HLS Component",
+      "Working with Sources",
+      "Adding RTL Blackbox Functions",
+      "JSON File for RTL Blackbox"
+    ],
+    "page": 354,
+    "top": 270.39230999999995,
+    "section_id": "ug1399-2026.1-en-s0216"
+  },
+  {
+    "title": "Defining the HLS Config File",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Defining the HLS Config File"
+    ],
+    "page": 361,
+    "top": 514.0,
+    "section_id": "ug1399-2026.1-en-s0217"
+  },
+  {
+    "title": "Specifying the Clock Frequency",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Defining the HLS Config File",
+      "Specifying the Clock Frequency"
+    ],
+    "page": 363,
+    "top": 459.55712,
+    "section_id": "ug1399-2026.1-en-s0218"
+  },
+  {
+    "title": "Clock and Reset Ports",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Defining the HLS Config File",
+      "Specifying the Clock Frequency",
+      "Clock and Reset Ports"
+    ],
+    "page": 365,
+    "top": 639.9148,
+    "section_id": "ug1399-2026.1-en-s0219"
+  },
+  {
+    "title": "Adding Pragmas and Directives",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Defining the HLS Config File",
+      "Adding Pragmas and Directives"
+    ],
+    "page": 366,
+    "top": 126.60000000000002,
+    "section_id": "ug1399-2026.1-en-s0220"
+  },
+  {
+    "title": "Conditional Control of Pragmas",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Defining the HLS Config File",
+      "Adding Pragmas and Directives",
+      "Conditional Control of Pragmas"
+    ],
+    "page": 367,
+    "top": 345.53316,
+    "section_id": "ug1399-2026.1-en-s0221"
+  },
+  {
+    "title": "Using Directives in Scripts vs. Pragmas in Code",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Defining the HLS Config File",
+      "Adding Pragmas and Directives",
+      "Using Directives in Scripts vs. Pragmas in Code"
+    ],
+    "page": 368,
+    "top": 559.49997,
+    "section_id": "ug1399-2026.1-en-s0222"
+  },
+  {
+    "title": "Applying Directives to the Proper Scope",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Defining the HLS Config File",
+      "Adding Pragmas and Directives",
+      "Applying Directives to the Proper Scope"
+    ],
+    "page": 369,
+    "top": 480.28274,
+    "section_id": "ug1399-2026.1-en-s0223"
+  },
+  {
+    "title": "Applying Optimization Directives to Global Variables",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Defining the HLS Config File",
+      "Adding Pragmas and Directives",
+      "Applying Directives to the Proper Scope",
+      "Applying Optimization Directives to Global Variables"
+    ],
+    "page": 370,
+    "top": 182.59619999999995,
+    "section_id": "ug1399-2026.1-en-s0224"
+  },
+  {
+    "title": "Applying Optimization Directives to Class Objects",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Defining the HLS Config File",
+      "Adding Pragmas and Directives",
+      "Applying Directives to the Proper Scope",
+      "Applying Optimization Directives to Class Objects"
+    ],
+    "page": 370,
+    "top": 373.49233,
+    "section_id": "ug1399-2026.1-en-s0225"
+  },
+  {
+    "title": "Applying Optimization Directives to Templates",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Defining the HLS Config File",
+      "Adding Pragmas and Directives",
+      "Applying Directives to the Proper Scope",
+      "Applying Optimization Directives to Templates"
+    ],
+    "page": 371,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0226"
+  },
+  {
+    "title": "Using Constants with Pragmas",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Defining the HLS Config File",
+      "Adding Pragmas and Directives",
+      "Applying Directives to the Proper Scope",
+      "Using Constants with Pragmas"
+    ],
+    "page": 371,
+    "top": 246.60000000000002,
+    "section_id": "ug1399-2026.1-en-s0227"
+  },
+  {
+    "title": "Failure to Satisfy Optimization Directives",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Defining the HLS Config File",
+      "Adding Pragmas and Directives",
+      "Failure to Satisfy Optimization Directives"
+    ],
+    "page": 371,
+    "top": 559.79608,
+    "section_id": "ug1399-2026.1-en-s0228"
+  },
+  {
+    "title": "Running C Simulation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C Simulation"
+    ],
+    "page": 372,
+    "top": 508.2961,
+    "section_id": "ug1399-2026.1-en-s0229"
+  },
+  {
+    "title": "Writing a Test Bench",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C Simulation",
+      "Writing a Test Bench"
+    ],
+    "page": 376,
+    "top": 211.20000000000005,
+    "section_id": "ug1399-2026.1-en-s0230"
+  },
+  {
+    "title": "Example Test Bench",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C Simulation",
+      "Writing a Test Bench",
+      "Example Test Bench"
+    ],
+    "page": 377,
+    "top": 557.6576,
+    "section_id": "ug1399-2026.1-en-s0231"
+  },
+  {
+    "title": "Design Files and Test Bench Files",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C Simulation",
+      "Writing a Test Bench",
+      "Example Test Bench",
+      "Design Files and Test Bench Files"
+    ],
+    "page": 380,
+    "top": 326.0,
+    "section_id": "ug1399-2026.1-en-s0232"
+  },
+  {
+    "title": "Single File Test Bench and Design",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C Simulation",
+      "Writing a Test Bench",
+      "Example Test Bench",
+      "Single File Test Bench and Design"
+    ],
+    "page": 381,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0233"
+  },
+  {
+    "title": "Sanitizers During C Simulation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C Simulation",
+      "Sanitizers During C Simulation"
+    ],
+    "page": 383,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0234"
+  },
+  {
+    "title": "Output of C Simulation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C Simulation",
+      "Output of C Simulation"
+    ],
+    "page": 384,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0235"
+  },
+  {
+    "title": "Debugging the HLS Component",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C Simulation",
+      "Debugging the HLS Component"
+    ],
+    "page": 384,
+    "top": 369.78206,
+    "section_id": "ug1399-2026.1-en-s0236"
+  },
+  {
+    "title": "Running C Synthesis",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C Synthesis"
+    ],
+    "page": 386,
+    "top": 385.5,
+    "section_id": "ug1399-2026.1-en-s0237"
+  },
+  {
+    "title": "Improving Synthesis Runtime and Capacity",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C Synthesis",
+      "Improving Synthesis Runtime and Capacity"
+    ],
+    "page": 391,
+    "top": 588.88687,
+    "section_id": "ug1399-2026.1-en-s0238"
+  },
+  {
+    "title": "Output of C Synthesis",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C Synthesis",
+      "Output of C Synthesis"
+    ],
+    "page": 392,
+    "top": 457.3998,
+    "section_id": "ug1399-2026.1-en-s0239"
+  },
+  {
+    "title": "Synthesis Summary",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C Synthesis",
+      "Synthesis Summary"
+    ],
+    "page": 393,
+    "top": 213.43461000000002,
+    "section_id": "ug1399-2026.1-en-s0240"
+  },
+  {
+    "title": "Function Call Graph",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C Synthesis",
+      "Function Call Graph"
+    ],
+    "page": 400,
+    "top": 400.2922,
+    "section_id": "ug1399-2026.1-en-s0241"
+  },
+  {
+    "title": "Schedule Viewer",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C Synthesis",
+      "Schedule Viewer"
+    ],
+    "page": 402,
+    "top": 560.082,
+    "section_id": "ug1399-2026.1-en-s0242"
+  },
+  {
+    "title": "Dataflow Viewer",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C Synthesis",
+      "Dataflow Viewer"
+    ],
+    "page": 406,
+    "top": 611.84131,
+    "section_id": "ug1399-2026.1-en-s0243"
+  },
+  {
+    "title": "Running C/RTL Co-Simulation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C/RTL Co-Simulation"
+    ],
+    "page": 408,
+    "top": 590.6442,
+    "section_id": "ug1399-2026.1-en-s0244"
+  },
+  {
+    "title": "Output of C/RTL Co-Simulation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C/RTL Co-Simulation",
+      "Output of C/RTL Co-Simulation"
+    ],
+    "page": 411,
+    "top": 294.5962,
+    "section_id": "ug1399-2026.1-en-s0245"
+  },
+  {
+    "title": "Automatically Verifying the RTL",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C/RTL Co-Simulation",
+      "Automatically Verifying the RTL"
+    ],
+    "page": 412,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0246"
+  },
+  {
+    "title": "Co-simulation Requirements for Interface Synthesis",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C/RTL Co-Simulation",
+      "Automatically Verifying the RTL",
+      "Co-simulation Requirements for Interface Synthesis"
+    ],
+    "page": 413,
+    "top": 452.59246,
+    "section_id": "ug1399-2026.1-en-s0247"
+  },
+  {
+    "title": "Verification of DATAFLOW and DEPENDENCE",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C/RTL Co-Simulation",
+      "Automatically Verifying the RTL",
+      "Verification of DATAFLOW and DEPENDENCE"
+    ],
+    "page": 414,
+    "top": 280.73845,
+    "section_id": "ug1399-2026.1-en-s0248"
+  },
+  {
+    "title": "Unsupported Optimizations for Co-Simulation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C/RTL Co-Simulation",
+      "Automatically Verifying the RTL",
+      "Unsupported Optimizations for Co-Simulation"
+    ],
+    "page": 415,
+    "top": 259.66922,
+    "section_id": "ug1399-2026.1-en-s0249"
+  },
+  {
+    "title": "Simulating IP Cores",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C/RTL Co-Simulation",
+      "Automatically Verifying the RTL",
+      "Simulating IP Cores"
+    ],
+    "page": 415,
+    "top": 604.88824,
+    "section_id": "ug1399-2026.1-en-s0250"
+  },
+  {
+    "title": "Analyzing RTL Simulations",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C/RTL Co-Simulation",
+      "Analyzing RTL Simulations"
+    ],
+    "page": 416,
+    "top": 270.69230000000005,
+    "section_id": "ug1399-2026.1-en-s0251"
+  },
+  {
+    "title": "Viewing Simulation Waveforms",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C/RTL Co-Simulation",
+      "Viewing Simulation Waveforms"
+    ],
+    "page": 416,
+    "top": 573.4768300000001,
+    "section_id": "ug1399-2026.1-en-s0252"
+  },
+  {
+    "title": "Cosim Deadlock Detection",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C/RTL Co-Simulation",
+      "Cosim Deadlock Detection"
+    ],
+    "page": 418,
+    "top": 439.9873,
+    "section_id": "ug1399-2026.1-en-s0253"
+  },
+  {
+    "title": "Timeline Trace Viewer",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C/RTL Co-Simulation",
+      "Timeline Trace Viewer"
+    ],
+    "page": 420,
+    "top": 382.6,
+    "section_id": "ug1399-2026.1-en-s0254"
+  },
+  {
+    "title": "Troubleshooting C/RTL Co-Simulation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C/RTL Co-Simulation",
+      "Troubleshooting C/RTL Co-Simulation"
+    ],
+    "page": 422,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0255"
+  },
+  {
+    "title": "Setting Up the Environment",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C/RTL Co-Simulation",
+      "Troubleshooting C/RTL Co-Simulation",
+      "Setting Up the Environment"
+    ],
+    "page": 422,
+    "top": 336.1,
+    "section_id": "ug1399-2026.1-en-s0256"
+  },
+  {
+    "title": "Optimization Directives",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C/RTL Co-Simulation",
+      "Troubleshooting C/RTL Co-Simulation",
+      "Optimization Directives"
+    ],
+    "page": 422,
+    "top": 578.8617,
+    "section_id": "ug1399-2026.1-en-s0257"
+  },
+  {
+    "title": "C Test Bench and C Source Code",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running C/RTL Co-Simulation",
+      "Troubleshooting C/RTL Co-Simulation",
+      "C Test Bench and C Source Code"
+    ],
+    "page": 423,
+    "top": 442.9828,
+    "section_id": "ug1399-2026.1-en-s0258"
+  },
+  {
+    "title": "Packaging the RTL Design",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Packaging the RTL Design"
+    ],
+    "page": 424,
+    "top": 610.74054,
+    "section_id": "ug1399-2026.1-en-s0259"
+  },
+  {
+    "title": "Output of RTL Export",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Packaging the RTL Design",
+      "Output of RTL Export"
+    ],
+    "page": 427,
+    "top": 658.55407,
+    "section_id": "ug1399-2026.1-en-s0260"
+  },
+  {
+    "title": "Running Implementation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running Implementation"
+    ],
+    "page": 428,
+    "top": 544.2655,
+    "section_id": "ug1399-2026.1-en-s0261"
+  },
+  {
+    "title": "Implementation Report",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Running Implementation",
+      "Implementation Report"
+    ],
+    "page": 431,
+    "top": 123.52800000000002,
+    "section_id": "ug1399-2026.1-en-s0262"
+  },
+  {
+    "title": "Optimizing the HLS Project",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Optimizing the HLS Project"
+    ],
+    "page": 433,
+    "top": 401.65725,
+    "section_id": "ug1399-2026.1-en-s0263"
+  },
+  {
+    "title": "Cloning HLS Components",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Optimizing the HLS Project",
+      "Cloning HLS Components"
+    ],
+    "page": 433,
+    "top": 616.85718,
+    "section_id": "ug1399-2026.1-en-s0264"
+  },
+  {
+    "title": "Component Comparison Feature",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "Component Comparison Feature"
+    ],
+    "page": 434,
+    "top": 416.37331,
+    "section_id": "ug1399-2026.1-en-s0265"
+  },
+  {
+    "title": "L1 Library Wizard Flow",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 13: Building and Running an HLS Component",
+      "L1 Library Wizard Flow"
+    ],
+    "page": 435,
+    "top": 267.1,
+    "section_id": "ug1399-2026.1-en-s0266"
+  },
+  {
+    "title": "Ch. 14: Creating HLS Components from the Command Line",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. III: Vitis HLS Flow Steps",
+      "Ch. 14: Creating HLS Components from the Command Line"
+    ],
+    "page": 439,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0267"
+  },
+  {
+    "title": "Sec. IV: Vitis HLS Command Reference",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference"
+    ],
+    "page": 443,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0268"
+  },
+  {
+    "title": "Ch. 15: vitis, v++, and vitis-run Commands",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 15: vitis, v++, and vitis-run Commands"
+    ],
+    "page": 444,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0269"
+  },
+  {
+    "title": "hls_init.tcl",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 15: vitis, v++, and vitis-run Commands",
+      "hls_init.tcl"
+    ],
+    "page": 446,
+    "top": 364.0,
+    "section_id": "ug1399-2026.1-en-s0270"
+  },
+  {
+    "title": "Ch. 16: HLS Config File Commands",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands"
+    ],
+    "page": 447,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0271"
+  },
+  {
+    "title": "HLS General Options",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS General Options"
+    ],
+    "page": 448,
+    "top": 134.20000000000005,
+    "section_id": "ug1399-2026.1-en-s0272"
+  },
+  {
+    "title": "Array Partition Configuration",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "Array Partition Configuration"
+    ],
+    "page": 450,
+    "top": 630.31128,
+    "section_id": "ug1399-2026.1-en-s0273"
+  },
+  {
+    "title": "C-Simulation Configuration",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "C-Simulation Configuration"
+    ],
+    "page": 451,
+    "top": 330.8462,
+    "section_id": "ug1399-2026.1-en-s0274"
+  },
+  {
+    "title": "Co-Simulation Configuration",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "Co-Simulation Configuration"
+    ],
+    "page": 452,
+    "top": 425.2923,
+    "section_id": "ug1399-2026.1-en-s0275"
+  },
+  {
+    "title": "Compile Options",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "Compile Options"
+    ],
+    "page": 456,
+    "top": 340.0923,
+    "section_id": "ug1399-2026.1-en-s0276"
+  },
+  {
+    "title": "Dataflow Configuration",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "Dataflow Configuration"
+    ],
+    "page": 458,
+    "top": 579.79233,
+    "section_id": "ug1399-2026.1-en-s0277"
+  },
+  {
+    "title": "Debug Options",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "Debug Options"
+    ],
+    "page": 461,
+    "top": 204.79233,
+    "section_id": "ug1399-2026.1-en-s0278"
+  },
+  {
+    "title": "Interface Configuration",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "Interface Configuration"
+    ],
+    "page": 461,
+    "top": 526.4539,
+    "section_id": "ug1399-2026.1-en-s0279"
+  },
+  {
+    "title": "Package Options",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "Package Options"
+    ],
+    "page": 466,
+    "top": 541.35782,
+    "section_id": "ug1399-2026.1-en-s0280"
+  },
+  {
+    "title": "Operator Configuration",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "Operator Configuration"
+    ],
+    "page": 469,
+    "top": 175.60000000000002,
+    "section_id": "ug1399-2026.1-en-s0281"
+  },
+  {
+    "title": "RTL Configuration",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "RTL Configuration"
+    ],
+    "page": 471,
+    "top": 573.10571,
+    "section_id": "ug1399-2026.1-en-s0282"
+  },
+  {
+    "title": "Schedule Setting",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "Schedule Setting"
+    ],
+    "page": 475,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0283"
+  },
+  {
+    "title": "Storage Configuration",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "Storage Configuration"
+    ],
+    "page": 475,
+    "top": 272.59619999999995,
+    "section_id": "ug1399-2026.1-en-s0284"
+  },
+  {
+    "title": "Implementation Configuration",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "Implementation Configuration"
+    ],
+    "page": 476,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0285"
+  },
+  {
+    "title": "Unroll Setting",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "Unroll Setting"
+    ],
+    "page": 478,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0286"
+  },
+  {
+    "title": "HLS Optimization Directives",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives"
+    ],
+    "page": 478,
+    "top": 301.4923,
+    "section_id": "ug1399-2026.1-en-s0287"
+  },
+  {
+    "title": "syn.directive.aggregate",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.aggregate"
+    ],
+    "page": 479,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0288"
+  },
+  {
+    "title": "syn.directive.alias",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.alias"
+    ],
+    "page": 480,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0289"
+  },
+  {
+    "title": "syn.directive.allocation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.allocation"
+    ],
+    "page": 481,
+    "top": 392.98845,
+    "section_id": "ug1399-2026.1-en-s0290"
+  },
+  {
+    "title": "syn.directive.array_partition",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.array_partition"
+    ],
+    "page": 482,
+    "top": 504.6578,
+    "section_id": "ug1399-2026.1-en-s0291"
+  },
+  {
+    "title": "syn.directive.array_reshape",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.array_reshape"
+    ],
+    "page": 485,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0292"
+  },
+  {
+    "title": "syn.directive.bind_op",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.bind_op"
+    ],
+    "page": 487,
+    "top": 330.20003,
+    "section_id": "ug1399-2026.1-en-s0293"
+  },
+  {
+    "title": "syn.directive.bind_storage",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.bind_storage"
+    ],
+    "page": 491,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0294"
+  },
+  {
+    "title": "syn.directive.cache",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.cache"
+    ],
+    "page": 495,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0295"
+  },
+  {
+    "title": "syn.directive.dataflow",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.dataflow"
+    ],
+    "page": 497,
+    "top": 544.59234,
+    "section_id": "ug1399-2026.1-en-s0296"
+  },
+  {
+    "title": "syn.directive.dependence",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.dependence"
+    ],
+    "page": 499,
+    "top": 134.39999999999998,
+    "section_id": "ug1399-2026.1-en-s0297"
+  },
+  {
+    "title": "syn.directive.disaggregate",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.disaggregate"
+    ],
+    "page": 501,
+    "top": 234.49613,
+    "section_id": "ug1399-2026.1-en-s0298"
+  },
+  {
+    "title": "syn.directive.expression_balance",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.expression_balance"
+    ],
+    "page": 503,
+    "top": 334.89232,
+    "section_id": "ug1399-2026.1-en-s0299"
+  },
+  {
+    "title": "syn.directive.function_instantiate",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.function_instantiate"
+    ],
+    "page": 504,
+    "top": 291.0808,
+    "section_id": "ug1399-2026.1-en-s0300"
+  },
+  {
+    "title": "syn.directive.inline",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.inline"
+    ],
+    "page": 505,
+    "top": 478.98086,
+    "section_id": "ug1399-2026.1-en-s0301"
+  },
+  {
+    "title": "syn.directive.interface",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.interface"
+    ],
+    "page": 506,
+    "top": 520.87313,
+    "section_id": "ug1399-2026.1-en-s0302"
+  },
+  {
+    "title": "syn.directive.latency",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.latency"
+    ],
+    "page": 512,
+    "top": 312.19237,
+    "section_id": "ug1399-2026.1-en-s0303"
+  },
+  {
+    "title": "syn.directive.loop_flatten",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.loop_flatten"
+    ],
+    "page": 513,
+    "top": 551.2770399999999,
+    "section_id": "ug1399-2026.1-en-s0304"
+  },
+  {
+    "title": "syn.directive.loop_merge",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.loop_merge"
+    ],
+    "page": 515,
+    "top": 333.2577,
+    "section_id": "ug1399-2026.1-en-s0305"
+  },
+  {
+    "title": "syn.directive.loop_tripcount",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.loop_tripcount"
+    ],
+    "page": 516,
+    "top": 440.88463,
+    "section_id": "ug1399-2026.1-en-s0306"
+  },
+  {
+    "title": "syn.directive.occurrence",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.occurrence"
+    ],
+    "page": 518,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0307"
+  },
+  {
+    "title": "syn.directive.performance",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.performance"
+    ],
+    "page": 519,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0308"
+  },
+  {
+    "title": "syn.directive.pipeline",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.pipeline"
+    ],
+    "page": 520,
+    "top": 548.68084,
+    "section_id": "ug1399-2026.1-en-s0309"
+  },
+  {
+    "title": "syn.directive.protocol",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.protocol"
+    ],
+    "page": 522,
+    "top": 413.65777,
+    "section_id": "ug1399-2026.1-en-s0310"
+  },
+  {
+    "title": "syn.directive.reset",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.reset"
+    ],
+    "page": 523,
+    "top": 404.48086,
+    "section_id": "ug1399-2026.1-en-s0311"
+  },
+  {
+    "title": "syn.directive.stable",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.stable"
+    ],
+    "page": 525,
+    "top": 422.99614,
+    "section_id": "ug1399-2026.1-en-s0312"
+  },
+  {
+    "title": "syn.directive.stream",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.stream"
+    ],
+    "page": 526,
+    "top": 371.08852,
+    "section_id": "ug1399-2026.1-en-s0313"
+  },
+  {
+    "title": "syn.directive.top",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.top"
+    ],
+    "page": 528,
+    "top": 294.70003,
+    "section_id": "ug1399-2026.1-en-s0314"
+  },
+  {
+    "title": "syn.directive.unroll",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 16: HLS Config File Commands",
+      "HLS Optimization Directives",
+      "syn.directive.unroll"
+    ],
+    "page": 529,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0315"
+  },
+  {
+    "title": "Ch. 17: HLS Pragmas and Directives",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives"
+    ],
+    "page": 531,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0316"
+  },
+  {
+    "title": "Aggregate",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Aggregate"
+    ],
+    "page": 532,
+    "top": 328.827,
+    "section_id": "ug1399-2026.1-en-s0317"
+  },
+  {
+    "title": "Alias",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Alias"
+    ],
+    "page": 534,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0318"
+  },
+  {
+    "title": "Allocation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Allocation"
+    ],
+    "page": 535,
+    "top": 536.8500300000001,
+    "section_id": "ug1399-2026.1-en-s0319"
+  },
+  {
+    "title": "Array_partition",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Array_partition"
+    ],
+    "page": 537,
+    "top": 625.3500300000001,
+    "section_id": "ug1399-2026.1-en-s0320"
+  },
+  {
+    "title": "Array_reshape",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Array_reshape"
+    ],
+    "page": 540,
+    "top": 380.40004,
+    "section_id": "ug1399-2026.1-en-s0321"
+  },
+  {
+    "title": "Array_stencil",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Array_stencil"
+    ],
+    "page": 543,
+    "top": 572.12033,
+    "section_id": "ug1399-2026.1-en-s0322"
+  },
+  {
+    "title": "Bind_op",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Bind_op"
+    ],
+    "page": 544,
+    "top": 572.92502,
+    "section_id": "ug1399-2026.1-en-s0323"
+  },
+  {
+    "title": "Bind_storage",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Bind_storage"
+    ],
+    "page": 548,
+    "top": 366.22417,
+    "section_id": "ug1399-2026.1-en-s0324"
+  },
+  {
+    "title": "Cache",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Cache"
+    ],
+    "page": 553,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0325"
+  },
+  {
+    "title": "Dataflow",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Dataflow"
+    ],
+    "page": 556,
+    "top": 397.40004,
+    "section_id": "ug1399-2026.1-en-s0326"
+  },
+  {
+    "title": "Dependence",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Dependence"
+    ],
+    "page": 559,
+    "top": 197.79999999999995,
+    "section_id": "ug1399-2026.1-en-s0327"
+  },
+  {
+    "title": "Disaggregate",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Disaggregate"
+    ],
+    "page": 562,
+    "top": 437.69237,
+    "section_id": "ug1399-2026.1-en-s0328"
+  },
+  {
+    "title": "Expression_balance",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Expression_balance"
+    ],
+    "page": 564,
+    "top": 430.7962,
+    "section_id": "ug1399-2026.1-en-s0329"
+  },
+  {
+    "title": "Function_instantiate",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Function_instantiate"
+    ],
+    "page": 565,
+    "top": 571.90973,
+    "section_id": "ug1399-2026.1-en-s0330"
+  },
+  {
+    "title": "Inline",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Inline"
+    ],
+    "page": 567,
+    "top": 470.38854,
+    "section_id": "ug1399-2026.1-en-s0331"
+  },
+  {
+    "title": "Interface",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Interface"
+    ],
+    "page": 570,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0332"
+  },
+  {
+    "title": "Latency",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Latency"
+    ],
+    "page": 576,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0333"
+  },
+  {
+    "title": "Loop_flatten",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Loop_flatten"
+    ],
+    "page": 578,
+    "top": 300.2,
+    "section_id": "ug1399-2026.1-en-s0334"
+  },
+  {
+    "title": "Loop_merge",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Loop_merge"
+    ],
+    "page": 582,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0335"
+  },
+  {
+    "title": "Loop_tripcount",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Loop_tripcount"
+    ],
+    "page": 583,
+    "top": 452.9075,
+    "section_id": "ug1399-2026.1-en-s0336"
+  },
+  {
+    "title": "Occurrence",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Occurrence"
+    ],
+    "page": 585,
+    "top": 330.4962,
+    "section_id": "ug1399-2026.1-en-s0337"
+  },
+  {
+    "title": "Performance",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Performance"
+    ],
+    "page": 587,
+    "top": 177.60000000000002,
+    "section_id": "ug1399-2026.1-en-s0338"
+  },
+  {
+    "title": "Pipeline",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Pipeline"
+    ],
+    "page": 589,
+    "top": 446.7962,
+    "section_id": "ug1399-2026.1-en-s0339"
+  },
+  {
+    "title": "Protocol",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Protocol"
+    ],
+    "page": 592,
+    "top": 306.5962,
+    "section_id": "ug1399-2026.1-en-s0340"
+  },
+  {
+    "title": "Reset",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Reset"
+    ],
+    "page": 593,
+    "top": 450.5885,
+    "section_id": "ug1399-2026.1-en-s0341"
+  },
+  {
+    "title": "Stable",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Stable"
+    ],
+    "page": 596,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0342"
+  },
+  {
+    "title": "Stream",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Stream"
+    ],
+    "page": 597,
+    "top": 325.29235,
+    "section_id": "ug1399-2026.1-en-s0343"
+  },
+  {
+    "title": "Top",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Top"
+    ],
+    "page": 599,
+    "top": 375.5924,
+    "section_id": "ug1399-2026.1-en-s0344"
+  },
+  {
+    "title": "Unroll",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Unroll"
+    ],
+    "page": 600,
+    "top": 371.38466,
+    "section_id": "ug1399-2026.1-en-s0345"
+  },
+  {
+    "title": "Resource",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Resource"
+    ],
+    "page": 603,
+    "top": 154.39999999999998,
+    "section_id": "ug1399-2026.1-en-s0346"
+  },
+  {
+    "title": "Shared",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 17: HLS Pragmas and Directives",
+      "Shared"
+    ],
+    "page": 603,
+    "top": 432.72497,
+    "section_id": "ug1399-2026.1-en-s0347"
+  },
+  {
+    "title": "Ch. 18: HLS Tcl Commands",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands"
+    ],
+    "page": 604,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0348"
+  },
+  {
+    "title": "Project Commands",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Project Commands"
+    ],
+    "page": 604,
+    "top": 219.39999999999998,
+    "section_id": "ug1399-2026.1-en-s0349"
+  },
+  {
+    "title": "Configuration Commands",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands"
+    ],
+    "page": 626,
+    "top": 520.65795,
+    "section_id": "ug1399-2026.1-en-s0350"
+  },
+  {
+    "title": "HLS General Options",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "HLS General Options"
+    ],
+    "page": 627,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0351"
+  },
+  {
+    "title": "C-Synthesis Sources",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "C-Synthesis Sources"
+    ],
+    "page": 627,
+    "top": 550.8212,
+    "section_id": "ug1399-2026.1-en-s0352"
+  },
+  {
+    "title": "Test Bench Sources",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "Test Bench Sources"
+    ],
+    "page": 628,
+    "top": 460.02501,
+    "section_id": "ug1399-2026.1-en-s0353"
+  },
+  {
+    "title": "Array Partition",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "Array Partition"
+    ],
+    "page": 629,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0354"
+  },
+  {
+    "title": "Array Stencil",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "Array Stencil"
+    ],
+    "page": 629,
+    "top": 543.025,
+    "section_id": "ug1399-2026.1-en-s0355"
+  },
+  {
+    "title": "Compile",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "Compile"
+    ],
+    "page": 630,
+    "top": 342.02501,
+    "section_id": "ug1399-2026.1-en-s0356"
+  },
+  {
+    "title": "C Simulation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "C Simulation"
+    ],
+    "page": 634,
+    "top": 188.60000000000002,
+    "section_id": "ug1399-2026.1-en-s0357"
+  },
+  {
+    "title": "Co-simulation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "Co-simulation"
+    ],
+    "page": 635,
+    "top": 476.825,
+    "section_id": "ug1399-2026.1-en-s0358"
+  },
+  {
+    "title": "Dataflow",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "Dataflow"
+    ],
+    "page": 638,
+    "top": 267.20000000000005,
+    "section_id": "ug1399-2026.1-en-s0359"
+  },
+  {
+    "title": "Debug",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "Debug"
+    ],
+    "page": 640,
+    "top": 351.40001,
+    "section_id": "ug1399-2026.1-en-s0360"
+  },
+  {
+    "title": "Interface",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "Interface"
+    ],
+    "page": 641,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0361"
+  },
+  {
+    "title": "Package/Export",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "Package/Export"
+    ],
+    "page": 644,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0362"
+  },
+  {
+    "title": "Op Binding",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "Op Binding"
+    ],
+    "page": 646,
+    "top": 271.0,
+    "section_id": "ug1399-2026.1-en-s0363"
+  },
+  {
+    "title": "RTL",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "RTL"
+    ],
+    "page": 648,
+    "top": 405.6,
+    "section_id": "ug1399-2026.1-en-s0364"
+  },
+  {
+    "title": "Schedule",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "Schedule"
+    ],
+    "page": 651,
+    "top": 265.20000000000005,
+    "section_id": "ug1399-2026.1-en-s0365"
+  },
+  {
+    "title": "Storage Binding",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "Storage Binding"
+    ],
+    "page": 652,
+    "top": 157.20000000000005,
+    "section_id": "ug1399-2026.1-en-s0366"
+  },
+  {
+    "title": "Unroll",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. IV: Vitis HLS Command Reference",
+      "Ch. 18: HLS Tcl Commands",
+      "Configuration Commands",
+      "Unroll"
+    ],
+    "page": 653,
+    "top": 547.7250300000001,
+    "section_id": "ug1399-2026.1-en-s0367"
+  },
+  {
+    "title": "Sec. V: Vitis HLS C Driver Reference",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference"
+    ],
+    "page": 655,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0368"
+  },
+  {
+    "title": "Ch. 19: AXI4-Lite Slave C Driver Reference",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference"
+    ],
+    "page": 656,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0369"
+  },
+  {
+    "title": "X<DUT>_Initialize",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Initialize"
+    ],
+    "page": 656,
+    "top": 219.39999999999998,
+    "section_id": "ug1399-2026.1-en-s0370"
+  },
+  {
+    "title": "X<DUT>_CfgInitialize",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_CfgInitialize"
+    ],
+    "page": 657,
+    "top": 234.28463999999997,
+    "section_id": "ug1399-2026.1-en-s0371"
+  },
+  {
+    "title": "X<DUT>_LookupConfig",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_LookupConfig"
+    ],
+    "page": 657,
+    "top": 544.86938,
+    "section_id": "ug1399-2026.1-en-s0372"
+  },
+  {
+    "title": "X<DUT>_Release",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Release"
+    ],
+    "page": 658,
+    "top": 350.19234,
+    "section_id": "ug1399-2026.1-en-s0373"
+  },
+  {
+    "title": "X<DUT>_Start",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Start"
+    ],
+    "page": 658,
+    "top": 612.9809,
+    "section_id": "ug1399-2026.1-en-s0374"
+  },
+  {
+    "title": "X<DUT>_IsDone",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_IsDone"
+    ],
+    "page": 659,
+    "top": 196.88850000000002,
+    "section_id": "ug1399-2026.1-en-s0375"
+  },
+  {
+    "title": "X<DUT>_IsIdle",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_IsIdle"
+    ],
+    "page": 659,
+    "top": 406.88085,
+    "section_id": "ug1399-2026.1-en-s0376"
+  },
+  {
+    "title": "X<DUT>_IsReady",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_IsReady"
+    ],
+    "page": 659,
+    "top": 617.16943,
+    "section_id": "ug1399-2026.1-en-s0377"
+  },
+  {
+    "title": "X<DUT>_Continue",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Continue"
+    ],
+    "page": 660,
+    "top": 196.59231999999997,
+    "section_id": "ug1399-2026.1-en-s0378"
+  },
+  {
+    "title": "X<DUT>_EnableAutoRestart",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_EnableAutoRestart"
+    ],
+    "page": 660,
+    "top": 392.2847,
+    "section_id": "ug1399-2026.1-en-s0379"
+  },
+  {
+    "title": "X<DUT>_DisableAutoRestart",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_DisableAutoRestart"
+    ],
+    "page": 661,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0380"
+  },
+  {
+    "title": "X<DUT>_Set_ARG",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Set_ARG"
+    ],
+    "page": 661,
+    "top": 290.69231,
+    "section_id": "ug1399-2026.1-en-s0381"
+  },
+  {
+    "title": "X<DUT>_Set_ARG_vld",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Set_ARG_vld"
+    ],
+    "page": 661,
+    "top": 524.18084,
+    "section_id": "ug1399-2026.1-en-s0382"
+  },
+  {
+    "title": "X<DUT>_Set_ARG_ack",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Set_ARG_ack"
+    ],
+    "page": 662,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0383"
+  },
+  {
+    "title": "X<DUT>_Get_ARG",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Get_ARG"
+    ],
+    "page": 662,
+    "top": 305.28844,
+    "section_id": "ug1399-2026.1-en-s0384"
+  },
+  {
+    "title": "X<DUT>_Get_ARG_vld",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Get_ARG_vld"
+    ],
+    "page": 662,
+    "top": 553.77701,
+    "section_id": "ug1399-2026.1-en-s0385"
+  },
+  {
+    "title": "X<DUT>_Get_ARG_ack",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Get_ARG_ack"
+    ],
+    "page": 663,
+    "top": 187.29233,
+    "section_id": "ug1399-2026.1-en-s0386"
+  },
+  {
+    "title": "X<DUT>_Get_ARG_BaseAddress",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Get_ARG_BaseAddress"
+    ],
+    "page": 663,
+    "top": 450.377,
+    "section_id": "ug1399-2026.1-en-s0387"
+  },
+  {
+    "title": "X<DUT>_Get_ARG_HighAddress",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Get_ARG_HighAddress"
+    ],
+    "page": 664,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0388"
+  },
+  {
+    "title": "X<DUT>_Get_ARG_TotalBytes",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Get_ARG_TotalBytes"
+    ],
+    "page": 664,
+    "top": 357.4923,
+    "section_id": "ug1399-2026.1-en-s0389"
+  },
+  {
+    "title": "X<DUT>_Get_ARG_BitWidth",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Get_ARG_BitWidth"
+    ],
+    "page": 665,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0390"
+  },
+  {
+    "title": "X<DUT>_Get_ARG_Depth",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Get_ARG_Depth"
+    ],
+    "page": 665,
+    "top": 410.39223,
+    "section_id": "ug1399-2026.1-en-s0391"
+  },
+  {
+    "title": "X<DUT>_Write_ARG_Words",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Write_ARG_Words"
+    ],
+    "page": 666,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0392"
+  },
+  {
+    "title": "X<DUT>_Read_ARG_Words",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Read_ARG_Words"
+    ],
+    "page": 666,
+    "top": 452.577,
+    "section_id": "ug1399-2026.1-en-s0393"
+  },
+  {
+    "title": "X<DUT>_Write_ARG_Bytes",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Write_ARG_Bytes"
+    ],
+    "page": 667,
+    "top": 158.5,
+    "section_id": "ug1399-2026.1-en-s0394"
+  },
+  {
+    "title": "X<DUT>_Read_ARG_Bytes",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_Read_ARG_Bytes"
+    ],
+    "page": 667,
+    "top": 515.78087,
+    "section_id": "ug1399-2026.1-en-s0395"
+  },
+  {
+    "title": "X<DUT>_InterruptGlobalEnable",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_InterruptGlobalEnable"
+    ],
+    "page": 668,
+    "top": 233.98850000000004,
+    "section_id": "ug1399-2026.1-en-s0396"
+  },
+  {
+    "title": "X<DUT>_InterruptGlobalDisable",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_InterruptGlobalDisable"
+    ],
+    "page": 668,
+    "top": 429.68087,
+    "section_id": "ug1399-2026.1-en-s0397"
+  },
+  {
+    "title": "X<DUT>_InterruptEnable",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_InterruptEnable"
+    ],
+    "page": 668,
+    "top": 625.07708,
+    "section_id": "ug1399-2026.1-en-s0398"
+  },
+  {
+    "title": "X<DUT>_InterruptDisable",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_InterruptDisable"
+    ],
+    "page": 669,
+    "top": 263.78463999999997,
+    "section_id": "ug1399-2026.1-en-s0399"
+  },
+  {
+    "title": "X<DUT>_InterruptClear",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_InterruptClear"
+    ],
+    "page": 669,
+    "top": 526.0771,
+    "section_id": "ug1399-2026.1-en-s0400"
+  },
+  {
+    "title": "X<DUT>_InterruptGetEnabled",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_InterruptGetEnabled"
+    ],
+    "page": 670,
+    "top": 154.39999999999998,
+    "section_id": "ug1399-2026.1-en-s0401"
+  },
+  {
+    "title": "X<DUT>_InterruptGetStatus",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. V: Vitis HLS C Driver Reference",
+      "Ch. 19: AXI4-Lite Slave C Driver Reference",
+      "X<DUT>_InterruptGetStatus"
+    ],
+    "page": 670,
+    "top": 445.69616,
+    "section_id": "ug1399-2026.1-en-s0402"
+  },
+  {
+    "title": "Sec. VI: Vitis HLS Libraries Reference",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference"
+    ],
+    "page": 671,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0403"
+  },
+  {
+    "title": "Ch. 20: C/C++ Builtin Functions",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 20: C/C++ Builtin Functions"
+    ],
+    "page": 672,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0404"
+  },
+  {
+    "title": "Ch. 21: Arbitrary Precision Data Types Library",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library"
+    ],
+    "page": 673,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0405"
+  },
+  {
+    "title": "Using Arbitrary Precision Data Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "Using Arbitrary Precision Data Types"
+    ],
+    "page": 673,
+    "top": 393.39992,
+    "section_id": "ug1399-2026.1-en-s0406"
+  },
+  {
+    "title": "Arbitrary Integer Precision Types with C++",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "Using Arbitrary Precision Data Types",
+      "Arbitrary Integer Precision Types with C++"
+    ],
+    "page": 674,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0407"
+  },
+  {
+    "title": "Arbitrary Precision Fixed-Point Data Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "Using Arbitrary Precision Data Types",
+      "Arbitrary Precision Fixed-Point Data Types"
+    ],
+    "page": 674,
+    "top": 378.6808,
+    "section_id": "ug1399-2026.1-en-s0408"
+  },
+  {
+    "title": "Fixed-Point Identifier Summary",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "Using Arbitrary Precision Data Types",
+      "Arbitrary Precision Fixed-Point Data Types",
+      "Fixed-Point Identifier Summary"
+    ],
+    "page": 675,
+    "top": 125.26919999999996,
+    "section_id": "ug1399-2026.1-en-s0409"
+  },
+  {
+    "title": "Example Using ap_fixed",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "Using Arbitrary Precision Data Types",
+      "Arbitrary Precision Fixed-Point Data Types",
+      "Example Using ap_fixed"
+    ],
+    "page": 676,
+    "top": 234.38279999999997,
+    "section_id": "ug1399-2026.1-en-s0410"
+  },
+  {
+    "title": "C++ Arbitrary Precision Integer Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Integer Types"
+    ],
+    "page": 676,
+    "top": 429.97887,
+    "section_id": "ug1399-2026.1-en-s0411"
+  },
+  {
+    "title": "C++ Arbitrary Precision Integer Types: Reference Information",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Integer Types",
+      "C++ Arbitrary Precision Integer Types: Reference Information"
+    ],
+    "page": 678,
+    "top": 582.38846,
+    "section_id": "ug1399-2026.1-en-s0412"
+  },
+  {
+    "title": "Compiling ap_[u]int<> Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Integer Types",
+      "C++ Arbitrary Precision Integer Types: Reference Information",
+      "Compiling ap_[u]int<> Types"
+    ],
+    "page": 679,
+    "top": 295.29622,
+    "section_id": "ug1399-2026.1-en-s0413"
+  },
+  {
+    "title": "Declaring/Defining ap_[u] Variables",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Integer Types",
+      "C++ Arbitrary Precision Integer Types: Reference Information",
+      "Declaring/Defining ap_[u] Variables"
+    ],
+    "page": 679,
+    "top": 420.78084,
+    "section_id": "ug1399-2026.1-en-s0414"
+  },
+  {
+    "title": "Initialization and Assignment from Constants (Literals)",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Integer Types",
+      "C++ Arbitrary Precision Integer Types: Reference Information",
+      "Initialization and Assignment from Constants (Literals)"
+    ],
+    "page": 680,
+    "top": 166.59619999999995,
+    "section_id": "ug1399-2026.1-en-s0415"
+  },
+  {
+    "title": "Support for Console I/O (Printing)",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Integer Types",
+      "C++ Arbitrary Precision Integer Types: Reference Information",
+      "Support for Console I/O (Printing)"
+    ],
+    "page": 681,
+    "top": 486.78457,
+    "section_id": "ug1399-2026.1-en-s0416"
+  },
+  {
+    "title": "Expressions Involving ap_[u]<> types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Integer Types",
+      "C++ Arbitrary Precision Integer Types: Reference Information",
+      "Expressions Involving ap_[u]<> types"
+    ],
+    "page": 683,
+    "top": 186.59619999999995,
+    "section_id": "ug1399-2026.1-en-s0417"
+  },
+  {
+    "title": "Class Methods and Operators",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Integer Types",
+      "C++ Arbitrary Precision Integer Types: Reference Information",
+      "Class Methods and Operators"
+    ],
+    "page": 684,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0418"
+  },
+  {
+    "title": "Other Class Methods, Operators, and Data Members",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Integer Types",
+      "C++ Arbitrary Precision Integer Types: Reference Information",
+      "Other Class Methods, Operators, and Data Members"
+    ],
+    "page": 691,
+    "top": 487.59621,
+    "section_id": "ug1399-2026.1-en-s0419"
+  },
+  {
+    "title": "C++ Arbitrary Precision Fixed-Point Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Fixed-Point Types"
+    ],
+    "page": 698,
+    "top": 422.37694,
+    "section_id": "ug1399-2026.1-en-s0420"
+  },
+  {
+    "title": "Fixed-Point Identifier Summary",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Fixed-Point Types",
+      "Fixed-Point Identifier Summary"
+    ],
+    "page": 701,
+    "top": 351.0,
+    "section_id": "ug1399-2026.1-en-s0421"
+  },
+  {
+    "title": "C++ Arbitrary Precision Fixed-Point Types: Reference Information",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Fixed-Point Types",
+      "C++ Arbitrary Precision Fixed-Point Types: Reference Information"
+    ],
+    "page": 702,
+    "top": 507.68285,
+    "section_id": "ug1399-2026.1-en-s0422"
+  },
+  {
+    "title": "ap_[u]fixed Representation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Fixed-Point Types",
+      "C++ Arbitrary Precision Fixed-Point Types: Reference Information",
+      "ap_[u]fixed Representation"
+    ],
+    "page": 703,
+    "top": 425.68841,
+    "section_id": "ug1399-2026.1-en-s0423"
+  },
+  {
+    "title": "Quantization Modes",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Fixed-Point Types",
+      "C++ Arbitrary Precision Fixed-Point Types: Reference Information",
+      "Quantization Modes"
+    ],
+    "page": 703,
+    "top": 644.58075,
+    "section_id": "ug1399-2026.1-en-s0424"
+  },
+  {
+    "title": "Overflow Modes",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Fixed-Point Types",
+      "C++ Arbitrary Precision Fixed-Point Types: Reference Information",
+      "Overflow Modes"
+    ],
+    "page": 705,
+    "top": 655.59619,
+    "section_id": "ug1399-2026.1-en-s0425"
+  },
+  {
+    "title": "Compiling ap_[u]fixed<> Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Fixed-Point Types",
+      "C++ Arbitrary Precision Fixed-Point Types: Reference Information",
+      "Compiling ap_[u]fixed<> Types"
+    ],
+    "page": 707,
+    "top": 642.40002,
+    "section_id": "ug1399-2026.1-en-s0426"
+  },
+  {
+    "title": "Declaring and Defining ap_[u]fixed<> Variables",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Fixed-Point Types",
+      "C++ Arbitrary Precision Fixed-Point Types: Reference Information",
+      "Declaring and Defining ap_[u]fixed<> Variables"
+    ],
+    "page": 708,
+    "top": 139.4923,
+    "section_id": "ug1399-2026.1-en-s0427"
+  },
+  {
+    "title": "Initialization and Assignment from Constants (Literals)",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Fixed-Point Types",
+      "C++ Arbitrary Precision Fixed-Point Types: Reference Information",
+      "Initialization and Assignment from Constants (Literals)"
+    ],
+    "page": 708,
+    "top": 331.18081,
+    "section_id": "ug1399-2026.1-en-s0428"
+  },
+  {
+    "title": "Support for Console I/O (Printing)",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Fixed-Point Types",
+      "C++ Arbitrary Precision Fixed-Point Types: Reference Information",
+      "Support for Console I/O (Printing)"
+    ],
+    "page": 709,
+    "top": 241.78842999999995,
+    "section_id": "ug1399-2026.1-en-s0429"
+  },
+  {
+    "title": "Expressions Involving ap_[u]fixed<> types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Fixed-Point Types",
+      "C++ Arbitrary Precision Fixed-Point Types: Reference Information",
+      "Expressions Involving ap_[u]fixed<> types"
+    ],
+    "page": 711,
+    "top": 338.28847,
+    "section_id": "ug1399-2026.1-en-s0430"
+  },
+  {
+    "title": "Class Methods, Operators, and Data Members",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 21: Arbitrary Precision Data Types Library",
+      "C++ Arbitrary Precision Fixed-Point Types",
+      "C++ Arbitrary Precision Fixed-Point Types: Reference Information",
+      "Class Methods, Operators, and Data Members"
+    ],
+    "page": 711,
+    "top": 577.18838,
+    "section_id": "ug1399-2026.1-en-s0431"
+  },
+  {
+    "title": "Ch. 22: HLS Print Function",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 22: HLS Print Function"
+    ],
+    "page": 726,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0432"
+  },
+  {
+    "title": "Ch. 23: HLS Math Library",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 23: HLS Math Library"
+    ],
+    "page": 728,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0433"
+  },
+  {
+    "title": "HLS Math Library Accuracy",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 23: HLS Math Library",
+      "HLS Math Library Accuracy"
+    ],
+    "page": 728,
+    "top": 357.59972,
+    "section_id": "ug1399-2026.1-en-s0434"
+  },
+  {
+    "title": "HLS Math Library",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 23: HLS Math Library",
+      "HLS Math Library"
+    ],
+    "page": 730,
+    "top": 145.53842999999995,
+    "section_id": "ug1399-2026.1-en-s0435"
+  },
+  {
+    "title": "Fixed-Point Math Functions",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 23: HLS Math Library",
+      "Fixed-Point Math Functions"
+    ],
+    "page": 732,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0436"
+  },
+  {
+    "title": "Verification and Math Functions",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 23: HLS Math Library",
+      "Verification and Math Functions"
+    ],
+    "page": 734,
+    "top": 235.89620000000002,
+    "section_id": "ug1399-2026.1-en-s0437"
+  },
+  {
+    "title": "Verification Option 1: Standard Math Library and Verify Differences",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 23: HLS Math Library",
+      "Verification and Math Functions",
+      "Verification Option 1: Standard Math Library and Verify Differences"
+    ],
+    "page": 734,
+    "top": 441.9846,
+    "section_id": "ug1399-2026.1-en-s0438"
+  },
+  {
+    "title": "Verification Option 2: HLS Math Library and Validate Differences",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 23: HLS Math Library",
+      "Verification and Math Functions",
+      "Verification Option 2: HLS Math Library and Validate Differences"
+    ],
+    "page": 737,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0439"
+  },
+  {
+    "title": "Verification Option 3: HLS Math Library File and Validate Differences",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 23: HLS Math Library",
+      "Verification and Math Functions",
+      "Verification Option 3: HLS Math Library File and Validate Differences"
+    ],
+    "page": 737,
+    "top": 420.98852,
+    "section_id": "ug1399-2026.1-en-s0440"
+  },
+  {
+    "title": "Common Synthesis Errors",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 23: HLS Math Library",
+      "Common Synthesis Errors"
+    ],
+    "page": 738,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0441"
+  },
+  {
+    "title": "Ch. 24: HLS Stream Library",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 24: HLS Stream Library"
+    ],
+    "page": 739,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0442"
+  },
+  {
+    "title": "C Modeling and RTL Implementation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 24: HLS Stream Library",
+      "C Modeling and RTL Implementation"
+    ],
+    "page": 740,
+    "top": 249.53842999999995,
+    "section_id": "ug1399-2026.1-en-s0443"
+  },
+  {
+    "title": "Using HLS Streams",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 24: HLS Stream Library",
+      "Using HLS Streams"
+    ],
+    "page": 741,
+    "top": 360.88845,
+    "section_id": "ug1399-2026.1-en-s0444"
+  },
+  {
+    "title": "Blocking API",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 24: HLS Stream Library",
+      "Using HLS Streams",
+      "Blocking API"
+    ],
+    "page": 743,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0445"
+  },
+  {
+    "title": "Blocking Write Methods",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 24: HLS Stream Library",
+      "Using HLS Streams",
+      "Blocking API",
+      "Blocking Write Methods"
+    ],
+    "page": 743,
+    "top": 265.76930000000004,
+    "section_id": "ug1399-2026.1-en-s0446"
+  },
+  {
+    "title": "Blocking Read Methods",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 24: HLS Stream Library",
+      "Using HLS Streams",
+      "Blocking API",
+      "Blocking Read Methods"
+    ],
+    "page": 743,
+    "top": 542.66153,
+    "section_id": "ug1399-2026.1-en-s0447"
+  },
+  {
+    "title": "Deterministic Behavior",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 24: HLS Stream Library",
+      "Using HLS Streams",
+      "Blocking API",
+      "Deterministic Behavior"
+    ],
+    "page": 744,
+    "top": 320.09231,
+    "section_id": "ug1399-2026.1-en-s0448"
+  },
+  {
+    "title": "Non-Blocking API",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 24: HLS Stream Library",
+      "Using HLS Streams",
+      "Non-Blocking API"
+    ],
+    "page": 745,
+    "top": 446.09997,
+    "section_id": "ug1399-2026.1-en-s0449"
+  },
+  {
+    "title": "Non-Blocking Write",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 24: HLS Stream Library",
+      "Using HLS Streams",
+      "Non-Blocking API",
+      "Non-Blocking Write"
+    ],
+    "page": 746,
+    "top": 137.53842999999995,
+    "section_id": "ug1399-2026.1-en-s0450"
+  },
+  {
+    "title": "Non-Blocking Read",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 24: HLS Stream Library",
+      "Using HLS Streams",
+      "Non-Blocking API",
+      "Non-Blocking Read"
+    ],
+    "page": 746,
+    "top": 474.4308,
+    "section_id": "ug1399-2026.1-en-s0451"
+  },
+  {
+    "title": "hls::stream.capacity() Method",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 24: HLS Stream Library",
+      "Using HLS Streams",
+      "Non-Blocking API",
+      "hls::stream.capacity() Method"
+    ],
+    "page": 747,
+    "top": 284.9,
+    "section_id": "ug1399-2026.1-en-s0452"
+  },
+  {
+    "title": "hls::stream.empty() Method",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 24: HLS Stream Library",
+      "Using HLS Streams",
+      "Non-Blocking API",
+      "hls::stream.empty() Method"
+    ],
+    "page": 747,
+    "top": 592.26144,
+    "section_id": "ug1399-2026.1-en-s0453"
+  },
+  {
+    "title": "hls::stream.full() Method",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 24: HLS Stream Library",
+      "Using HLS Streams",
+      "Non-Blocking API",
+      "hls::stream.full() Method"
+    ],
+    "page": 748,
+    "top": 440.6,
+    "section_id": "ug1399-2026.1-en-s0454"
+  },
+  {
+    "title": "hls::stream.size() Method",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 24: HLS Stream Library",
+      "Using HLS Streams",
+      "Non-Blocking API",
+      "hls::stream.size() Method"
+    ],
+    "page": 748,
+    "top": 578.29614,
+    "section_id": "ug1399-2026.1-en-s0455"
+  },
+  {
+    "title": "Controlling the RTL FIFO Depth",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 24: HLS Stream Library",
+      "Using HLS Streams",
+      "Controlling the RTL FIFO Depth"
+    ],
+    "page": 749,
+    "top": 476.2038,
+    "section_id": "ug1399-2026.1-en-s0456"
+  },
+  {
+    "title": "Ch. 25: HLS Direct I/O",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 25: HLS Direct I/O"
+    ],
+    "page": 751,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0457"
+  },
+  {
+    "title": "Using Direct I/O Streams",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 25: HLS Direct I/O",
+      "Using Direct I/O Streams"
+    ],
+    "page": 751,
+    "top": 572.38846,
+    "section_id": "ug1399-2026.1-en-s0458"
+  },
+  {
+    "title": "Mapping Direct I/O Streams to a Wire Interface",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 25: HLS Direct I/O",
+      "Mapping Direct I/O Streams to a Wire Interface"
+    ],
+    "page": 752,
+    "top": 428.78847,
+    "section_id": "ug1399-2026.1-en-s0459"
+  },
+  {
+    "title": "Mapping Direct I/O Streams to SAXI Lite Interface",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 25: HLS Direct I/O",
+      "Mapping Direct I/O Streams to SAXI Lite Interface"
+    ],
+    "page": 754,
+    "top": 284.0,
+    "section_id": "ug1399-2026.1-en-s0460"
+  },
+  {
+    "title": "Blocking/Non-Blocking API",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 25: HLS Direct I/O",
+      "Blocking/Non-Blocking API"
+    ],
+    "page": 755,
+    "top": 174.0,
+    "section_id": "ug1399-2026.1-en-s0461"
+  },
+  {
+    "title": "Ch. 26: HLS Fence Library",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 26: HLS Fence Library"
+    ],
+    "page": 758,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0462"
+  },
+  {
+    "title": "Ch. 27: HLS Vector Library",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 27: HLS Vector Library"
+    ],
+    "page": 761,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0463"
+  },
+  {
+    "title": "Ch. 28: HLS Task Library",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 28: HLS Task Library"
+    ],
+    "page": 764,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0464"
+  },
+  {
+    "title": "Support of Scalars/Memory Interfaces in DTLP",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 28: HLS Task Library",
+      "Support of Scalars/Memory Interfaces in DTLP"
+    ],
+    "page": 765,
+    "top": 573.62021,
+    "section_id": "ug1399-2026.1-en-s0465"
+  },
+  {
+    "title": "Tasks and Channels",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 28: HLS Task Library",
+      "Tasks and Channels"
+    ],
+    "page": 767,
+    "top": 317.49227,
+    "section_id": "ug1399-2026.1-en-s0466"
+  },
+  {
+    "title": "Tasks and Dataflow",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 28: HLS Task Library",
+      "Tasks and Dataflow"
+    ],
+    "page": 770,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0467"
+  },
+  {
+    "title": "Ch. 29: HLS Split/Merge Library",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 29: HLS Split/Merge Library"
+    ],
+    "page": 772,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0468"
+  },
+  {
+    "title": "Ch. 30: HLS Stream of Blocks Library",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 30: HLS Stream of Blocks Library"
+    ],
+    "page": 777,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0469"
+  },
+  {
+    "title": "Stream-of-Blocks Modeling Style",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 30: HLS Stream of Blocks Library",
+      "Stream-of-Blocks Modeling Style"
+    ],
+    "page": 778,
+    "top": 611.28454,
+    "section_id": "ug1399-2026.1-en-s0470"
+  },
+  {
+    "title": "Resource Usage",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 30: HLS Stream of Blocks Library",
+      "Stream-of-Blocks Modeling Style",
+      "Resource Usage"
+    ],
+    "page": 780,
+    "top": 632.39612,
+    "section_id": "ug1399-2026.1-en-s0471"
+  },
+  {
+    "title": "Checking for Full and Empty Blocks",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 30: HLS Stream of Blocks Library",
+      "Checking for Full and Empty Blocks"
+    ],
+    "page": 781,
+    "top": 174.4923,
+    "section_id": "ug1399-2026.1-en-s0472"
+  },
+  {
+    "title": "Modeling Feedback in Dataflow Regions",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 30: HLS Stream of Blocks Library",
+      "Modeling Feedback in Dataflow Regions"
+    ],
+    "page": 783,
+    "top": 201.755,
+    "section_id": "ug1399-2026.1-en-s0473"
+  },
+  {
+    "title": "Limitations",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 30: HLS Stream of Blocks Library",
+      "Limitations"
+    ],
+    "page": 784,
+    "top": 184.0,
+    "section_id": "ug1399-2026.1-en-s0474"
+  },
+  {
+    "title": "Ch. 31: HLS Array Partition Library",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 31: HLS Array Partition Library"
+    ],
+    "page": 786,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0475"
+  },
+  {
+    "title": "Ch. 32: HLS IP Libraries",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries"
+    ],
+    "page": 792,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0476"
+  },
+  {
+    "title": "DSP Intrinsics",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "DSP Intrinsics"
+    ],
+    "page": 792,
+    "top": 454.925,
+    "section_id": "ug1399-2026.1-en-s0477"
+  },
+  {
+    "title": "Using DSP Intrinsics",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "DSP Intrinsics",
+      "Using DSP Intrinsics"
+    ],
+    "page": 793,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0478"
+  },
+  {
+    "title": "Unsigned Inputs",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "DSP Intrinsics",
+      "Unsigned Inputs"
+    ],
+    "page": 794,
+    "top": 413.22493,
+    "section_id": "ug1399-2026.1-en-s0479"
+  },
+  {
+    "title": "Accumulation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "DSP Intrinsics",
+      "Accumulation"
+    ],
+    "page": 794,
+    "top": 638.12488,
+    "section_id": "ug1399-2026.1-en-s0480"
+  },
+  {
+    "title": "DSP Cascading",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "DSP Intrinsics",
+      "DSP Cascading"
+    ],
+    "page": 795,
+    "top": 422.92727,
+    "section_id": "ug1399-2026.1-en-s0481"
+  },
+  {
+    "title": "DSP Complex Intrinsics",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "DSP Intrinsics",
+      "DSP Complex Intrinsics"
+    ],
+    "page": 797,
+    "top": 340.14003,
+    "section_id": "ug1399-2026.1-en-s0482"
+  },
+  {
+    "title": "Fast Fourier Transform IP Library",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "Fast Fourier Transform IP Library"
+    ],
+    "page": 800,
+    "top": 264.0,
+    "section_id": "ug1399-2026.1-en-s0483"
+  },
+  {
+    "title": "FIR Filter IP Library",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "FIR Filter IP Library"
+    ],
+    "page": 806,
+    "top": 331.09612,
+    "section_id": "ug1399-2026.1-en-s0484"
+  },
+  {
+    "title": "FIR Static Parameters",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "FIR Filter IP Library",
+      "FIR Static Parameters"
+    ],
+    "page": 808,
+    "top": 127.26919999999996,
+    "section_id": "ug1399-2026.1-en-s0485"
+  },
+  {
+    "title": "DDS IP Library",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "DDS IP Library"
+    ],
+    "page": 814,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0486"
+  },
+  {
+    "title": "DDS Static Parameters",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "DDS IP Library",
+      "DDS Static Parameters"
+    ],
+    "page": 815,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0487"
+  },
+  {
+    "title": "DDS Struct Parameter Values",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "DDS IP Library",
+      "DDS Static Parameters",
+      "DDS Struct Parameter Values"
+    ],
+    "page": 816,
+    "top": 416.70391,
+    "section_id": "ug1399-2026.1-en-s0488"
+  },
+  {
+    "title": "SRL IP Library",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "SRL IP Library"
+    ],
+    "page": 819,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0489"
+  },
+  {
+    "title": "Mapping Directly into SRL Resources",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "SRL IP Library",
+      "Mapping Directly into SRL Resources"
+    ],
+    "page": 819,
+    "top": 243.0,
+    "section_id": "ug1399-2026.1-en-s0490"
+  },
+  {
+    "title": "Read from the Shifter",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "SRL IP Library",
+      "Read from the Shifter"
+    ],
+    "page": 819,
+    "top": 562.39224,
+    "section_id": "ug1399-2026.1-en-s0491"
+  },
+  {
+    "title": "Read, Write, and Shift Data",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "SRL IP Library",
+      "Read, Write, and Shift Data"
+    ],
+    "page": 820,
+    "top": 291.79232,
+    "section_id": "ug1399-2026.1-en-s0492"
+  },
+  {
+    "title": "Read, Write, and Enable-Shift",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 32: HLS IP Libraries",
+      "SRL IP Library",
+      "Read, Write, and Enable-Shift"
+    ],
+    "page": 820,
+    "top": 499.78844,
+    "section_id": "ug1399-2026.1-en-s0493"
+  },
+  {
+    "title": "Ch. 33: Working with OpenCV",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VI: Vitis HLS Libraries Reference",
+      "Ch. 33: Working with OpenCV"
+    ],
+    "page": 822,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0494"
+  },
+  {
+    "title": "Sec. VII: Vitis HLS Migration Guide",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide"
+    ],
+    "page": 823,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0495"
+  },
+  {
+    "title": "Ch. 34: Migrating from Vitis HLS to the Vitis Unified IDE",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 34: Migrating from Vitis HLS to the Vitis Unified IDE"
+    ],
+    "page": 824,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0496"
+  },
+  {
+    "title": "Ch. 35: Migrating from Vivado HLS to Vitis HLS",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 35: Migrating from Vivado HLS to Vitis HLS"
+    ],
+    "page": 826,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0497"
+  },
+  {
+    "title": "Key Behavioral Differences",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 35: Migrating from Vivado HLS to Vitis HLS",
+      "Key Behavioral Differences"
+    ],
+    "page": 826,
+    "top": 585.59997,
+    "section_id": "ug1399-2026.1-en-s0498"
+  },
+  {
+    "title": "Default User Control Settings",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 35: Migrating from Vivado HLS to Vitis HLS",
+      "Key Behavioral Differences",
+      "Default User Control Settings"
+    ],
+    "page": 827,
+    "top": 163.53842999999995,
+    "section_id": "ug1399-2026.1-en-s0499"
+  },
+  {
+    "title": "Vivado IP Development Flow",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 35: Migrating from Vivado HLS to Vitis HLS",
+      "Key Behavioral Differences",
+      "Default User Control Settings",
+      "Vivado IP Development Flow"
+    ],
+    "page": 827,
+    "top": 288.1346,
+    "section_id": "ug1399-2026.1-en-s0500"
+  },
+  {
+    "title": "Vitis Application Acceleration Development Flow (Kernel Mode)",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 35: Migrating from Vivado HLS to Vitis HLS",
+      "Key Behavioral Differences",
+      "Default User Control Settings",
+      "Vitis Application Acceleration Development Flow (Kernel Mode)"
+    ],
+    "page": 828,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0501"
+  },
+  {
+    "title": "Default Interfaces",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 35: Migrating from Vivado HLS to Vitis HLS",
+      "Key Behavioral Differences",
+      "Default Interfaces"
+    ],
+    "page": 828,
+    "top": 518.05,
+    "section_id": "ug1399-2026.1-en-s0502"
+  },
+  {
+    "title": "Interface Bundle Rules",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 35: Migrating from Vivado HLS to Vitis HLS",
+      "Key Behavioral Differences",
+      "Interface Bundle Rules"
+    ],
+    "page": 829,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0503"
+  },
+  {
+    "title": "Memory Property on Interface",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 35: Migrating from Vivado HLS to Vitis HLS",
+      "Key Behavioral Differences",
+      "Memory Property on Interface"
+    ],
+    "page": 829,
+    "top": 296.58843,
+    "section_id": "ug1399-2026.1-en-s0504"
+  },
+  {
+    "title": "AXI4-Stream Interfaces with Side-Channels",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 35: Migrating from Vivado HLS to Vitis HLS",
+      "Key Behavioral Differences",
+      "AXI4-Stream Interfaces with Side-Channels"
+    ],
+    "page": 829,
+    "top": 507.97686,
+    "section_id": "ug1399-2026.1-en-s0505"
+  },
+  {
+    "title": "Memory Model",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 35: Migrating from Vivado HLS to Vitis HLS",
+      "Key Behavioral Differences",
+      "Memory Model"
+    ],
+    "page": 830,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0506"
+  },
+  {
+    "title": "Unconnected Ports",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 35: Migrating from Vivado HLS to Vitis HLS",
+      "Key Behavioral Differences",
+      "Unconnected Ports"
+    ],
+    "page": 830,
+    "top": 475.30013,
+    "section_id": "ug1399-2026.1-en-s0507"
+  },
+  {
+    "title": "Global Variables on the Interface",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 35: Migrating from Vivado HLS to Vitis HLS",
+      "Key Behavioral Differences",
+      "Global Variables on the Interface"
+    ],
+    "page": 831,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0508"
+  },
+  {
+    "title": "Behavior Changes to Module Names and Module Prefix",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 35: Migrating from Vivado HLS to Vitis HLS",
+      "Key Behavioral Differences",
+      "Behavior Changes to Module Names and Module Prefix"
+    ],
+    "page": 831,
+    "top": 224.20000000000005,
+    "section_id": "ug1399-2026.1-en-s0509"
+  },
+  {
+    "title": "Updated Memory (RAM/ROM) Module Name and RTL File Name",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 35: Migrating from Vivado HLS to Vitis HLS",
+      "Key Behavioral Differences",
+      "Updated Memory (RAM/ROM) Module Name and RTL File Name"
+    ],
+    "page": 831,
+    "top": 494.9846,
+    "section_id": "ug1399-2026.1-en-s0510"
+  },
+  {
+    "title": "Behavior Differences in Inlining of Functions",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 35: Migrating from Vivado HLS to Vitis HLS",
+      "Key Behavioral Differences",
+      "Behavior Differences in Inlining of Functions"
+    ],
+    "page": 832,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0511"
+  },
+  {
+    "title": "Dataflow",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 35: Migrating from Vivado HLS to Vitis HLS",
+      "Key Behavioral Differences",
+      "Dataflow"
+    ],
+    "page": 832,
+    "top": 295.69994,
+    "section_id": "ug1399-2026.1-en-s0512"
+  },
+  {
+    "title": "Ch. 36: Deprecated and Unsupported Features",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 36: Deprecated and Unsupported Features"
+    ],
+    "page": 833,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0513"
+  },
+  {
+    "title": "Ch. 37: Unsupported Features",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 37: Unsupported Features"
+    ],
+    "page": 838,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0514"
+  },
+  {
+    "title": "Pragmas",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 37: Unsupported Features",
+      "Pragmas"
+    ],
+    "page": 838,
+    "top": 288.7,
+    "section_id": "ug1399-2026.1-en-s0515"
+  },
+  {
+    "title": "Top-Level Function Argument",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 37: Unsupported Features",
+      "Pragmas",
+      "Top-Level Function Argument"
+    ],
+    "page": 838,
+    "top": 504.88472,
+    "section_id": "ug1399-2026.1-en-s0516"
+  },
+  {
+    "title": "HLS Video Library",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 37: Unsupported Features",
+      "HLS Video Library"
+    ],
+    "page": 839,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0517"
+  },
+  {
+    "title": "C Arbitrary Precision Types",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Sec. VII: Vitis HLS Migration Guide",
+      "Ch. 37: Unsupported Features",
+      "C Arbitrary Precision Types"
+    ],
+    "page": 839,
+    "top": 213.39620000000002,
+    "section_id": "ug1399-2026.1-en-s0518"
+  },
+  {
+    "title": "Appx. A: Tcl to Config File Command Map",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Appx. A: Tcl to Config File Command Map"
+    ],
+    "page": 840,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0519"
+  },
+  {
+    "title": "Appx. B: Instruction/Operator Explanation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Appx. B: Instruction/Operator Explanation"
+    ],
+    "page": 849,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0520"
+  },
+  {
+    "title": "Appx. C: Additional Resources and Legal Notices",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Appx. C: Additional Resources and Legal Notices"
+    ],
+    "page": 851,
+    "top": 81.0,
+    "section_id": "ug1399-2026.1-en-s0521"
+  },
+  {
+    "title": "Finding Additional Documentation",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Appx. C: Additional Resources and Legal Notices",
+      "Finding Additional Documentation"
+    ],
+    "page": 851,
+    "top": 269.0,
+    "section_id": "ug1399-2026.1-en-s0522"
+  },
+  {
+    "title": "Support Resources",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Appx. C: Additional Resources and Legal Notices",
+      "Support Resources"
+    ],
+    "page": 852,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0523"
+  },
+  {
+    "title": "References",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Appx. C: Additional Resources and Legal Notices",
+      "References"
+    ],
+    "page": 852,
+    "top": 198.79999999999995,
+    "section_id": "ug1399-2026.1-en-s0524"
+  },
+  {
+    "title": "Revision History",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Appx. C: Additional Resources and Legal Notices",
+      "Revision History"
+    ],
+    "page": 853,
+    "top": 167.60000000000002,
+    "section_id": "ug1399-2026.1-en-s0525"
+  },
+  {
+    "title": "Please Read: Important Legal Notices",
+    "path": [
+      "Vitis High-Level Synthesis User Guide",
+      "Appx. C: Additional Resources and Legal Notices",
+      "Please Read: Important Legal Notices"
+    ],
+    "page": 854,
+    "top": 95.0,
+    "section_id": "ug1399-2026.1-en-s0526"
+  }
+]
