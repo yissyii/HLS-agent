@@ -243,7 +243,7 @@ def _evaluate(args):
     for task in task_dirs:
         reused = None
         if args.drafts_from:
-            reused = _valid_draft(Path(args.drafts_from) / task.name / "off")
+            reused = _valid_draft(Path(args.drafts_from) / task.name / "draft")
         if reused is not None:
             frozen = batch_dir / task.name / "initial.cpp"
             frozen.parent.mkdir(parents=True, exist_ok=True)

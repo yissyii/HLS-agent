@@ -69,9 +69,9 @@ class CompareContracts(unittest.TestCase):
         batch = self.root/'batch'
         config = ROOT/'serve/runtime.json'
         args = argparse.Namespace(config=str(config), policy=str(ROOT/'agent/config/policy.rag-hybrid.json'),
-                                  rag_runtime='explicit-runtime', workers=1)
+                                  rag_runtime='explicit-runtime', workers=1, drafts_from=None)
         calls = []
-        def entry(task, output, configuration, condition, policy, runtime, source=None, **kwargs):
+        def entry(task, output, configuration, condition, policy, runtime, source=None, validation=None, **kwargs):
             calls.append((task.name, condition, source, policy, runtime))
             if condition == 'draft' and task.name == 'task1':
                 self.valid_draft(output)
