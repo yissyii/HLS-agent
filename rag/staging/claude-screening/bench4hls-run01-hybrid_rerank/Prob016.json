@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "task": "Prob016",
+  "attempt": 0,
+  "candidate": 1,
+  "source_run": "output/bench4hls_rag/run01/hybrid_rerank",
+  "stage": "compile",
+  "diagnostic": "no matching function for call to object of type 'ap_uint<4>'",
+  "diagnostic_quality_score": 4,
+  "diagnostic_quality_status": "reviewed",
+  "has_location": true,
+  "has_source_line": true,
+  "has_caret": true,
+  "has_note": true,
+  "feedback_trimmed": false,
+  "query_trimmed": true,
+  "source_window_needed": false,
+  "candidates": [
+    {
+      "id": "ug1399-2026.1-en-s0098-p0149-00",
+      "title": "Bit-Width Propagation",
+      "evidence_usefulness_score": 0,
+      "retrieval_label": "wrong_direction",
+      "should_inject": false,
+      "failure_stage": "rerank",
+      "reason": "The error is an ap_uint bit-select written as a function call; Bit-Width Propagation concerns argument width propagation, not bit selection."
+    },
+    {
+      "id": "ug1399-2026.1-en-s0084-p0134-00",
+      "title": "Dealing with Unsupported Functions",
+      "evidence_usefulness_score": 0,
+      "retrieval_label": "wrong_direction",
+      "should_inject": false,
+      "failure_stage": "rerank",
+      "reason": "ap_float unsupported-function guidance is a different type family; rerank scored it -3.4 yet rag_top_k=2 still forced injection."
+    }
+  ],
+  "reviewer": "claude-remote",
+  "reviewed_at": "2026-09-21T00:00:00Z",
+  "status": "pending_human_review"
+}

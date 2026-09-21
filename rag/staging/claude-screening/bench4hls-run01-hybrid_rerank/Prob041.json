@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "task": "Prob041",
+  "attempt": 0,
+  "candidate": 1,
+  "source_run": "output/bench4hls_rag/run01/hybrid_rerank",
+  "stage": "compile",
+  "diagnostic": "no matching function for call to object of type 'ap_uint<25>'",
+  "diagnostic_quality_score": 4,
+  "diagnostic_quality_status": "reviewed",
+  "has_location": true,
+  "has_source_line": true,
+  "has_caret": true,
+  "has_note": true,
+  "feedback_trimmed": false,
+  "query_trimmed": true,
+  "source_window_needed": false,
+  "candidates": [
+    {
+      "id": "ug1399-2026.1-en-s0419-p0693-00",
+      "title": "Other Class Methods, Operators, and Data Members",
+      "evidence_usefulness_score": 4,
+      "retrieval_label": "exact_actionable",
+      "should_inject": true,
+      "failure_stage": "none",
+      "reason": "The passage demonstrates the (hi,lo) range-select form (Val1(3,0)=Val2(3,0)) which matches the erroneous single-arg bit-select call."
+    }
+  ],
+  "reviewer": "claude-remote",
+  "reviewed_at": "2026-09-21T00:00:00Z",
+  "status": "pending_human_review"
+}
