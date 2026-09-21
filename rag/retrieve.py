@@ -189,13 +189,28 @@ class Retriever:
             location = (f'{s.get("document", "?")} {s.get("version", "?")} {s.get("language", "?")}; '
                         f'{s.get("file", "?")} pp.{s.get("page_start", "?")}-{s.get("page_end", "?")}')
             caution = 'PDF text may be a fragment, not a complete compilable example.'
+        elif record['kind'] == 'fix_card':
+            location = (f'{s.get("citation", record.get("source_citation", "?"))}; '
+                        f'{s.get("file", "?")} pp.{s.get("page_start", "?")}-{s.get("page_end", "?")}')
+            caution = ('Structured source-reviewed fix card; obey applicability and exclusions. '
+                       'It is not a substitute for running Vitis HLS.')
         else:
             location = s.get('repository', s.get('file', '?'))
             caution = 'Check applicability and preserve the task interface/behavior.'
+        details = ''
+        if record['kind'] == 'fix_card':
+            details = (f'Family: {record["error_family"]}\n'
+                       f'Signature terms: {", ".join(record["signature_terms"])}\n'
+                       f'Required constructs: {", ".join(record["required_constructs"]) or "none"}\n'
+                       f'Exclusions: {", ".join(record["exclusions"]) or "none"}\n'
+                       f'Applicability: {record["applicability"]}\n'
+                       f'Action: {record["action"]}\n'
+                       f'Verification: {record["verification"]}\n')
         return (f'[REFERENCE {record["id"]}] {record["title"]}\n'
                 f'Source: {location}; tool={record["tool"]["target_version"]}; '
                 f'release={record["release"]["status"]}; validation={record["validation"]["status"]}\n'
                 + caution + '\n'
+                + details
                 + record['text'] + '\n[/REFERENCE]\n')
 
     def parent(self, identifier):

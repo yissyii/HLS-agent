@@ -64,7 +64,9 @@ def load_corpus(directory):
 
 
 RELEASE_STATUSES = {'pending', 'reference', 'withdrawn'}
-VALIDATION_STATUSES = {'unvalidated', 'compile_only', 'csim_passed', 'synthesis_passed'}
+VALIDATION_STATUSES = {
+    'unvalidated', 'human_reviewed', 'compile_only', 'csim_passed', 'synthesis_passed'
+}
 ROLES = {'doc', 'design', 'testbench', 'build_script', 'config', 'other'}
 SUPPORTED_TOOL_VERSIONS = {'2025.2', '2026.1'}
 
@@ -76,6 +78,18 @@ SOURCE_CONTRACT = {
         'required': ['document', 'version', 'language', 'file', 'file_sha256',
                      'page_start', 'page_end', 'section_path', 'parent_id', 'license'],
     },
+    # A fix card keeps the same immutable source provenance as a PDF section,
+    # while its structured applicability/action fields live on the record.
+    'fix_card': {
+        'required': ['document', 'version', 'language', 'file', 'file_sha256',
+                     'page_start', 'page_end', 'section_path', 'parent_id', 'license',
+                     'citation'],
+    },
+}
+
+FIX_CARD_FIELDS = {
+    'error_family', 'signature_terms', 'required_constructs', 'exclusions',
+    'action', 'applicability', 'verification', 'source_citation',
 }
 
 
@@ -103,6 +117,16 @@ def validate_record(record):
     if record['role'] not in ROLES:
         raise ValueError('Unknown record role: ' + record['role'])
     validate_source(record['kind'], record['source'])
+    if record['kind'] == 'fix_card':
+        missing_card_fields = FIX_CARD_FIELDS - set(record)
+        if missing_card_fields:
+            raise ValueError('Fix card missing fields: ' + ', '.join(sorted(missing_card_fields)))
+        for field in ('signature_terms', 'required_constructs', 'exclusions'):
+            if not isinstance(record[field], list) or not all(isinstance(v, str) for v in record[field]):
+                raise ValueError('Fix card field must be a list of strings: ' + field)
+        for field in ('error_family', 'action', 'applicability', 'verification', 'source_citation'):
+            if not isinstance(record[field], str) or not record[field].strip():
+                raise ValueError('Fix card field must be a nonempty string: ' + field)
     if (not isinstance(record['tool'], dict)
             or record['tool'].get('target_version') not in SUPPORTED_TOOL_VERSIONS):
         raise ValueError('Record tool target_version must be a supported Vitis version')
@@ -113,7 +137,7 @@ def validate_record(record):
 
 
 def record(identifier, title, text, source, *, kind, role='doc', quality=None, aliases=(),
-           tool=None, release=None, validation=None):
+           tool=None, release=None, validation=None, extra=None):
     tool = dict(tool or {})
     tool.setdefault('target_version', '2025.2')
     tool.setdefault('upstream_version', None)
@@ -132,5 +156,6 @@ def record(identifier, title, text, source, *, kind, role='doc', quality=None, a
                   content_sha256=sha256(text.encode('utf-8')),
                   tool=tool, release=release, validation=validation,
                   quality=quality or [])
+    result.update(extra or {})
     validate_record(result)
     return result

@@ -15,7 +15,9 @@
 | 原版模型与校验清单 | `F:/Workspace/hls-rag/models/Qwen3-Embedding-0.6B` |
 | 可选重排模型与校验清单 | `F:/Workspace/hls-rag/models/Qwen3-Reranker-0.6B` |
 | 提取语料 | `rag/corpora/ug1399-2026.1-en-curated` |
+| 小规模精确修复卡片 | `rag/corpora/ug1399-2026.1-fix-cards-v1` |
 | 向量索引 | `rag/indexes/ug1399-qwen06b-2026.1-curated` |
+| 修复卡片向量索引 | `rag/indexes/ug1399-qwen06b-2026.1-fix-cards-v1` |
 | 开发检索问题 | `rag/eval_queries.json` |
 | 实测报告 | [UG1399 检索方案实测](../report/model_selection/UG1399-2025.2.md) |
 | 发布注册表 | `rag/releases/`；仅注册表白名单可被 Agent 检索 |
@@ -35,6 +37,37 @@
 3. PDF 文本不是 C++ AST。代码可能是片段，表格仍是布局文本，插图不做 OCR。大段落被拆开时有质量标记；没有把手册代码当成可直接执行的完整示例。抽查不能代表全书人工校对。
 4. `records.jsonl` 是规范语料；`pages.json` 保留整页提取文本，`outline.json` 保留目录，`coverage.json` 记录各页覆盖情况。向量对应的输入为末三级标题加空白归一化正文，展示时保留原文布局。Agent 只读取 `rag/releases/` 中显式注册且哈希匹配的发布库；`rag/staging/` 不可见。
 5. 编码输入设 2048 tokens 上限；超长时报错，避免静默截断。建库按长度分批编码、逐批保存，可用相同命令恢复中断任务；已完成索引不可原位覆盖。
+
+## 小规模精确 fix 语料
+
+`ug1399-2026.1-fix-cards-v1` 是独立于完整手册的 18 条高精度 `fix_card` 语料。卡片不是从 PDF 整页切块，而是人工根据 UG1399 v2026.1 的固定页码编写，至少保留 `error_family`、`signature_terms`、`required_constructs`、`exclusions`、`action`、`applicability`、`verification` 和来源引用。当前覆盖：
+
+- `m_axi` interface offset 的 Vitis kernel / Vivado IP 分流；
+- `ap_uint` 单 bit 与 range 选择；
+- system call、动态内存、递归和 STL 等不支持构造；
+- DATA_PACK、`ap_bus` 等已弃用或不支持的 pragma/interface；
+- `ap_int.h`、`hls_math.h`、`hls::stream` API；
+- dataflow 单生产者/消费者与多出口限制、pipeline 携带依赖、array partition 的 RAM 端口限制。
+
+其中 offset 按流程分流：Vitis Kernel 卡片引用专门的 pp. 161–162 规则，Vivado IP 卡片引用 pp. 172–175 的 `off/direct/slave` 选择；不能把后者直接套到前者。
+
+卡片的 `validation.status=human_reviewed` 只表示已按来源页人工复核，不表示已通过 Vitis 编译、C Simulation 或综合。发布注册表状态仍是 `reference`；完整 UG1399 库继续保留，不能把卡片库自动并入 general 库或宣称为已验证修复。
+
+重新从当前 PDF 构建卡片和独立索引：
+
+```powershell
+python -X utf8 -B -m rag.build_fix_cards
+& F:/Workspace/hls-rag/venv/Scripts/python.exe -X utf8 -B -m rag.build_index `
+  rag/corpora/ug1399-2026.1-fix-cards-v1 `
+  rag/indexes/ug1399-qwen06b-2026.1-fix-cards-v1
+python -X utf8 -B -m rag.register_fix_release
+```
+
+构建器不会原位覆盖已存在的 immutable 输出目录；要重建请指定一个新的 `--output` 目录，并相应地为索引和 release 使用新的路径/ID。
+
+卡片库可以独立做 BM25 或 dense/hybrid 检索；它没有被当前 Agent runtime 默认发布入口替换。只有在逐卡完成 Vitis 2026.1 可复现实验后，才应考虑把对应卡片的验证状态升级，并由策略显式选择该 release。
+
+随库保存的 `rag/fix_card_eval_queries.json` 是 18 条作者编写的路由 smoke，不是独立测试集：BM25 Hit@1 为 18/18，Qwen dense 为 17/18，hybrid 为 18/18。该结果只说明卡片可被检索到，不代表动作已通过 Vitis 2026.1 验证，也不代表对真实故障的修复成功率。
 
 ## BM25 与混合检索
 

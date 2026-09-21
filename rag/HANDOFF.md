@@ -2,6 +2,8 @@
 
 Ubuntu 远程主机请先阅读 [远程 Ubuntu/5090D 运行指南](UBUNTU_REMOTE_GUIDE.md)。
 
+首批 18 条 UG1399 高精度 fix cards 的真实 Vitis 对照实验按 [远程 Claude：UG1399 fix cards 对照评测计划](../docs/handoff/remote_claude_fix_cards_evaluation.md) 执行。该计划使用 general／fix／fix+reranker 三组和同一批冻结首稿；fix-only release 必须设置 `rag_profile=all`。
+
 本轮假匹配筛查按 [远程 Claude RAG 筛查计划](../report/design/remote_claude_rag_screening.md) 执行；标注只写入 `rag/staging/`，不直接修改活动库。
 
 2026-09-21，远程 Claude 已完成 9-20 hybrid+rerank 的 6 案例复核，产物位于 `rag/staging/claude-screening/bench4hls-run01-hybrid_rerank/`，对应提交 `8cf3d45`。6 个 JSON 和 `summary.md` 已强制纳入 Git，但仍保持 `pending_human_review`，不属于活动 corpus、release 或 index。复核结论是没有诊断截断；Prob045/Prob041 为 `exact_actionable`，Prob071/Prob152/Prob104/Prob016 为假匹配，下一步优先实现 `signature_gate`。种子表中 Prob152 的 `topic_only` 分数已校正为 1，Prob016 的 `wrong_direction` 分数已校正为 0。

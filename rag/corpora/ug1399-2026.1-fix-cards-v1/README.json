@@ -1,0 +1,7 @@
+{
+  "purpose": "Small high-precision fix-card corpus, separate from the UG1399 general corpus.",
+  "release_policy": "Reference only until each card is validated against a reproducible 2026.1 HLS case.",
+  "source_pdf": "ug1399-vitis-hls-en-us-2026.1.pdf",
+  "source_sha256": "7da1b9ffdca0b259d96781c25a3acd222429556daf269cf847e3993679abf6cf",
+  "manual_review": "Cards were reviewed against their cited UG1399 sections; human_reviewed is not synthesis_passed."
+}
