@@ -249,15 +249,20 @@ def _evaluate(args):
             frozen.parent.mkdir(parents=True, exist_ok=True)
             frozen.write_bytes(reused.read_bytes())
             frozen_drafts[task.name] = frozen
-            # Validate the frozen draft once (skip generation, no repair).
-            execute(task, "draft", source=frozen)
-            val = _extract_validation(batch_dir / task.name / "draft")
+            # Reuse the prior validation directly instead of re-running Vitis.
+            val = _extract_validation(Path(args.drafts_from) / task.name / "draft")
             if val:
                 val_path = batch_dir / task.name / "initial_validation.json"
                 write_json(val_path, val)
                 validations[task.name] = val_path
+            # Carry the prior draft's stop_reason/checks so summarize() can compute recovery.
+            draft_receipt_path = Path(args.drafts_from) / task.name / "draft" / "result.json"
+            draft_receipt = (json.loads(draft_receipt_path.read_text(encoding="utf-8"))
+                             if draft_receipt_path.is_file() else {})
             row = dict(task=task.name, method="draft", valid_source=True,
-                       source_sha256=file_sha256(frozen), reused_from=str(args.drafts_from))
+                       source_sha256=file_sha256(frozen), reused_from=str(args.drafts_from),
+                       stop_reason=draft_receipt.get("stop_reason"),
+                       checks=draft_receipt.get("checks"))
             frozen_hashes[str(frozen)] = row['source_sha256']
         else:
             row = execute(task, "draft")
