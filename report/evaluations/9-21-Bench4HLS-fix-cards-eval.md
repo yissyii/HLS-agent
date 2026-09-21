@@ -47,6 +47,20 @@
 - general hybrid 相对 off 多恢复 **Prob154**；fix-rerank hybrid 相对 off **零增量**。
 - 三组 `off` 完全一致（120），证明首稿冻结与复用正确（fix-rerank 的 170 个 draft 全部 `reused_from` 有值、`source_sha256` 与 general 一致）。
 
+### 关于 overall 绝对值（67.6% → 70.6%）
+
+本轮 off 的 overall（120/170 = 70.6%）高于 9-19 off 基线（115/170 = 67.6%），**主要来自 Vitis 工具链 2025.2 → 2026.1 的变化，不是 fix cards 的作用**：
+
+| 指标 | 9-19 off（2025.2） | 本轮 off（2026.1） | Δ |
+|---|---:|---:|---:|
+| compile | 166 (97.6%) | 162 (95.3%) | −4 |
+| csim/run | 116 (68.2%) | 121 (71.2%) | +5 |
+| synthesis | 115 (67.6%) | 120 (70.6%) | +5 |
+| overall | 115 (67.6%) | 120 (70.6%) | **+5** |
+
+- compile 下降 4（2026.1 更严格），但 csim/synthesis 多通过 5（2026.1 仿真/综合行为变化），净 **+5**。
+- 因此绝对通过率的提升是**工具链变化**，与本轮 fix cards / RAG 无关。fix cards 的结论（相对 general 无增益）是**组内配对对照**（同工具链、同冻结首稿），不受绝对水平影响，仍然成立。
+
 ### 检索证据（fix-rerank）
 
 - `rag_history` 状态：`skipped 124` · `injected 14` · `no_reference_injected 18`
@@ -59,6 +73,31 @@
   | `fix-ug1399-2026.1-ap-int-header`（补 ap_int.h） | 2 |
 
   其余 15 张卡（recursion、dynamic memory、STL、DATA_PACK、ap_bus、hls_stream、dataflow、pipeline、array_partition 等）**从未被召回**——对应错误族在本轮 62 个失败首稿中没有出现。
+
+## 失败首稿错误族分布（62 题）与卡片扩展清单
+
+62 个失败首稿按「首个失败诊断」分类：
+
+| 错误族 | 数量 | 现有卡覆盖？ |
+|---|---:|---|
+| **功能逻辑错误**（无编译错误，csim 输出不匹配） | **49 (79%)** | ❌ 无卡可覆盖（诊断驱动检索，功能反例无手册信号） |
+| ap_uint 位选 `x(0)` 写成函数调用 | 4 | ✅ `ap-uint-bit-selection` |
+| Verilog 字面量 `2'b`/`32'h` 误入 C++ | 3 | ❌ 缺卡 |
+| `no member named 'parity'`（ap_uint 方法） | 1 | ⚠️ 近似 `ap-uint-bit-selection` |
+| 三元运算符类型歧义（int vs ap_int） | 1 | ❌ 缺卡 |
+| Simulation SIGABRT（@E 运行异常） | 1 | ❌ 非卡片可解 |
+| undeclared identifier | 1 | ❌ 缺卡（纯 C++） |
+| redefinition | 1 | ❌ 缺卡（纯 C++） |
+| interface offset 非法值 | 1 | ✅ `interface-offset-vitis-kernel` |
+
+**卡片扩展清单（按本轮真实出现频率）**：
+
+1. **功能逻辑错误（49）——不在 fix cards 射程内**：79% 的失败首稿是「编译/综合通过但功能输出不对」，`functional_diagnostics` 只给 expected/actual 反例，没有可检索的手册信号。提升这 49 题靠**更强的生成/推理模型**，不是检索。
+2. **Verilog 字面量（3）——最高优先级新增卡**：`2'b01`/`32'h1` 是 Bench4HLS 反复注入的陷阱，既不在现有 18 卡内，也不在 general 的精确命中范围（UG1399 无「Verilog 字面量在 C++ 非法」章节）。建议新增 `verilog-literal-in-cpp` 卡。
+3. **undeclared identifier / redefinition（各 1）**：纯 C/C++ 作用域错误，UG1399 不覆盖，应明确「不检索、由模型基础能力修复」。
+4. **三元类型歧义（1）**：ap_int 表达式类型转换，可归入新增「表达式类型转换」卡或 `ap-int-header`。
+
+> **收益天花板**：即便把 18 张卡扩到覆盖全部 13 个编译错误族，也只作用于 13/62（21%）的失败首稿；剩余 49 个功能错误（79%）任何检索都救不了。fix cards 能触及的只有「有明确编译诊断」的 21% 子集，且其中大部分（Verilog 字面量、undeclared、redefinition）是 UG1399 与卡片都难覆盖的纯 C/C++ 陷阱。
 
 ## 关键结论
 
