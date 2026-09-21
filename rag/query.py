@@ -48,14 +48,61 @@ def _signature(problem, feedback, cleaned):
     return dict(family='generic', exact_terms=[], source_constructs=[])
 
 
+def _flow_hint(text):
+    lower = text.lower()
+    if 'vitis kernel' in lower or 'xrt' in lower:
+        return 'vitis_kernel'
+    if 'vivado ip' in lower or 'vivado' in lower:
+        return 'vivado_ip'
+    return None
+
+
+def _card_family_matches(record, signature, text):
+    """Use fix-card metadata to keep mutually exclusive cards apart."""
+    card_family = record.get('error_family')
+    if not card_family:
+        return True, None
+    family = signature.get('family', 'generic')
+    if family == 'interface_offset' and card_family == 'interface_offset':
+        flow = _flow_hint(text)
+        applicability = record.get('applicability', '').lower()
+        exclusions = ' '.join(record.get('exclusions', [])).lower()
+        if flow == 'vitis_kernel' and ('vitis kernel' not in applicability or
+                                       'vitis kernel' in exclusions):
+            return False, 'flow_exclusion'
+        if flow == 'vivado_ip' and ('vivado ip' not in applicability or
+                                    'vivado ip' in exclusions):
+            return False, 'flow_exclusion'
+        if flow is None:
+            return False, 'ambiguous_interface_flow'
+        return True, None
+    if family == 'ap_int_bit_selection' and card_family in {
+            'ap_uint_bit_selection', 'ap_uint_range_selection'}:
+        construct = signature.get('source_constructs', [])
+        if 'single_arg_call' in construct and card_family != 'ap_uint_bit_selection':
+            return False, 'range_card_for_single_bit'
+        if 'range_call' in construct and card_family != 'ap_uint_range_selection':
+            return False, 'bit_card_for_range'
+        return True, None
+    return True, None
+
+
 def _signature_gate(record, plan):
     """Apply a conservative applicability gate after lexical retrieval."""
     signature = plan.get('signature', {})
     family = signature.get('family', 'generic')
     text = (record.get('title', '') + ' ' + record.get('text', '')).lower()
+    card_ok, card_reason = _card_family_matches(record, signature,
+                                                plan.get('query_text', ''))
+    if not card_ok:
+        return False, card_reason, dict(family=family, matched=False, card_family=record.get('error_family'))
     if signature.get('hard_abstain'):
         return False, 'generic_cpp_diagnostic', dict(family=family, matched=False)
     if family == 'interface_offset':
+        if record.get('error_family') == 'interface_offset':
+            matched = 'm_axi' in text and 'offset' in text
+            return matched, 'signature_match' if matched else 'missing_interface_offset_signature', \
+                dict(family=family, matched=matched, card_family='interface_offset')
         required = ('offset=slave', 'offset=direct', 'offset=off')
         matched = all(term in text for term in required)
         return matched, 'signature_match' if matched else 'missing_interface_offset_signature', \
@@ -138,7 +185,8 @@ def query_plan(problem, feedback, category, feedback_policy, max_chars):
                 problem_trimmed=problem_size < len(problem),
                 feedback_trimmed=diagnostic_size < len(cleaned),
                 feedback_cleaned=cleaned != original_feedback,
-                cleaned_feedback=cleaned)
+                cleaned_feedback=cleaned,
+                query_text=query)
     plan['signature'] = _signature(problem, feedback, cleaned)
     plan['annotation'] = diagnostic_annotation(feedback, plan, category, feedback_policy)
     return query, plan

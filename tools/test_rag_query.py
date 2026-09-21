@@ -86,6 +86,27 @@ class QueryContracts(unittest.TestCase):
         self.assertTrue(assess(exact, plan)[0])
         self.assertFalse(assess(unrelated, plan)[0])
 
+    def test_fix_card_gate_uses_flow_and_construct_metadata(self):
+        from rag.common import load_corpus
+        records, _ = load_corpus('rag/corpora/ug1399-2026.1-fix-cards-v1')
+        by_family = {r['error_family']: r for r in records
+                     if r.get('error_family') in ('ap_uint_bit_selection', 'ap_uint_range_selection')}
+        _, vitis = query_plan('Vitis kernel XRT m_axi integration',
+                              "error: unexpected interface offset value '0x0', expects '[slave, direct, off]'",
+                              'compile_error', 'compiler_diagnostics', 1600)
+        _, ambiguous = query_plan('m_axi integration',
+                                  "error: unexpected interface offset value '0x0', expects '[slave, direct, off]'",
+                                  'compile_error', 'compiler_diagnostics', 1600)
+        offset_cards = [r for r in records if r.get('error_family') == 'interface_offset']
+        self.assertEqual([r['title'] for r in offset_cards if assess(r, vitis)[0]],
+                         ['m_axi offset: let the Vitis kernel flow select the offset'])
+        self.assertEqual([r['title'] for r in offset_cards if assess(r, ambiguous)[0]], [])
+        _, single = query_plan('ap_uint x(0)',
+                               "error: no matching function for call to object of type 'ap_uint<4>'\nx(0)",
+                               'compile_error', 'compiler_diagnostics', 1600)
+        self.assertTrue(assess(by_family['ap_uint_bit_selection'], single)[0])
+        self.assertFalse(assess(by_family['ap_uint_range_selection'], single)[0])
+
     def test_public_feedback_remains_authorized_but_not_invented(self):
         query, plan = self.plan('Mismatch cycle 4: expected 7 got 3', 'functional_or_runtime_error', 'public_diagnostics')
         self.assertFalse(plan['skip_reason'])
