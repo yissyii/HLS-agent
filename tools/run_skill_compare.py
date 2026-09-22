@@ -216,6 +216,47 @@ def summarize(rows, conditions):
     return aggregates, comparisons
 
 
+def _run_task(task, conditions, batch, config_path, policy_paths, workflow_root, policies, timeout):
+    """Run one task's conditions in order; return (rows, protocol_error)."""
+    rows = []
+    task_rows = {}
+    for condition in conditions:
+        directory = batch / "runs" / task.name / condition
+        try:
+            exit_code, receipt = _run_entry(task, directory, config_path, policy_paths[condition],
+                                            workflow_root, timeout)
+            errors = audit_run(directory, condition, policies[condition])
+            row = _metrics(task, condition, directory, exit_code, receipt, errors)
+        except subprocess.TimeoutExpired as error:
+            row = {"task": task.name, "condition": condition, "directory": str(directory.resolve()),
+                   "runner_error": "subprocess_timeout", "message": str(error), "final_overall": False,
+                   "initial_overall": False, "audit_errors": ["entry subprocess timed out"]}
+            errors = row["audit_errors"]
+        except Exception as error:
+            row = {"task": task.name, "condition": condition, "directory": str(directory.resolve()),
+                   "runner_error": type(error).__name__, "message": str(error), "final_overall": False,
+                   "initial_overall": False, "audit_errors": [str(error)]}
+            errors = row["audit_errors"]
+        rows.append(row)
+        task_rows[condition] = row
+        print(json.dumps({key: row.get(key) for key in
+                          ("task", "condition", "receipt_status", "category", "final_overall", "audit_errors")},
+                         ensure_ascii=False), flush=True)
+        if errors:
+            return rows, f"{task.name}/{condition}: evidence audit failed"
+        if row.get("category") in INFRA_CATEGORIES:
+            return rows, f"{task.name}/{condition}: infrastructure failure {row['category']}"
+        if condition in {"S2", "S3"} and "S1" in task_rows:
+            reference = task_rows["S1"]
+            if (reference.get("candidate0_sha256") and row.get("candidate0_sha256")
+                    and reference["candidate0_sha256"] != row["candidate0_sha256"]):
+                return rows, f"{task.name}: candidate 0 differs between S1 and {condition}"
+            if (reference.get("contract_file_sha256") and row.get("contract_file_sha256")
+                    and reference["contract_file_sha256"] != row["contract_file_sha256"]):
+                return rows, f"{task.name}: contract differs between S1 and {condition}"
+    return rows, None
+
+
 def _evaluate(args):
     dataset, index, tasks, feedback_policy = _discover(args)
     conditions = tuple(item.strip().upper() for item in args.conditions.split(",") if item.strip())
@@ -272,7 +313,7 @@ def _evaluate(args):
         "task_ids": [task.name for task in tasks],
         "task_count": len(tasks),
         "conditions": list(conditions),
-        "workers": 1,
+        "workers": args.workers,
         "config": config,
         "policies": policies,
         "policy_files": {name: str(path.resolve()) for name, path in policy_paths.items()},
@@ -286,50 +327,32 @@ def _evaluate(args):
     timeout = max(args.per_task_timeout, config["hls"]["total_timeout_seconds"] + 60)
     started = time.monotonic()
     protocol_error = None
-    rows_by_task = {}
-    for task in tasks:
-        rows_by_task[task.name] = {}
-        for condition in conditions:
-            directory = batch / "runs" / task.name / condition
-            try:
-                exit_code, receipt = _run_entry(task, directory, config_path, policy_paths[condition],
-                                                workflow_root, timeout)
-                errors = audit_run(directory, condition, policies[condition])
-                row = _metrics(task, condition, directory, exit_code, receipt, errors)
-            except subprocess.TimeoutExpired as error:
-                row = {"task": task.name, "condition": condition, "directory": str(directory.resolve()),
-                       "runner_error": "subprocess_timeout", "message": str(error), "final_overall": False,
-                       "initial_overall": False, "audit_errors": ["entry subprocess timed out"]}
-                errors = row["audit_errors"]
-            except Exception as error:
-                row = {"task": task.name, "condition": condition, "directory": str(directory.resolve()),
-                       "runner_error": type(error).__name__, "message": str(error), "final_overall": False,
-                       "initial_overall": False, "audit_errors": [str(error)]}
-                errors = row["audit_errors"]
-            summary["results"].append(row)
-            rows_by_task[task.name][condition] = row
-            write_json(summary_path, summary)
-            print(json.dumps({key: row.get(key) for key in
-                              ("task", "condition", "receipt_status", "category", "final_overall", "audit_errors")},
-                             ensure_ascii=False), flush=True)
-            if errors:
-                protocol_error = f"{task.name}/{condition}: evidence audit failed"
-                break
-            if row.get("category") in INFRA_CATEGORIES:
-                protocol_error = f"{task.name}/{condition}: infrastructure failure {row['category']}"
-                break
-            if condition in {"S2", "S3"} and "S1" in rows_by_task[task.name]:
-                reference = rows_by_task[task.name]["S1"]
-                if (reference.get("candidate0_sha256") and row.get("candidate0_sha256")
-                        and reference["candidate0_sha256"] != row["candidate0_sha256"]):
-                    protocol_error = f"{task.name}: candidate 0 differs between S1 and {condition}"
-                    break
-                if (reference.get("contract_file_sha256") and row.get("contract_file_sha256")
-                        and reference["contract_file_sha256"] != row["contract_file_sha256"]):
-                    protocol_error = f"{task.name}: contract differs between S1 and {condition}"
-                    break
-        if protocol_error:
-            break
+    if args.workers <= 1:
+        ordered_rows = []
+        for task in tasks:
+            rows, error = _run_task(task, conditions, batch, config_path, policy_paths,
+                                    workflow_root, policies, timeout)
+            ordered_rows.extend(rows)
+            if error and protocol_error is None:
+                protocol_error = error
+    else:
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        collected = {}
+        with ThreadPoolExecutor(max_workers=args.workers) as pool:
+            future_to_task = {pool.submit(_run_task, task, conditions, batch, config_path,
+                                          policy_paths, workflow_root, policies, timeout): task
+                              for task in tasks}
+            for future in as_completed(future_to_task):
+                task = future_to_task[future]
+                rows, error = future.result()
+                collected[task.name] = (rows, error)
+        ordered_rows = []
+        for task in tasks:
+            rows, error = collected[task.name]
+            ordered_rows.extend(rows)
+            if error and protocol_error is None:
+                protocol_error = error
+    summary["results"] = ordered_rows
 
     changed = [path for path, expected in frozen_hashes.items()
                if not Path(path).is_file() or digest(Path(path).read_bytes()) != expected]
@@ -359,8 +382,8 @@ def main():
     selection.add_argument("--selection", help="Explicit JSON with tasks[] or categories{}")
     selection.add_argument("--task", action="append", help="Explicit task id; repeat for multiple tasks")
     parser.add_argument("--conditions", default="S0,S1,S2,S3")
-    parser.add_argument("--workers", type=int, choices=(1,), default=1,
-                        help="Frozen protocol permits one worker only")
+    parser.add_argument("--workers", type=int, default=1,
+                        help="Parallel task workers (>=1). >1 relaxes the frozen single-worker protocol.")
     parser.add_argument("--dataset", default=str(DATASET))
     parser.add_argument("--config", default=str(ROOT / "serve/runtime.rag-eval.json"))
     parser.add_argument("--workflow-skills-dir", default=str(ROOT / "skill"))
