@@ -232,6 +232,7 @@ def _evaluate(args):
     batch.mkdir(parents=True, exist_ok=False)
     config_path = batch / "config.json"
     write_json(config_path, config)
+    (batch / "policies").mkdir()
     policy_paths = {}
     for condition, policy in policies.items():
         path = batch / "policies" / (condition + ".json")
