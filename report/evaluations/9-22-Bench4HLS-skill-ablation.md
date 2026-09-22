@@ -18,6 +18,11 @@
 
 因此本报告定位为**一次无效的消融初跑记录**：记录口径、原始数字与失效机理，供后续修正 runner 后重跑。方向性信号是「首批 Skill 在当前配置下不但无收益，反而明显拖累通过率」，但必须在消除契约/首稿不确定性的干净重跑后才能下结论。
 
+逐题归因（详见第 7、8 节）进一步显示，两个技能的主要退化不是「随机变差」，而是**可定位的误拦**：
+
+- S1 `problem_contract_ambiguous` 24 题里 **16 题在 S0 本可通过**——契约把「时钟/状态被 Bench4HLS 剥离」「算法参数未指定」这类题判为 `needs_clarification` 而中止，属过度保守的门控。
+- S2 `selftest_invalid` 37 题里 **28 题在 S0/S1 本可通过**——其中 21 题是校验器「main() 未直接调用顶层函数」的**误拒**（顶层调用被包在 helper 函数里），16 题是模型生成的自测代码本身编译不过（缺 `#include <ap_int.h>`、ap_int API 误用等）。
+
 ---
 
 ## 1. 协议与条件
@@ -40,7 +45,7 @@
 
 - 模型：本地 vLLM `qwen38`（`http://127.0.0.1:8001/v1`），`temperature=0.0`，`enable_thinking=false`，`context_tokens=16384`，`max_tokens=4096`，`timeout_seconds=180`。模型版本无 revision 证据，仅服务别名 `qwen38`。
 - 工具链：Vitis/Vivado 2026.1，`part=xczu3eg-sbva484-1-e`，`clock_ns=5`，csim 120s / synthesis 300s / total 600s。
-- 并行：`workers=4`（本次运行的 key 变更，见第 6 节失效机理）。
+- 并行：`workers=4`（本次运行的 key 变更，失效机理见第 9 节）。
 - 运行窗口：`2026-09-22T10:44:57Z` → `12:26:06Z`，墙钟约 6068s（≈1.7h）。
 - API 请求：全程记录 **1189** 次，`request_outcomes_unknown=0`。
 
@@ -109,7 +114,77 @@
 
 即：S1 的主要新失败是 `problem_contract_ambiguous`（24）+ `workflow_output_error`（19）；S2 的主要新失败是 `selftest_invalid`（37）——自测在 107 次运行中判「无效」41 次，成为最大单项退化来源。S3 的 `synth_guard` 在 18 次触发中报 12 个发现，但仅为 observe，未直接作门禁。
 
-## 7. 协议违规与失效机理（重点）
+## 7. S1 `problem_contract_ambiguous` 逐题归因（24 题）
+
+`problem-contract` 在 S1 对 24 题返回 `status=needs_clarification` 并中止（`message="Problem contract requires clarification"`，`workflow_skills_used=[]`）。逐题读 `workflow/problem-contract/response.txt` 的 `unresolved`/`assumptions`/`risk_points`，归为两类。
+
+### 7.1 时序/时钟逻辑与无状态 C++ 原型冲突（12 题）
+
+题目描述触发器/FSM/计数器/寄存器等「时钟沿触发」行为，但冻结的 C++ 原型 `void TopModule(...)` 不含 clk 参数、也没有显式状态机制，契约模型因此判「无法建模上升沿/跨调用状态」而要求澄清。这主要是 **Bench4HLS 剥离时钟后的接口限制**，而非题目本身缺失。
+
+| 题号 | 归因要点 |
+| --- | --- |
+| Prob027 | 带时钟使能的寄存器（D 触发器），原型无 clk，无法建模上升沿与 q 初值 |
+| Prob033 | 上升沿捕获寄存器，原型无 clk |
+| Prob037 | 计数器状态跨调用维持，原型无 clk/state |
+| Prob043 | 寄存输入首拍初值未定义 |
+| Prob047 | 触发器无 clk、q 初值未定义 |
+| Prob051 | 触发器无 clk、状态持久化机制未定 |
+| Prob052 | 边沿检测寄存器首拍初值未定义 |
+| Prob058 | 带使能 DFF，无 clk/state、Q 初值未定义 |
+| Prob071 | 三段 FSM，无 clk/state，且「每调用是否代表一个时钟周期」不明 |
+| Prob075 | 双边沿触发器，无 clk/边沿指示 |
+| Prob092 | FSM 同步/异步复位、初态、复位时序歧义 |
+| Prob123 | 同步 FSM，原型无 clk |
+
+### 7.2 算法细节/常量未定义（12 题）
+
+题目描述复杂算法，但关键参数/方程/变体未指定，契约模型对真实欠规范要求澄清。
+
+| 题号 | 归因要点 |
+| --- | --- |
+| Prob126 | 波形用符号变量（a,b,d,e），无法推导逻辑函数 |
+| Prob129 | y=5,6,7 行为未定义、Y0 是 LSB 还是 MSB 歧义 |
+| Prob152 | 延迟线寄存器初态、19-bit 溢出、舍入模式未定义 |
+| Prob153 | 缓冲/FF 初态、定点溢出/舍入、点积用当前还是移入值歧义 |
+| Prob155 | FFT 浮点容差、位反转 in-place、CORDIC/查表精度未定义 |
+| Prob159 | 一阶 IIR 滤波公式、积分与输出顺序、输出 latency 未定义 |
+| Prob160 | CRC-32 变体（init/xorout/refin/refout）未指定 |
+| Prob163 | Montgomery 乘法 mprime 定义、m 偶/零等非法输入未定义 |
+| Prob166 | SHA valid 标志在非法输入时的行为未定义 |
+| Prob168 | 标准差「small minimum」常量、float_n 是否恒为 100 未定义 |
+| Prob169 | ADI 前向/后向求解方程、边界与初值未定义 |
+| Prob170 | FDTD 第 4 步更新 ex 还是 hz、`_fict_` 到 `ey[0][*]` 映射歧义 |
+
+**跨条件影响**：这 24 题中 **16 / 24 在 S0 通过**（模型本可解出，被契约门误拦），S1 下 0 / 24 通过。契约「needs_clarification」门控过度保守，是 S1 相对 S0 净 −23 的主要来源之一。
+
+## 8. S2 `selftest_invalid` 逐题归因（37 题）
+
+`functional-selftest` 在 S2 对 37 题触发 `selftest_invalid`。读 `result.json` 的 `message` + `workflow_history`（`functional-selftest` 的 ready/attempt 状态与 `category`），归为两个子因。
+
+### 8.1 校验器误拒——「main() 未直接调用顶层函数」（21 题）
+
+21 题 `message="Generated self-test main() does not directly exercise the top function"`。抽查生成源码发现：模型把 `TopModule(...)` 调用放进 `check(...)`/`run_test(...)` 等 **helper 函数**（声明在 `main()` 之前），`main()` 只调用这些 helper。而 `parse_selftest` 的校验只扫描 `main() {` **之后**的源码里是否有字面 `TopModule(` 调用，漏掉 helper 里的调用，误判「未直接调用顶层函数」。**生成的自测代码本身有效、确实调用了顶层函数，这是校验启发式误拒，不是模型错误。**
+
+| 题号（21） | 自测结构 |
+| --- | --- |
+| Prob016, 031, 040, 042, 045, 049, 050, 053, 056, 073, 077, 089, 091, 110, 119, 124, 134, 148, 150, 164, 167 | 顶层调用包裹在 `check()`/`run_test()` helper 内，`main()` 只调 helper |
+
+### 8.2 自测代码本身编译失败（16 题）
+
+16 题 `message="Generated self-test failed independently..."`，`workflow_history` 里 `functional-selftest` attempt `status=failed`。读 `candidates/000/selftest.json` 的编译错误逐条归因：
+
+| 错误签名 | 题号 | 归因 |
+| --- | --- | --- |
+| `no template named 'ap_uint'` | Prob025, 063, 096, 102 | 自测缺 `#include <ap_int.h>` |
+| `invalid operands ... 'const char[...]' and 'const char *'` | Prob036, 069, 097, 103 | 字符串字面量拼接错误 |
+| `no member named 'str'` / `'to_uint' in 'ap_bit_ref'` | Prob021, 088 | 调用了 ap_int/ap_bit_ref 不存在的方法 |
+| `ambiguous constructor` / `no matching function` / `ambiguous conversion` | Prob004, 079, 111 | ap_uint 构造/调用/强转误用 |
+| 其他（缺 `;` / 重声明 / 缺头文件） | Prob035, 064, 156 | 语法错误、`class member cannot be redeclared`、缺 `<initializer_list>` |
+
+**跨条件影响**：这 37 题中 **28 / 37 在 S0 与 S1 均通过**（不加自测时模型可解出），S2 下 0 / 37 通过。自测门控造成 28 个净回归，其中 21 个是校验器误拒（8.1，属代码缺陷，可修）、16 个是自测代码编译失败（8.2，属模型生成 ap_int 自测代码的可靠性问题）。
+
+## 9. 协议违规与失效机理（重点）
 
 本次运行 `summary.status = "invalid"`，`protocol_error = "Prob001: contract differs between S1 and S2"`。逐题核对后确认不是孤例：
 
@@ -119,7 +194,7 @@
 
 **可能机理（待验证）**：`temperature=0` 依赖 vLLM 采样在单请求顺序执行下才稳定；本次新增 `--workers 4` 并行，同批多个请求在 batched inference 下可能引入浮点/批序不确定性，从而打破「冻结首稿」假设。该假设正是协议里 `_run_task` 对 candidate0 / contract 做 S1 基准比对的前提。**修正方向**：先以 `--workers 1` 顺序重跑 S0–S3 验证是否存在同源不确定性；若仍存在，需进一步固定 vLLM 采样（如 `seed`/`top_p`/禁用并行批）或接受契约/首稿在跨条件比较中不可配对。
 
-## 8. 复现
+## 10. 复现
 
 ```bash
 python tools/run_skill_compare.py \
@@ -133,8 +208,13 @@ python tools/run_skill_compare.py \
 - 会话：`.../session.json`（`status=completed_with_failures`，`valid_attempt=attempt_000`，exit_code 1）。
 - 逐题审计证据在 `.../runs/{ProbXXX}/{cond}/`（`result.json`、`events.jsonl`、`workflow/problem-contract/contract.json`、`workflow/functional-selftest/bundle.json` 等）。
 
-## 9. 后续
+## 11. 后续
 
-- **先修 runner / 采样确定性**，再决定是否重跑；当前结果不构成「Skill 有害」的正式证据，只能作为「需要警惕」的方向性信号。
-- 若干净重跑后仍复现「叠加技能单调降低通过率」，需回到 `functional-selftest` 的 `selftest_invalid`（S2 最大退化源）与 `problem-contract` 的 `ambiguous`（S1 最大退化源）逐条归因，判断是 prompt/验收条件问题还是技能设计本身与当前修复循环冲突。
+- **先修 runner / 采样确定性**（第 9 节），再决定是否重跑；当前结果不构成「Skill 有害」的正式证据，只能作为「需要警惕」的方向性信号。
+- 归因已就绪，可直接对症修：
+  1. **修校验器误拒（8.1，21 题）**：放宽 `agent/workflow/runtime.py` 的 `parse_selftest` 对「main() 直接调用顶层函数」的判定——顶层调用包在 `check()`/`run_test()` 等 helper 里应视为通过；或改为在整个源文件范围校验顶层函数被调用（而非仅 `main() {` 之后）。
+  2. **修自测代码编译失败（8.2，16 题）**：在 `functional-selftest` 生成 prompt 里强制约束（必含 `#include <ap_int.h>`、禁用字符串字面量 `+` 拼接、只用 `ap_int::to_uint/to_string` 合法方法、给出位选 `operator[]` 而非函数调用），或对自测代码加一次编译修复回环。
+  3. **放宽契约过度保守（7.1/7.2）**：对「时钟/状态被 Bench4HLS 剥离」的题（7.1，12 题）在契约模型里显式告知「原型无 clk 属已知接口约定，按每调用一拍的语义建模」；对「算法参数未指定」的题（7.2，12 题）允许契约以显式 `assumptions` 落盘并继续，而非 `needs_clarification` 直接中止。
+  4. **修契约/首稿不确定（第 9 节）**：先 `--workers 1` 顺序重跑验证是否源于并行 batched inference；若仍复现则固定 vLLM 采样或调整协议对比基准。
+- 干净重跑后若仍复现「叠加技能单调降低通过率」，再判断是 prompt/验收条件问题还是技能设计本身与当前修复循环冲突。
 - S3 的 `synth-guard` 目前 observe-only 且样本不足，暂无法评估其独立贡献。
