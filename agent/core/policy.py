@@ -12,9 +12,19 @@ RAG_DEFAULTS = dict(rag_enabled=False, rag_mode='hybrid', rag_top_k=2, rag_recal
                     rag_strategy='diagnostic_v1', rag_profile='fix_first',
                     rag_reranker='none', rag_rerank_k=20)
 
+WORKFLOW_DEFAULTS = dict(problem_contract_enabled=False,
+                         functional_selftest_enabled=False,
+                         synth_guard_enabled=False,
+                         synth_guard_mode='observe',
+                         workflow_context_max_bytes=6000)
+
 
 def rag_options(policy):
     return {name: policy.get(name, default) for name, default in RAG_DEFAULTS.items()}
+
+
+def workflow_options(policy):
+    return {name: policy.get(name, default) for name, default in WORKFLOW_DEFAULTS.items()}
 
 
 def load_policy(path=None):
@@ -28,7 +38,7 @@ def validate_policy(value):
                       'stagnation_limit': (1, 10), 'max_skills': (0, 10),
                       'context_safety_tokens': (128, 8192), 'diagnostic_max_chars': (128, 12000)}
     expected = set(integer_limits) | {'validation_reserve_seconds', 'cleanup_reserve_seconds', 'skills_enabled'}
-    if not expected.issubset(value) or set(value) - expected - set(RAG_DEFAULTS):
+    if not expected.issubset(value) or set(value) - expected - set(RAG_DEFAULTS) - set(WORKFLOW_DEFAULTS):
         raise Failure('policy_error', 'Unexpected or missing policy fields')
     for name, (minimum, maximum) in integer_limits.items():
         if type(value[name]) is not int or not minimum <= value[name] <= maximum:
@@ -58,6 +68,17 @@ def validate_policy(value):
     timeout = rag['rag_timeout_seconds']
     if type(timeout) not in (int, float) or not math.isfinite(timeout) or not 0 < timeout <= 120:
         raise Failure('policy_error', 'Invalid RAG timeout')
+    workflow = workflow_options(value)
+    for name in ('problem_contract_enabled', 'functional_selftest_enabled', 'synth_guard_enabled'):
+        if type(workflow[name]) is not bool:
+            raise Failure('policy_error', name + ' must be boolean')
+    if workflow['functional_selftest_enabled'] and not workflow['problem_contract_enabled']:
+        raise Failure('policy_error', 'functional_selftest requires problem_contract')
+    if workflow['synth_guard_mode'] != 'observe':
+        raise Failure('policy_error', 'Only advisory synth_guard_mode=observe is currently supported')
+    if (type(workflow['workflow_context_max_bytes']) is not int
+            or not 512 <= workflow['workflow_context_max_bytes'] <= 20000):
+        raise Failure('policy_error', 'workflow_context_max_bytes must be an integer in 512..20000')
 
 
 def decide(policy, diagnostic, repairs_used, budget, stagnant):

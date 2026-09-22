@@ -44,11 +44,15 @@ class FakeModel:
 
 
 class FakeValidator:
-    def __init__(self, failures=None, preflight_error=None, mismatched_hash=False):
+    def __init__(self, failures=None, preflight_error=None, mismatched_hash=False,
+                 selftest_failures=None, mismatched_selftest=False):
         self.failures = failures or {}
         self.calls = []
+        self.selftest_calls = []
         self.preflight_error = preflight_error
         self.mismatched_hash = mismatched_hash
+        self.selftest_failures = selftest_failures or {}
+        self.mismatched_selftest = mismatched_selftest
 
     def preflight(self, task, runtime, directory):
         if self.preflight_error:
@@ -71,6 +75,19 @@ class FakeValidator:
         return ValidationResult('wrong' if self.mismatched_hash else candidate.sha256,
                                 task.fingerprint, json_digest(runtime['hls']), stage, outcome,
                                 checks, 'error: ' + str(category))
+
+    def selftest(self, candidate, task, runtime, deadline):
+        self.selftest_calls.append(candidate.candidate_id)
+        category = self.selftest_failures.get(candidate.candidate_id)
+        outcome = {'status': 'failed' if category else 'passed', 'elapsed_seconds': .01}
+        if category:
+            outcome['category'] = category
+        feedback = ('Functional diagnostic (observed facts; absent fields were not reported):\n'
+                    '{"schema_version":1,"source":"csim_log","events":[],"observed_events":1,'
+                    '"omitted_unique_events":0}') if category == 'functional_or_runtime_error' else str(category)
+        return ValidationResult('wrong' if self.mismatched_selftest else candidate.sha256,
+                                task.fingerprint, json_digest(runtime['hls']), 'selftest',
+                                outcome, {}, feedback)
 
 
 class AgentContract(unittest.TestCase):
@@ -140,11 +157,123 @@ class AgentContract(unittest.TestCase):
         self.manifest.write_text(json.dumps(data))
         return self.manifest
 
+    def contract_response(self, status='ready'):
+        value = {
+            'schema_version': 1,
+            'contract': {
+                'schema_version': 1, 'status': status, 'top_function': 'kernel',
+                'interface': {'inputs': ['a'], 'outputs': [], 'return': 'a + 1'},
+                'behavior': ([{'claim': 'return a + 1', 'source': 'problem', 'confidence': 'explicit'}]
+                             if status == 'ready' else []),
+                'state': {'persistent': False, 'initialization': []},
+                'numeric': {'signedness': [], 'widths': [], 'overflow': [], 'rounding': []},
+                'boundaries': [0, 20], 'performance_constraints': [], 'risk_points': [],
+                'assumptions': [], 'unresolved': ([] if status == 'ready' else ['ambiguous behavior']),
+            },
+            'test_plan': {
+                'schema_version': 1, 'contract_status': status,
+                'oracle_strategy': 'independent_reference' if status == 'ready' else 'unavailable',
+                'cases': ([{'id': 'zero', 'category': 'boundary', 'purpose': 'zero input',
+                            'construction': 'a=0', 'comparison': 'exact'}]
+                          if status == 'ready' else []),
+                'properties': [], 'random': {'enabled': False, 'seeds': [], 'cases_per_seed': 0},
+                'tolerance': None, 'unresolved': ([] if status == 'ready' else ['ambiguous behavior']),
+            },
+        }
+        return json.dumps(value)
+
+    @staticmethod
+    def selftest_response():
+        return '```cpp\nextern int kernel(int);\nint main(){ return kernel(0) == 1 ? 0 : 1; }\n```\n'
+
     def solve(self, name='agent', **kwargs):
         values = dict(config=self.config, policy=self.policy, manifest=self.manifest,
                       model=self.model, validator=self.validator, run_id='test-run')
         values.update(kwargs)
         return run(self.problem, self.directory / name, **values)
+
+    def test_workflow_skills_default_off_add_no_requests_or_prompt_context(self):
+        self.public_task()
+        code, result = self.solve()
+        self.assertEqual(code, 0)
+        self.assertEqual(result['workflow_skills_enabled'], [])
+        self.assertEqual(result['workflow_requests'], 0)
+        self.assertEqual(result['model_requests'], 1)
+        self.assertEqual(result['generation_requests'], 1)
+        self.assertEqual([item['kind'] for item in result['requests']], ['candidate_generation'])
+        self.assertFalse((self.directory / 'agent/workflow').exists())
+        self.assertNotIn('<BEHAVIOR_CONTRACT>', self.model.prompts[0].text)
+
+    def test_problem_contract_is_frozen_before_candidate_and_uses_public_inputs_only(self):
+        self.public_task()
+        self.policy['problem_contract_enabled'] = True
+        self.model = FakeModel([self.contract_response(), 'int kernel(int a) { return a + 1; }'])
+        code, result = self.solve()
+        self.assertEqual(code, 0)
+        self.assertEqual((result['workflow_requests'], result['generation_requests'], result['model_requests']),
+                         (1, 1, 2))
+        self.assertEqual([item['kind'] for item in result['requests']],
+                         ['problem-contract', 'candidate_generation'])
+        contract_prompt, candidate_prompt = self.model.prompts
+        self.assertIn('int kernel(int a);', contract_prompt.text)
+        self.assertNotIn('int main()', contract_prompt.text)
+        self.assertIn('<BEHAVIOR_CONTRACT>', candidate_prompt.text)
+        events = [json.loads(line) for line in (self.directory / 'agent/events.jsonl').read_text().splitlines()]
+        ready = next(i for i, event in enumerate(events) if event['event'] == 'workflow_artifact_ready')
+        created = next(i for i, event in enumerate(events) if event['event'] == 'candidate_created')
+        self.assertLess(ready, created)
+
+    def test_invalid_or_ambiguous_contract_blocks_candidate_generation(self):
+        self.public_task()
+        self.policy['problem_contract_enabled'] = True
+        for name, response, category in (
+                ('malformed', 'not json', 'workflow_output_error'),
+                ('ambiguous', self.contract_response('needs_clarification'), 'problem_contract_ambiguous')):
+            self.model = FakeModel([response])
+            code, result = self.solve(name)
+            self.assertEqual(code, 1)
+            self.assertEqual(result['category'], category)
+            self.assertEqual(result['generation_requests'], 0)
+            self.assertEqual(result['workflow_requests'], 1)
+            self.assertFalse((self.directory / name / 'candidates').exists())
+
+    def test_generated_selftest_failure_repairs_then_retests_before_public_validation(self):
+        self.public_task(feedback='functional_diagnostics')
+        self.policy.update(problem_contract_enabled=True, functional_selftest_enabled=True)
+        self.model = FakeModel([self.contract_response(), self.selftest_response(),
+                                'int kernel(int a) { return a; }',
+                                'int kernel(int a) { return a + 1; }'])
+        self.validator = FakeValidator(selftest_failures={0: 'functional_or_runtime_error'})
+        code, result = self.solve()
+        self.assertEqual(code, 0)
+        self.assertEqual(self.validator.selftest_calls, [0, 1])
+        self.assertEqual(self.validator.calls, [(1, 'csim'), (1, 'synthesis')])
+        self.assertEqual((result['workflow_requests'], result['generation_requests'], result['model_requests']),
+                         (2, 2, 4))
+        self.assertTrue((self.directory / 'agent/candidates/000/selftest.json').is_file())
+        self.assertTrue((self.directory / 'agent/candidates/001/selftest.json').is_file())
+
+    def test_synth_guard_observes_but_does_not_block_real_synthesis(self):
+        self.public_task()
+        self.policy['synth_guard_enabled'] = True
+        self.model = FakeModel(['int kernel(int a) { int *p = new int(a); int r=*p; delete p; return r; }'])
+        code, result = self.solve()
+        self.assertEqual(code, 0)
+        self.assertEqual(self.validator.calls, [(0, 'csim'), (0, 'synthesis')])
+        guard = json.loads((self.directory / 'agent/candidates/000/synth_guard.json').read_text())
+        self.assertEqual(guard['status'], 'review_required')
+        self.assertIn('synth-guard', result['workflow_skills_used'])
+
+    def test_stale_selftest_evidence_is_rejected(self):
+        self.public_task(feedback='functional_diagnostics')
+        self.policy.update(problem_contract_enabled=True, functional_selftest_enabled=True)
+        self.model = FakeModel([self.contract_response(), self.selftest_response(),
+                                'int kernel(int a) { return a + 1; }'])
+        self.validator = FakeValidator(mismatched_selftest=True)
+        code, result = self.solve()
+        self.assertEqual(code, 1)
+        self.assertEqual(result['category'], 'evidence_mismatch')
+        self.assertEqual(self.validator.calls, [])
 
     def test_problem_only_receipt_and_no_overwrite(self):
         code, result = self.solve()

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "name": "skill-ablation-development-20-v1",
+  "strata": {
+    "kernel": ["Prob151", "Prob153", "Prob155", "Prob158", "Prob160", "Prob163", "Prob166", "Prob169"],
+    "sequential": ["Prob065", "Prob076", "Prob079", "Prob083", "Prob093", "Prob106", "Prob115", "Prob124", "Prob132", "Prob137", "Prob143", "Prob149"]
+  },
+  "tasks": [
+    "Prob065", "Prob076", "Prob079", "Prob083", "Prob093", "Prob106", "Prob115", "Prob124", "Prob132", "Prob137",
+    "Prob143", "Prob149", "Prob151", "Prob153", "Prob155", "Prob158", "Prob160", "Prob163", "Prob166", "Prob169"
+  ]
+}

@@ -1,4 +1,5 @@
 """Source-aware prompts with an explicitly conservative fallback budget."""
+import json
 from agent.core.contracts import PromptBundle, digest, json_digest
 from agent.context.prompts import load_prompts
 from agent.core.policy import rag_options
@@ -6,7 +7,8 @@ from serve.inference import Failure
 from evaluation.functional import fit_feedback
 
 
-def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw_initial=False, *, templates=None, retrieval=None):
+def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw_initial=False, *, templates=None,
+          retrieval=None, workflow_context=None):
     templates = templates if templates is not None else load_prompts()
     problem = task.problem.decode('utf-8')
     provenance = [{'kind': 'problem', 'sha256': digest(task.problem)}]
@@ -30,6 +32,17 @@ def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw
             if material.model_visible:
                 mandatory += f'<PUBLIC_FILE name="{material.name}">\n{material.content.decode("utf-8")}\n</PUBLIC_FILE>\n'
                 provenance.append({'kind': 'public_file', 'name': material.name, 'sha256': digest(material.content)})
+        if workflow_context:
+            contract = workflow_context['contract']
+            plan = workflow_context['test_plan']
+            contract_text = json.dumps(contract, ensure_ascii=False, sort_keys=True)
+            plan_text = json.dumps(plan, ensure_ascii=False, sort_keys=True)
+            mandatory += ('<BEHAVIOR_CONTRACT>\n' + contract_text + '\n</BEHAVIOR_CONTRACT>\n'
+                          '<TEST_PLAN>\n' + plan_text + '\n</TEST_PLAN>\n')
+            provenance.extend([
+                {'kind': 'behavior_contract', 'sha256': json_digest(contract)},
+                {'kind': 'test_plan', 'sha256': json_digest(plan)},
+            ])
     if candidate is not None:
         mandatory += '<CURRENT_SOURCE>\n' + candidate.source + '\n</CURRENT_SOURCE>\n'
         provenance.append({'kind': 'candidate', 'sha256': candidate.sha256})
@@ -110,5 +123,8 @@ def build(task, runtime, policy, candidate=None, diagnostic=None, skills=(), raw
                        'injected_ids': [h['record']['id'] for h in rag_hits],
                        'injected_bytes': len(references.encode('utf-8'))} if retrieval else None),
         'output_tokens': runtime['model']['max_tokens'], 'safety_tokens': policy['context_safety_tokens'],
+        'workflow_context': ({'contract_sha256': json_digest(workflow_context['contract']),
+                              'test_plan_sha256': json_digest(workflow_context['test_plan'])}
+                             if workflow_context else None),
         'note': 'Local tokenizer/chat-template verification is not installed; service overflow remains a failure.',
     }, [r['id'] for r in selected], system=system)

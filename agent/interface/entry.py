@@ -13,6 +13,7 @@ from agent.context.skills import Skills
 from agent.core.contracts import digest, json_digest
 from agent.core.controller import solve
 from agent.core.policy import load_policy, validate_policy
+from agent.workflow.runtime import WorkflowSkills
 from evaluation.task_io import load_task
 from evaluation.validator import HLSValidator
 from evaluation.lifecycle import evaluate as development_evaluation, output_path
@@ -21,7 +22,7 @@ from serve.inference import Failure, ROOT, load_config, validate_config
 
 
 def run(problem, output, *, config=None, run_id=None, manifest=None, policy=None,
-        skills_dir=None, cpu_only=False, initial_source=None, raw_initial=False,
+        skills_dir=None, workflow_skills_dir=None, cpu_only=False, initial_source=None, raw_initial=False,
         model=None, validator=None, rag_runtime=None, initial_validation=None):
     started = time.monotonic()
     artifacts = Artifacts(output)  # Never overwrite previous evidence, even on failure.
@@ -43,13 +44,14 @@ def run(problem, output, *, config=None, run_id=None, manifest=None, policy=None
         if task.problem != problem_bytes:
             raise Failure('input_error', 'Problem changed while loading inputs')
         skill_pack = Skills(selected_policy['skills_enabled'], skills_dir)
+        workflow_skill_pack = WorkflowSkills(selected_policy, workflow_skills_dir)
         source = Path(initial_source).read_bytes().decode('utf-8') if initial_source is not None else None
         known_validation = (json.loads(Path(initial_validation).read_text(encoding='utf-8'))
                             if initial_validation is not None else None)
         return solve(task, runtime, selected_policy, model or ModelClient(),
                      validator or HLSValidator(cpu_only), artifacts, skill_pack, run_id,
                      initial_source=source, raw_initial=raw_initial, started=started, rag_runtime=rag_runtime,
-                     initial_validation=known_validation)
+                     initial_validation=known_validation, workflow_skills=workflow_skill_pack)
     except (Failure, OSError, ValueError, KeyError, TypeError) as error:
         category = error.category if isinstance(error, Failure) else 'configuration_or_io_error'
         receipt.update(status='failed', category=category, message=str(error), stop_reason=category,
@@ -71,6 +73,7 @@ def main():
     parser.add_argument('--task-manifest')
     parser.add_argument('--policy')
     parser.add_argument('--skills-dir')
+    parser.add_argument('--workflow-skills-dir', help='Frozen root containing enabled workflow Skill packages')
     parser.add_argument('--rag-runtime', help='Local RAG paths JSON; read only when RAG is enabled in policy')
     parser.add_argument('--initial-source', help='Path to a pre-generated first draft (raw model output); skips generation')
     parser.add_argument('--initial-validation', help='Path to a JSON list of pre-computed ValidationResult dicts; skips revalidation')
@@ -83,7 +86,8 @@ def _evaluate(args):
     try:
         code, receipt = run(args.problem, output_path(args.output), config=args.config, run_id=args.run_id,
                             manifest=args.task_manifest, policy=args.policy,
-                            skills_dir=args.skills_dir, cpu_only=args.cpu_only, rag_runtime=args.rag_runtime,
+                            skills_dir=args.skills_dir, workflow_skills_dir=args.workflow_skills_dir,
+                            cpu_only=args.cpu_only, rag_runtime=args.rag_runtime,
                             initial_source=args.initial_source, initial_validation=args.initial_validation)
         print(json.dumps(receipt, ensure_ascii=False))
         return code

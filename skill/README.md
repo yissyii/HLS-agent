@@ -1,5 +1,39 @@
-# Skill package
+# HLS workflow skills
 
-Store reusable HLS guidance, prompt fragments, static checks and evidence of their validation here. Each skill should state its trigger, inputs, expected benefit, failure modes and held-out validation result.
+本目录保存 HLS Agent 的程序性能力。Skill 决定“什么时候做什么、调用什么工具、怎样判定结果”；版本相关事实与案例属于 RAG，能够确定执行的检查属于脚本。
 
-Do not place task answers, reference implementations or hidden-test material here.
+## 边界
+
+- Agent 仍是控制器，负责预算、阶段切换、有限修复和候选选择。
+- Skill 不拥有全局循环，不覆盖题目 specification，也不把启发式判断当成工具事实。
+- Script 只输出可复现的观察结果，不自行修改候选代码。
+- RAG 只返回完成当前步骤所需的证据，不决定工作流，也不向 Skill 注入整篇文档。
+- 不得放入题目答案、参考实现、隐藏测试、由冻结评测集归纳出的规则或答案派生材料。
+
+权威顺序为：真实工具结果和题目 specification > Skill 的流程约束 > 官方检索证据 > 经验案例 > 模型先验。对流程问题，Skill 高于 RAG；对版本相关事实，官方证据高于 Skill 启发式。
+
+## 首批 Skill
+
+| Skill | 作用 | 当前状态 |
+| --- | --- | --- |
+| `problem-contract` | 首稿前从题目独立提取行为契约与测试计划 | 已接入，默认关闭，等待 RAG-off 消融 |
+| `functional-selftest` | 用独立 oracle 和真实执行检查功能正确性 | 已接入真实 CSim，默认关闭，等待 RAG-off 消融 |
+| `synth-guard` | 在昂贵综合前发现需要审查的 C/C++ 构造 | 已以 observe 模式接入，默认关闭，不作为综合门禁 |
+
+首版保持默认关闭。发布前按 `S0`–`S3` 在 RAG-off 条件下做冻结 benchmark replay，至少记录触发率、误报率、运行开销、修复轮数和最终通过率。Bench4HLS 已用于多轮开发观察，因此不得把该回放称为 held-out 泛化验证。一个 Skill 只有在另行保留的独立数据上证明有收益且无不可接受退化后，才可进入默认策略。
+
+## 与现有规则注入的关系
+
+`agent/context/skills.py` 当前实现的是修复阶段的已验证 JSON 规则选择，不是这里定义的工作流 Skill runtime。首批 Skill 不放入 `skill/rules/`，也不通过诊断关键词直接注入 prompt；否则只是把现有 RAG 换成离散规则检索。工作流阶段由 `agent/workflow/runtime.py` 独立装载，产物、哈希和请求数也与旧规则分别记录。
+
+## 统一要求
+
+每个 Skill 的 `SKILL.md` 必须说明：
+
+- 触发条件和不应触发的情况；
+- 输入、输出及其来源；
+- 操作步骤和客观接受条件；
+- 失败时返回给修复模型的最小证据；
+- RAG 允许访问的知识域与最大证据量；
+- 已知失败模式和停止条件；
+- 验证状态，不得把“脚本可运行”等同于“Skill 有收益”。

@@ -17,16 +17,21 @@ from serve.inference import Failure
 
 def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
           *, initial_source=None, raw_initial=False, started=None, rag_runtime=None,
-          initial_validation=None):
+          initial_validation=None, workflow_skills=None):
     started = time.monotonic() if started is None else started
     budget = Budget(started, started + runtime['hls']['total_timeout_seconds'] - policy['cleanup_reserve_seconds'])
     candidates = Candidates(task.fingerprint, json_digest(runtime['hls']))
     templates = load_prompts()  # One immutable prompt snapshot for all attempts in this run.
     rag = Retrieval(policy, rag_runtime)
+    if workflow_skills is None:
+        raise Failure('workflow_configuration_error', 'Workflow skill runtime was not supplied')
     summary = dict(schema_version=1, branch='agent', run_id=run_id, status='running',
                    problem_sha256=digest(task.problem), config_sha256=json_digest(runtime),
                    policy_sha256=json_digest(policy), task_sha256=task.fingerprint,
-                   skills_sha256=skills.sha256, model=runtime['model'], agent_used=True,
+                   skills_sha256=skills.sha256, workflow_skills_sha256=workflow_skills.sha256,
+                   workflow_skills_enabled=workflow_skills.enabled, workflow_skills_used=[],
+                   workflow_requests=0, model_requests=0, workflow_history=[],
+                   model=runtime['model'], agent_used=True,
                    prompt_templates_version=templates.version, prompt_templates_sha256=templates.sha256,
                    raw_initial=raw_initial,
                    rag_enabled=rag.enabled, rag_config_sha256=rag.sha256, rag_history=[],
@@ -43,6 +48,7 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
     artifacts.json('policy.json', policy)
     artifacts.json('prompt_templates.json', templates.snapshot())
     artifacts.json('rag.json', rag.snapshot)
+    artifacts.json('workflow_skills.json', workflow_skills.snapshot())
     artifacts.json('task.json', task.snapshot())
     for material in task.materials:
         artifacts.bytes('materials/' + material.name, material.content)
@@ -54,10 +60,74 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
     stagnant = 0
     stop = 'not_started'
     fatal = False
+    code_requests = 0
+    workflow_requests = 0
+    workflow_context = None
+    selftest_source = None
+    selftest_bundle = None
+
+    def dispatch_workflow(kind, prompt, directory):
+        nonlocal workflow_requests
+        directory.mkdir(parents=True, exist_ok=False)
+        budget.requests += 1
+        workflow_requests += 1
+        summary.update(workflow_requests=workflow_requests, model_requests=budget.requests)
+        summary['requests'].append({'attempt': None, 'kind': kind, 'state': 'dispatched',
+                                    'request_outcome_unknown': True})
+        artifacts.event('workflow_generation_dispatched', skill=kind, request_number=budget.requests,
+                        prompt_sha256=digest(prompt.text.encode()), messages_sha256=json_digest(prompt.messages))
+        artifacts.json('result.json', summary)
+        metadata = model.generate(prompt, runtime, directory, budget.deadline)
+        summary['requests'][-1].update(state='finished', **metadata)
+        artifacts.event('workflow_generation_finished', skill=kind, metadata=metadata)
+        artifacts.json('result.json', summary)
+        if metadata.get('status') != 'passed':
+            raise Failure(metadata.get('category', 'generation_error'),
+                          'Workflow model request failed; inspect ' + str(directory / 'generation.log'))
+        return (directory / 'response.txt').read_text(encoding='utf-8')
     try:
         if budget.remaining() <= 0:
             raise Failure('total_timeout', 'Budget exhausted during input preparation')
         validator.preflight(task, runtime, artifacts.root)
+        if raw_initial and workflow_skills.enabled:
+            raise Failure('policy_error', 'Workflow skills are incompatible with raw_initial')
+        if 'problem-contract' in workflow_skills.enabled:
+            prompt = workflow_skills.contract_prompt(task, runtime, policy)
+            response = dispatch_workflow('problem-contract', prompt,
+                                         artifacts.root / 'workflow/problem-contract')
+            contract, test_plan = workflow_skills.parse_contract(response, task, prompt)
+            workflow_context = {'contract': contract, 'test_plan': test_plan}
+            artifacts.json('workflow/problem-contract/contract.json', contract)
+            artifacts.json('workflow/problem-contract/test_plan.json', test_plan)
+            summary['workflow_skills_used'].append('problem-contract')
+            summary['workflow_history'].append({
+                'skill': 'problem-contract', 'status': 'ready',
+                'contract_sha256': json_digest(contract),
+                'test_plan_sha256': json_digest(test_plan),
+                'created_before_candidate': True,
+            })
+            artifacts.event('workflow_artifact_ready', skill='problem-contract',
+                            contract_sha256=json_digest(contract), test_plan_sha256=json_digest(test_plan))
+            if 'functional-selftest' in workflow_skills.enabled:
+                prompt = workflow_skills.selftest_prompt(task, runtime, policy, contract, test_plan)
+                response = dispatch_workflow('functional-selftest', prompt,
+                                             artifacts.root / 'workflow/functional-selftest')
+                selftest_source, selftest_bundle, extraction = workflow_skills.parse_selftest(
+                    response, task, contract, test_plan, prompt)
+                artifacts.bytes('workflow/functional-selftest/testbench.cpp', selftest_source.encode('utf-8'))
+                artifacts.json('workflow/functional-selftest/bundle.json', selftest_bundle)
+                artifacts.json('workflow/functional-selftest/extraction.json', extraction)
+                summary['workflow_skills_used'].append('functional-selftest')
+                summary['workflow_history'].append({
+                    'skill': 'functional-selftest', 'status': 'ready',
+                    'bundle_sha256': selftest_bundle['bundle_sha256'],
+                    'testbench_sha256': selftest_bundle['testbench_sha256'],
+                    'created_before_candidate': True,
+                })
+                artifacts.event('workflow_artifact_ready', skill='functional-selftest',
+                                bundle_sha256=selftest_bundle['bundle_sha256'],
+                                testbench_sha256=selftest_bundle['testbench_sha256'])
+            artifacts.json('result.json', summary)
         for number in range(policy['max_repairs'] + 1):
             if budget.remaining() <= 0:
                 raise Failure('total_timeout', 'Single-task budget exhausted')
@@ -84,9 +154,10 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
                                             mode=evidence['mode'], rag_config_sha256=rag.sha256)
                             artifacts.json('result.json', summary)
                 prompt = build(task, runtime, policy, previous, diagnostic, selected_skills, raw_initial,
-                               templates=templates, retrieval=retrieval)
+                               templates=templates, retrieval=retrieval, workflow_context=workflow_context)
                 summary['skills_used'] |= bool(prompt.skills)
                 budget.requests += 1
+                code_requests += 1
                 summary['repair_attempts_used'] = number
                 artifacts.event('generation_dispatched', attempt=number, request_number=budget.requests,
                                 prompt_sha256=digest(prompt.text.encode()), messages_sha256=json_digest(prompt.messages),
@@ -107,9 +178,9 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
                                     rejected_count=retrieval.get('rejected_count'),
                                     injection_policy=retrieval.get('injection_policy'),
                                     no_reference_reason=retrieval.get('no_reference_reason'))
-                summary['requests'].append({'attempt': number, 'state': 'dispatched',
+                summary['requests'].append({'attempt': number, 'kind': 'candidate_generation', 'state': 'dispatched',
                                             'request_outcome_unknown': True})
-                summary['generation_requests'] = budget.requests
+                summary.update(generation_requests=code_requests, model_requests=budget.requests)
                 artifacts.json('result.json', summary)
                 metadata = model.generate(prompt, runtime, directory, budget.deadline)
                 summary['requests'][-1].update(state='finished', **metadata)
@@ -130,13 +201,70 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
                 break
             artifacts.event('candidate_created', attempt=number, source_sha256=candidate.sha256,
                             parent_id=candidate.parent_id, extraction=extraction, extraction_details=extraction_details)
-            if not task.stages:
+            diagnostic = None
+            if selftest_source is not None:
+                if not hasattr(validator, 'selftest'):
+                    raise Failure('selftest_unavailable', 'Validator has no generated self-test adapter')
+                selftest_task, selftest_name = workflow_skills.selftest_task(task, selftest_source, selftest_bundle)
+                budget.tool_calls += 1
+                artifacts.event('validation_started', attempt=number, stage='selftest',
+                                source_sha256=candidate.sha256, bundle_sha256=selftest_bundle['bundle_sha256'])
+                outcome = validator.selftest(candidate, selftest_task, runtime, budget.deadline)
+                if (outcome.source_sha256 != candidate.sha256
+                        or outcome.task_sha256 != selftest_task.fingerprint
+                        or outcome.config_sha256 != json_digest(runtime['hls'])
+                        or outcome.stage != 'selftest'):
+                    raise Failure('evidence_mismatch', 'Generated self-test evidence does not match candidate, task or configuration')
+                result = {
+                    'schema_version': 1,
+                    'runner_version': selftest_bundle['runner_version'],
+                    'source_sha256': candidate.sha256,
+                    'task_sha256': task.fingerprint,
+                    'selftest_task_sha256': selftest_task.fingerprint,
+                    'bundle_sha256': selftest_bundle['bundle_sha256'],
+                    'contract_sha256': selftest_bundle['contract_sha256'],
+                    'test_plan_sha256': selftest_bundle['test_plan_sha256'],
+                    'config_sha256': json_digest(runtime['hls']),
+                    'outcome': asdict(outcome),
+                }
+                artifacts.json(f'candidates/{number:03d}/selftest.json', result)
+                summary['workflow_history'].append({
+                    'skill': 'functional-selftest', 'attempt': number,
+                    'status': outcome.outcome['status'], 'source_sha256': candidate.sha256,
+                    'bundle_sha256': selftest_bundle['bundle_sha256'],
+                    'category': outcome.outcome.get('category'),
+                })
+                summary.update(tool_calls=budget.tool_calls)
+                artifacts.event('validation_finished', attempt=number, stage='selftest',
+                                status=outcome.outcome['status'], source_sha256=candidate.sha256)
+                artifacts.json('result.json', summary)
+                if outcome.outcome['status'] != 'passed':
+                    category = outcome.outcome.get('category')
+                    if (selftest_name in outcome.feedback_text
+                            or category == 'functional_or_runtime_error'
+                            and not outcome.feedback_text.startswith('Functional diagnostic')):
+                        raise Failure('selftest_invalid', 'Generated self-test failed independently of actionable candidate evidence')
+                    diagnostic = classify(outcome)
+            if not task.stages and diagnostic is None:
                 stop = 'no_validation_materials'
                 break
-            diagnostic = None
-            for stage_index, stage in enumerate(task.stages):
+            for stage_index, stage in enumerate(task.stages if diagnostic is None else ()):
                 if budget.remaining() <= 0:
                     raise Failure('total_timeout', 'Budget exhausted before ' + stage)
+                if stage == 'synthesis' and 'synth-guard' in workflow_skills.enabled:
+                    guard = workflow_skills.scan(candidate.source, f'candidates/{number:03d}/candidate.cpp')
+                    artifacts.json(f'candidates/{number:03d}/synth_guard.json', guard)
+                    budget.tool_calls += 1
+                    if 'synth-guard' not in summary['workflow_skills_used']:
+                        summary['workflow_skills_used'].append('synth-guard')
+                    summary['workflow_history'].append({
+                        'skill': 'synth-guard', 'attempt': number, 'status': guard['status'],
+                        'source_sha256': candidate.sha256, 'finding_count': guard['finding_count'],
+                        'mode': workflow_skills.options['synth_guard_mode'],
+                    })
+                    artifacts.event('synth_guard_finished', attempt=number, status=guard['status'],
+                                    source_sha256=candidate.sha256, finding_count=guard['finding_count'],
+                                    mode=workflow_skills.options['synth_guard_mode'])
                 budget.tool_calls += 1
                 artifacts.event('validation_started', attempt=number, stage=stage, source_sha256=candidate.sha256)
                 if number == 0 and initial_validation is not None and stage_index < len(initial_validation):
@@ -202,9 +330,12 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
             if isinstance(value, (int, float)):
                 usage[key] = usage.get(key, 0) + value
     summary.update(status=status, validation_status=validation_status, stop_reason=stop,
-                   generation_requests=budget.requests, api_requests_recorded=sum(r.get('requests', 0) for r in summary['requests']),
+                   generation_requests=code_requests, workflow_requests=workflow_requests,
+                   model_requests=budget.requests,
+                   api_requests_recorded=sum(r.get('requests', 0) for r in summary['requests']),
                    request_outcomes_unknown=sum(bool(r.get('request_outcome_unknown')) for r in summary['requests']),
-                   request_count_note='generation_requests counts dispatched attempts conservatively; metadata records known sends.',
+                   request_count_note=('generation_requests counts candidate requests; workflow_requests counts '
+                                       'contract/self-test requests; model_requests is their dispatched total.'),
                    tool_calls=budget.tool_calls, usage=usage, candidates=candidates.history(),
                    elapsed_seconds=round(time.monotonic() - started, 3),
                    finished_at=datetime.now(timezone.utc).isoformat(), exit_code=code)

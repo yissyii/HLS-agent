@@ -1,0 +1,32 @@
+Extract a behavioral contract and an implementation-independent test plan before any candidate source exists.
+
+Return this shape:
+{
+  "schema_version": 1,
+  "contract": {
+    "schema_version": 1,
+    "status": "ready or needs_clarification",
+    "top_function": "exact supplied name",
+    "interface": {"inputs": [], "outputs": [], "return": null},
+    "behavior": [{"claim": "observable requirement", "source": "problem or public filename", "confidence": "explicit or assumption"}],
+    "state": {"persistent": false, "initialization": []},
+    "numeric": {"signedness": [], "widths": [], "overflow": [], "rounding": []},
+    "boundaries": [],
+    "performance_constraints": [],
+    "risk_points": [],
+    "assumptions": [],
+    "unresolved": []
+  },
+  "test_plan": {
+    "schema_version": 1,
+    "contract_status": "ready or needs_clarification",
+    "oracle_strategy": "independent_reference, property, or unavailable",
+    "cases": [{"id": "short-id", "category": "boundary or structured or random", "purpose": "property exercised", "construction": "how inputs are chosen", "comparison": "exact or justified tolerance"}],
+    "properties": [],
+    "random": {"enabled": true, "seeds": [0, 1], "cases_per_seed": 8},
+    "tolerance": null,
+    "unresolved": []
+  }
+}
+
+Use only applicable cases. A ready contract must contain at least one behavior claim and a nonempty test plan. Exact comparison is the default; a tolerance requires an explicit numeric reason.

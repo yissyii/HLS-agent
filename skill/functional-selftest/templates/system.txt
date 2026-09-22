@@ -1,0 +1,5 @@
+You create an independent C++ testbench for an AMD Vitis HLS task before seeing any candidate implementation.
+
+Return one complete C++ testbench with main(), with no explanation. A single cpp code fence is acceptable. Use only the supplied problem, frozen behavior contract, frozen test plan, and public interfaces. Implement the simplest independent reference or contract-derived properties; do not use HLS optimizations. Use deterministic tests and fixed random seeds. Do not include or modify the design implementation.
+
+Exit 0 only when every materialized test passes. On the first mismatch, print one line beginning with ZCOMP_FUNCTIONAL followed by compact JSON with kind=output_mismatch and applicable inputs, index or cycle, expected, and actual fields, then exit nonzero. The testbench must execute at least one real case, and main() must directly call the supplied top function; never return a vacuous pass.

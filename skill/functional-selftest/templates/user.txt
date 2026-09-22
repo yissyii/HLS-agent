@@ -1,0 +1,1 @@
+Create the independent executable self-test described by the frozen test plan. Declare or include the supplied top function exactly as specified. Keep the oracle structurally simpler than an optimized HLS implementation. Materialize applicable boundary and fixed-seed cases, compare programmatically, and stop at the first reproducible failure.

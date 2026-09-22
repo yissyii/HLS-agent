@@ -21,7 +21,15 @@ class HLSValidator:
     def check(self, candidate, task, runtime, stage, deadline):
         if stage not in task.stages:
             raise Failure('input_error', 'Stage has no authorized validation materials')
-        work = candidate.path.parent / 'work'
+        return self._check(candidate, task, runtime, stage, deadline, 'work', stage)
+
+    def selftest(self, candidate, task, runtime, deadline):
+        if 'csim' not in task.stages:
+            raise Failure('selftest_unavailable', 'Generated self-test task has no executable testbench')
+        return self._check(candidate, task, runtime, 'csim', deadline, 'selftest_work', 'selftest')
+
+    def _check(self, candidate, task, runtime, stage, deadline, work_name, result_stage):
+        work = candidate.path.parent / work_name
         inputs = work / 'input'
         inputs.mkdir(parents=True, exist_ok=True)
         # Rewrite only this candidate's snapshot, never the task's originals.
@@ -45,7 +53,9 @@ class HLSValidator:
             if (inputs / material.name).read_bytes() != material.content:
                 raise Failure('evidence_mismatch', 'Validation input changed during execution')
         checks = {}
-        if stage == 'synthesis':
+        if result_stage == 'selftest':
+            checks = {}
+        elif stage == 'synthesis':
             checks['synthesize'] = outcome['status']
         elif outcome['status'] == 'passed':
             checks.update(parse='passed', compile='passed', run='passed')
@@ -72,4 +82,4 @@ class HLSValidator:
         else:
             feedback = f'{stage}: {category}. Detailed diagnostics are not released by this task.'
         return ValidationResult(candidate.sha256, task.fingerprint, json_digest(runtime['hls']),
-                                stage, outcome, checks, feedback)
+                                result_stage, outcome, checks, feedback)

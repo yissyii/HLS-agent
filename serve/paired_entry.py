@@ -14,6 +14,7 @@ from evaluation.hls import run_process
 from evaluation.task_io import load_task
 from agent.core.policy import load_policy
 from agent.context.skills import Skills
+from agent.workflow.runtime import WorkflowSkills, input_paths as workflow_input_paths
 from agent.context.prompts import load_prompts
 from agent.context.retrieval import input_artifacts, Retrieval
 from agent.core.policy import rag_options
@@ -29,6 +30,7 @@ def main():
     parser.add_argument('--task-manifest', help='Explicit public validation materials for the agent')
     parser.add_argument('--policy', help='Frozen agent policy JSON')
     parser.add_argument('--skills-dir', help='Read-only independently validated rule pack')
+    parser.add_argument('--workflow-skills-dir', help='Read-only root containing workflow Skill packages')
     parser.add_argument('--rag-runtime', help='Local RAG runtime paths')
     parser.add_argument('--cpu-only', action='store_true')
     args = parser.parse_args()
@@ -47,6 +49,7 @@ def _evaluate(args, parser):
     task = load_task(args.problem, args.task_manifest)
     policy = load_policy(args.policy)
     skill_pack = Skills(policy['skills_enabled'], args.skills_dir)
+    workflow_skill_pack = WorkflowSkills(policy, args.workflow_skills_dir)
     output.mkdir(parents=True, exist_ok=False)
     run_id = uuid.uuid4().hex
     problem = output / 'problem.txt'
@@ -54,7 +57,8 @@ def _evaluate(args, parser):
     snapshot = output / 'config.json'
     write_json(snapshot, config)
     expected = dict(run_id=run_id, problem_sha256=digest(problem_bytes), config_sha256=config_digest(config))
-    expected.update(policy_sha256=config_digest(policy), skills_sha256=skill_pack.sha256)
+    expected.update(policy_sha256=config_digest(policy), skills_sha256=skill_pack.sha256,
+                    workflow_skills_sha256=workflow_skill_pack.sha256)
     prompt_templates = load_prompts()
     expected['prompt_templates_sha256'] = prompt_templates.sha256
     write_json(output / 'prompt_templates.json', prompt_templates.snapshot())
@@ -101,6 +105,19 @@ def _evaluate(args, parser):
             frozen_files[str(target)] = digest(target.read_bytes())
         if Skills(True, skills_snapshot).sha256 != skill_pack.sha256:
             raise ValueError('Skill pack changed while preparing the paired snapshot')
+    workflow_skills_snapshot = None
+    if workflow_skill_pack.enabled:
+        workflow_skills_snapshot = output / 'workflow_skill_snapshot'
+        workflow_skills_snapshot.mkdir()
+        workflow_root = Path(args.workflow_skills_dir).resolve() if args.workflow_skills_dir else ROOT / 'skill'
+        for source in workflow_input_paths(policy, workflow_root):
+            relative = source.relative_to(workflow_root)
+            target = workflow_skills_snapshot / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(source.read_bytes())
+            frozen_files[str(target)] = digest(target.read_bytes())
+        if WorkflowSkills(policy, workflow_skills_snapshot).sha256 != workflow_skill_pack.sha256:
+            raise ValueError('Workflow Skill pack changed while preparing the paired snapshot')
     pair = dict(**expected, status='running', agent_entry=str(agent), baseline='baseline/result.json', agent='agent/result.json')
     write_json(output / 'pair.json', pair)
     baseline_code, _ = run(problem, output / 'baseline', config, run_id)
@@ -121,6 +138,8 @@ def _evaluate(args, parser):
             command += ['--task-manifest', str(manifest_snapshot)]
         if skills_snapshot:
             command += ['--skills-dir', str(skills_snapshot)]
+        if workflow_skills_snapshot:
+            command += ['--workflow-skills-dir', str(workflow_skills_snapshot)]
         if rag_snapshot:
             command += ['--rag-runtime', str(rag_snapshot)]
         if args.cpu_only:

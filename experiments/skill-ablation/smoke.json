@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "name": "skill-ablation-smoke-v1",
+  "tasks": ["Prob016", "Prob041", "Prob045", "Prob071", "Prob104", "Prob152"]
+}

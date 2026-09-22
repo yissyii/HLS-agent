@@ -4,6 +4,7 @@
 
 - `policy.rag-hybrid.json`：显式启用 RAG 的混合检索预设；与默认策略的其他参数一致。路径配置与使用方式见 [RAG 接入说明](../../report/design/rag_agent.md)。
 - `policy.json`：保存修复次数上限、停滞阈值、技能开关、检索数量及验证预留时间等参数。
+- `policy.skill-s0.json` 至 `policy.skill-s3.json`：RAG-off Workflow Skill 消融矩阵；依次启用 contract、generated self-test 和 observe-only synth guard，且旧 `skills_enabled` 始终关闭。
 - 参数由 `core/policy.py` 等对应模块解释，运行前加载并冻结，记录快照与哈希。
 - 模型名称、采样参数、上下文上限和 Vitis 配置继续读取共享运行配置，不在这里重复定义。
 

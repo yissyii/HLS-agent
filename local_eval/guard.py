@@ -10,6 +10,7 @@ import uuid
 from agent.core.policy import load_policy
 from agent.context.prompts import PROMPT_ROOT, PROMPT_FILES
 from agent.context.retrieval import input_artifacts
+from agent.workflow.runtime import input_paths as workflow_input_paths
 from evaluation.task_io import load_manifest
 from local_eval.retry import classify, load_settings, run_session
 from serve.inference import Failure, ROOT, load_config, write_json
@@ -81,6 +82,10 @@ def input_files(args):
             candidate = Path(value).resolve()
             if candidate.is_file():
                 files.add(candidate)
+    for value in getattr(args, 'policy_files', ()) or ():
+        candidate = Path(value).resolve()
+        if candidate.is_file():
+            files.add(candidate)
     manifests = []
     for field in ('manifest', 'task_manifest'):
         value = getattr(args, field, None)
@@ -100,10 +105,15 @@ def input_files(args):
     files.add(ROOT / 'agent/config/policy.json')
     files.update(PROMPT_ROOT / name for name in PROMPT_FILES)
     try:
-        policy = load_policy(getattr(args, 'policy', None))
-        if getattr(args, 'rag_compare', False):
-            policy = dict(policy, rag_enabled=True, rag_mode='hybrid')
-        files.update(input_artifacts(policy, getattr(args, 'rag_runtime', None)))
+        policy_sources = list(getattr(args, 'policy_files', ()) or ())
+        if not policy_sources:
+            policy_sources = [getattr(args, 'policy', None)]
+        for source in policy_sources:
+            policy = load_policy(source)
+            if getattr(args, 'rag_compare', False):
+                policy = dict(policy, rag_enabled=True, rag_mode='hybrid')
+            files.update(input_artifacts(policy, getattr(args, 'rag_runtime', None)))
+            files.update(workflow_input_paths(policy, getattr(args, 'workflow_skills_dir', None)))
     except (OSError, ValueError, KeyError, TypeError):
         # The normal command will report the configuration error; don't mask it
         # while identifying the files to freeze.
