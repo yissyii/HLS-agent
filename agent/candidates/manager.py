@@ -1,6 +1,6 @@
 """Candidate selection is based on evidence, never the last response alone."""
 from dataclasses import asdict
-from agent.core.contracts import Candidate
+from agent.core.contracts import Candidate, digest
 from serve.inference import Failure
 
 
@@ -16,6 +16,9 @@ class Candidates:
             return None
         self.items.append(item)
         return item
+
+    def contains(self, source):
+        return any(c.sha256 == digest(source.encode('utf-8')) for c in self.items)
 
     def attach(self, candidate, result):
         if (result.source_sha256 != candidate.sha256 or result.task_sha256 != self.task_sha256
