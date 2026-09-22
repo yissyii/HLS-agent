@@ -192,13 +192,13 @@ def solve(task, runtime, policy, model, validator, artifacts, skills, run_id,
                     raise Failure(metadata.get('category', 'generation_error'), 'Model request failed; inspect candidate generation.log')
                 source, extraction = extract_code((directory / 'response.txt').read_bytes().decode('utf-8'),
                                                   top_function=top_function, details=extraction_details)
-            artifacts.json(f'candidates/{number:03d}/extraction.json', extraction_details)
-            path = artifacts.bytes(f'candidates/{number:03d}/candidate.cpp', source.encode('utf-8'))
-            candidate = candidates.add(number, source, path, previous.candidate_id if previous else None)
-            if candidate is None:
+            if candidates.contains(source):
                 artifacts.event('duplicate_candidate', attempt=number, source_sha256=digest(source.encode()))
                 stop = 'repeated_candidate'
                 break
+            artifacts.json(f'candidates/{number:03d}/extraction.json', extraction_details)
+            path = artifacts.bytes(f'candidates/{number:03d}/candidate.cpp', source.encode('utf-8'))
+            candidate = candidates.add(number, source, path, previous.candidate_id if previous else None)
             artifacts.event('candidate_created', attempt=number, source_sha256=candidate.sha256,
                             parent_id=candidate.parent_id, extraction=extraction, extraction_details=extraction_details)
             diagnostic = None
