@@ -37,7 +37,7 @@ class ModelClient:
             result.update(status='failed', category='generation_timeout')
         elif execution['exit_code'] != 0:
             result.update(status='failed', category=metadata.get('category', 'generation_error'))
-        result['request_outcome_unknown'] = (not metadata or metadata.get('status') == 'sending'
+        result['request_outcome_unknown'] = (metadata.get('request_outcome_unknown', False) or not metadata or metadata.get('status') == 'sending'
                                              or bool(metadata.get('requests')) and metadata.get('category') == 'api_network_or_timeout')
         from evaluation.lifecycle import observe_request
         observe_request(metadata_path, result)

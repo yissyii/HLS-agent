@@ -15,6 +15,7 @@ Usage:
   python -B tools/run_bench4hls_compare.py --config serve/runtime.local.json
 """
 import argparse
+import hashlib
 import json
 import subprocess
 import sys
@@ -58,6 +59,7 @@ def _metrics(receipt):
         "validation_status": receipt.get("validation_status"),
         "status": receipt.get("status"),
         "stop_reason": receipt.get("stop_reason"),
+        "category": receipt.get("category"),
         "api_requests": receipt.get("api_requests_recorded"),
         "elapsed_seconds": receipt.get("elapsed_seconds"),
     }
@@ -125,6 +127,8 @@ def main():
     parser.add_argument("--cpu-only", action="store_true")
     parser.add_argument("--task", help="Run a single Prob id (e.g. Prob001)")
     parser.add_argument("--selection", help="Selection JSON from select_bench4hls_tasks.py")
+    parser.add_argument("--resume-summary", action="append", default=[],
+                        help="Retain earliest completed results from this batch; repeat in chronological order")
     parser.add_argument("--dataset", default=str(DATASET), help="Any directory with compatible task folders")
     args = parser.parse_args()
     return development_evaluation(args, _evaluate)
@@ -157,12 +161,40 @@ def _evaluate(args):
                "workers": args.workers, "cpu_only": args.cpu_only,
                "task_count": len(task_dirs), "status": "running", "results": [],
                "started_at": datetime.now(timezone.utc).isoformat()}
+    retained = {}
+    from evaluation.metrics import eligible
+    for previous_path in args.resume_summary:
+        previous_path = Path(previous_path).resolve()
+        previous = json.loads(previous_path.read_text(encoding='utf-8'))
+        inputs_path = previous_path.parents[3] / 'inputs.json'
+        if inputs_path.is_file():
+            fingerprints = json.loads(inputs_path.read_text(encoding='utf-8'))
+            for filename, expected in fingerprints.items():
+                if hashlib.sha256(Path(filename).read_bytes()).hexdigest() != expected:
+                    raise ValueError('Resume input changed: ' + filename)
+        old_config = json.loads(Path(previous['config']).read_text(encoding='utf-8'))
+        current_config = json.loads(Path(args.config).read_text(encoding='utf-8'))
+        if old_config != current_config:
+            raise ValueError('Cannot resume with changed model or HLS configuration')
+        for row in previous['results']:
+            key = (row['task'], row['method'])
+            if row['method'] not in ('baseline', 'agent') or row['task'] not in {d.name for d in task_dirs}:
+                continue
+            if eligible(row):
+                retained.setdefault(key, dict(row, origin_summary=str(previous_path)))
+    summary['results'] = list(retained.values())
+    summary['resume_summaries'] = args.resume_summary
+    summary['retry_policy'] = 'request_in_place_v1'
+    summary['retained_count'] = len(retained)
     summary_file = batch_dir / "summary.json"
     summary_file.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
 
     def work():
         for d in task_dirs:
             for fn in (eval_baseline, eval_agent):
+                method = 'baseline' if fn == eval_baseline else 'agent'
+                if (d.name, method) in retained:
+                    continue
                 yield fn, d
 
     started = time.monotonic()
@@ -183,7 +215,7 @@ def _evaluate(args):
                               "status": result.get("status"), "stop_reason": result.get("stop_reason"),
                               "api_requests": result.get("api_requests"),
                               "elapsed_seconds": result.get("elapsed_seconds"),
-                              "done": len(summary["results"]), "total": len(futures)},
+                              "done": len(summary["results"]), "total": len(task_dirs) * 2},
                              ensure_ascii=False), flush=True)
 
     summary["status"] = "completed"
@@ -191,13 +223,18 @@ def _evaluate(args):
     summary["finished_at"] = datetime.now(timezone.utc).isoformat()
 
     by_method = {}
+    from evaluation.metrics import eligible, summarize
+    summary['ability_metrics'] = summarize(summary['results'])
     for method in ("baseline", "agent"):
         rows = [r for r in summary["results"] if r.get("method") == method]
+        pending = sum(not eligible(r) for r in rows)
+        rows = [r for r in rows if eligible(r)]
         n = len(rows)
         def rate(key):
             return sum(bool(r.get(key)) for r in rows) / n if n else 0.0
         by_method[method] = {
             "tasks": n,
+            "pending_infrastructure_or_review": pending,
             "compile": sum(bool(r.get("compile")) for r in rows),
             "run": sum(bool(r.get("run")) for r in rows),
             "synthesize": sum(bool(r.get("synthesize")) for r in rows),

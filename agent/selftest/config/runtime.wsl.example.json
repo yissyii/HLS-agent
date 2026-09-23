@@ -1,0 +1,23 @@
+{
+  "model": {
+    "base_url": "http://127.0.0.1:8000/v1",
+    "name": "replace-with-your-local-model",
+    "max_tokens": 4096,
+    "temperature": 0,
+    "enable_thinking": false,
+    "timeout_seconds": 180,
+    "context_tokens": 16384,
+    "context_note": "Example only; verify actual model context limit before model-generation evaluation.",
+    "tls_sha256": ""
+  },
+  "hls": {
+    "vitis_root": "/opt/zcomp-amd/2026.1/Vitis",
+    "vivado_root": "/opt/zcomp-amd/2026.1/Vivado",
+    "license_file": null,
+    "part": "xczu3eg-sbva484-1-e",
+    "clock_ns": 5,
+    "csim_timeout_seconds": 120,
+    "synthesis_timeout_seconds": 300,
+    "total_timeout_seconds": 600
+  }
+}

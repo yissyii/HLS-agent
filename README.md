@@ -70,7 +70,7 @@ cd F:\Projects\ADMCmpt\zcomp
 
 `output/` is recreated automatically. Do not commit raw responses, generated code, logs, synthesized RTL, tool reports, credentials or caches. Curated Markdown reports belong in `report/`.
 
-研发期间，上述入口以及 Agent、严格基线、配对、对比评测入口默认必经统一的评测管理模块，无须额外开启。遇到 503 等临时 HTTP 错误或网络异常，整轮作废并自动从头重跑；批量/配对命令由最外层统一重跑，子任务不单独重试。默认最多重跑两次，参数位于 `local_eval/retry.json`。
+研发评测永久采用请求级基础设施重试：保留已完成结果，只重试发生外部服务或网络故障的请求，不再整轮作废重跑。默认最多额外重试两次；未恢复项单列为未完成，不计入能力失败。详见 `local_eval/README.md`。
 
 显式输出目录现在保存整个会话，每轮原始结果位于 `attempt_NNN/result/`；无显式输出目录时会话写入 `output/local_eval/`。先查看 `session.json` 的 `valid_attempt` 再读取成绩，作废轮保留日志但不计分。提交副本移除 `local_eval/` 即恢复原始单轮行为及输出路径。详见 [研发评测与移除说明](local_eval/README.md)。
 

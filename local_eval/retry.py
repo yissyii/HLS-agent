@@ -1,4 +1,4 @@
-"""Restart an entire local evaluation, never an individual generation request."""
+"""Retry external requests in place; never restart completed evaluations."""
 import json
 import math
 from pathlib import Path
@@ -35,9 +35,9 @@ def classify(metadata, settings):
     """Only structured model-transport evidence, never generated text/tool logs."""
     category = metadata.get('category')
     status = metadata.get('http_status')
-    if category == 'api_network_or_timeout':
+    if category in {'api_network_or_timeout', 'api_auth_error', 'api_tls_error', 'api_response_error'}:
         return category
-    if category in {'api_http_error', 'api_quota_or_rate_limit'} and status in settings['retry_http_statuses']:
+    if category in {'api_http_error', 'api_quota_or_rate_limit'}:
         return 'http_' + str(status)
     # The worker deadline may be exhausted by model speed/total task budget,
     # rather than a network fault. Do not discard it by default.
@@ -61,7 +61,7 @@ def run_session(output, settings, run_once, *, sleep=time.sleep, verify=lambda: 
 
     save()
     try:
-        for number in range(settings['max_restarts'] + 1):
+        for number in range(1):  # Never restart the dataset.
             verify()
             attempt = output / ('attempt_%03d' % number)
             attempt.mkdir(exist_ok=False)
@@ -77,19 +77,10 @@ def run_session(output, settings, run_once, *, sleep=time.sleep, verify=lambda: 
                                valid_attempt=attempt.name)
                 save()
                 return result['exit_code'], summary
-            record.update(status='discarded_network', valid_for_metrics=False)
-            # Preserve everything, including successful sibling tasks/branches.
-            write_json(attempt / 'discarded.json', record)
-            print(json.dumps({'local_eval': 'discarded_network', 'attempt': attempt.name,
-                              'network_failures': result['network_failures']}, ensure_ascii=False), flush=True)
-            if number == settings['max_restarts']:
-                summary['status'] = 'network_retries_exhausted'
-                save()
-                return 2, summary
-            delay = min(settings['initial_delay_seconds'] * 2 ** number, settings['max_delay_seconds'])
-            record['retry_delay_seconds'] = delay
+            record.update(status='retained_with_network_failures', valid_for_metrics=False)
+            summary.update(status='completed_with_network_failures', valid_attempt=attempt.name)
             save()
-            sleep(delay)
+            return 2, summary
     except BaseException as error:
         summary.update(status='interrupted' if isinstance(error, KeyboardInterrupt) else 'runner_error',
                        error=str(error), valid_attempt=None)

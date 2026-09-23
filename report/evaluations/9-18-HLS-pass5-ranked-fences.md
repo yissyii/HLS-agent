@@ -1,3 +1,5 @@
+> **历史记录，禁止作为当前基线引用。** 本报告使用 Vitis/Vivado 2025.2；当前唯一 HLS pass@5 基线为 [Vitis/Vivado 2026.1 冻结结果](9-23-HLS-pass5-vitis2026.1.md)。后续 baseline/agent 对比必须引用 2026.1 报告和对应的 `output/baseline_pass5_ranked_fences_v1_20260923_vitis2026_1/summary.json`。
+
 # HLS pass@5 冻结基线与问题（2026-09-18）
 
 冻结日期：2026-09-18  

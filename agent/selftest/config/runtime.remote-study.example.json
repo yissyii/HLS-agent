@@ -1,0 +1,23 @@
+{
+  "model": {
+    "base_url": "http://127.0.0.1:8000/v1",
+    "name": "unused-for-validation",
+    "max_tokens": 4096,
+    "temperature": 0,
+    "enable_thinking": false,
+    "timeout_seconds": 120,
+    "context_tokens": 16384,
+    "context_note": "Remote validation-only example. Generation uses the separately frozen model runtime.",
+    "tls_sha256": ""
+  },
+  "hls": {
+    "vitis_root": "/home/dingjy/sxt/zcomp-agent/vivado/2026.1/Vitis",
+    "vivado_root": "/home/dingjy/sxt/zcomp-agent/vivado/2026.1/Vivado",
+    "license_file": "/home/dingjy/sxt/zcomp-agent/vivado/Xilinx_basic_20260922.lic",
+    "part": "xczu3eg-sbva484-1-e",
+    "clock_ns": 5,
+    "csim_timeout_seconds": 120,
+    "synthesis_timeout_seconds": 300,
+    "total_timeout_seconds": 600
+  }
+}

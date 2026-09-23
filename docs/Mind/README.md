@@ -1,6 +1,6 @@
 # 项目画布
 
-更新日期：2026-09-18。以 `F:/Projects/ADMCmpt` 为 Obsidian vault 根目录，直接在文件列表中打开以下 `.canvas` 文件。
+更新日期：2026-09-23。当前 HLS pass@5 基线已切换至 Vitis/Vivado 2026.1。以 `F:/Projects/ADMCmpt` 为 Obsidian vault 根目录，直接在文件列表中打开以下 `.canvas` 文件。
 
 - [项目结构思维导图](project-structure.canvas)：工作区、框架入口、Agent、验证、知识、报告和本地产物的关系；节点内可点击链接查看文档。
 - [Agent 与裸基线流程图](agent-flow.canvas)：两条入口、研发外层、模块作用、验证范围、修复循环和交付。节点与连线均可编辑。

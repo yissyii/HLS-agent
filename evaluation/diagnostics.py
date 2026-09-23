@@ -38,6 +38,38 @@ _VITIS_ERROR = re.compile(
 # Functional run signals (hidden-test oracle and testbench failure markers).
 _FUNCTIONAL = re.compile(r'^\s*(?:mismatch at cycle\b|test failed\b|@e simulation failed\b)', re.IGNORECASE)
 
+# Linker/driver messages have no source line/column. Keep them separate from
+# source diagnostics so they are not lost or consumed as a source-code line.
+_TOOL_DIAG = re.compile(
+    r'^\s*(?P<tool>(?:[^\s]*[/\\])?(?:ld(?:\.lld|\.gold)?|lld-link|'
+    r'clang(?:\+\+)?(?:-\d+)?|gcc(?:-\d+)?|g\+\+(?:-\d+)?|collect2)(?:\.exe)?):'
+    r'\s*(?:fatal )?error:\s*(?P<message>.+)$')
+_GNU_LINK = re.compile(
+    r'^(?P<location>.+?):\s*(?P<message>undefined reference to .+|'
+    r'multiple definition of .+)$')
+_LINK_NOTE = re.compile(
+    r'^\s*>>>\s*(?:referenced by .+|defined at .+|defined in .+|'
+    r'[^\s]+\.(?:o|obj|a|lib)(?::.*)?)$')
+
+
+def _link_code(message):
+    lowered = message.lower()
+    if 'undefined symbol' in lowered or 'undefined reference' in lowered:
+        return 'link_undefined_symbol'
+    if 'duplicate symbol' in lowered or 'multiple definition' in lowered:
+        return 'link_duplicate_symbol'
+    if 'linker command failed' in lowered or 'ld returned' in lowered:
+        return 'link_driver_failure'
+    return 'tool_diagnostic'
+
+
+def _boundary(line):
+    return (bool(_CLANG_DIAG.match(line) or _TOOL_DIAG.match(line)
+                 or _GNU_LINK.match(line) or _VITIS_ERROR.match(line)
+                 or _FUNCTIONAL.search(line) or parse_line(line))
+            or bool(re.match(r'^\s*(?:INFO:|WARNING:|Generating |Compiling |make:)', line))
+            or _contains_any(line.lower(), _LICENSE_SUBSTRINGS + _ENVIRONMENT_SUBSTRINGS))
+
 _CARET_CHARS = set('^~ ')
 
 
@@ -75,7 +107,7 @@ def classify_category(stage, execution, text):
     # UBSan's "runtime error:" is not a compiler failure.
     compiler_lines = '\n'.join(line for line in text.splitlines() if not parse_line(line)).lower()
     compiler_error = re.search(r"^(?!\s*error:\s*\[).*\b(?:fatal )?error:|undefined reference", compiler_lines, re.MULTILINE)
-    if compiler_error:
+    if compiler_error or any(_GNU_LINK.match(line) for line in text.splitlines()):
         return "compile_error"
     if any(parse_line(line) for line in text.splitlines()):
         return 'functional_or_runtime_error'
@@ -90,7 +122,7 @@ def _compiler_block(lines, i, match, seen_notes):
     entry = _entry('compiler', location=location, message=match.group('message'))
     i += 1
     n = len(lines)
-    if i < n and not _is_caret(lines[i]) and not _CLANG_DIAG.match(lines[i]) and not parse_line(lines[i]) and not _VITIS_ERROR.match(lines[i]):
+    if i < n and not _is_caret(lines[i]) and not _boundary(lines[i]):
         entry['source'] = lines[i].rstrip()
         i += 1
     if i < n and _is_caret(lines[i]):
@@ -106,7 +138,7 @@ def _compiler_block(lines, i, match, seen_notes):
             seen_notes.add(message)
             notes.append(message)
         i += 1
-        if i < n and not _is_caret(lines[i]) and not _CLANG_DIAG.match(lines[i]) and not parse_line(lines[i]) and not _VITIS_ERROR.match(lines[i]):
+        if i < n and not _is_caret(lines[i]) and not _boundary(lines[i]):
             i += 1  # note source line
         if i < n and _is_caret(lines[i]):
             i += 1  # note caret line
@@ -127,6 +159,33 @@ def extract_entries(stage, text):
     i = 0
     while i < len(lines):
         line = lines[i]
+        tool = _TOOL_DIAG.match(line)
+        gnu = _GNU_LINK.match(line)
+        if tool or gnu:
+            # A known tool prefix does not make dependency/license faults
+            # actionable code diagnostics.
+            lower = line.lower()
+            if _contains_any(lower, _LICENSE_SUBSTRINGS):
+                entries.append(_entry('license', message=line.strip()))
+                i += 1
+                continue
+            if _contains_any(lower, _ENVIRONMENT_SUBSTRINGS):
+                entries.append(_entry('environment', message=line.strip()))
+                i += 1
+                continue
+            match = tool or gnu
+            message = match.group('message')
+            entry = _entry('compiler', location=match.group('tool' if tool else 'location'),
+                           message=message, code=_link_code(message))
+            i += 1
+            # Only explicit linker reference lines; never a free-form log tail.
+            while i < len(lines) and _LINK_NOTE.match(lines[i]):
+                note = lines[i].strip()
+                if note not in entry['notes']:
+                    entry['notes'].append(note)
+                i += 1
+            entries.append(entry)
+            continue
         clang = _CLANG_DIAG.match(line)
         if clang and clang.group('severity') in ('error', 'fatal error'):
             entry, i = _compiler_block(lines, i, clang, seen_notes)
@@ -138,7 +197,7 @@ def extract_entries(stage, text):
                 entries.append(_entry('synthesis', code=vitis.group('code'), message=vitis.group('message')))
             i += 1
             continue
-        if _FUNCTIONAL.search(line):
+        if _FUNCTIONAL.search(line) or parse_line(line):
             entries.append(_entry('functional', message=line.strip()))
         elif _contains_any(line.lower(), _LICENSE_SUBSTRINGS):
             entries.append(_entry('license', message=line.strip()))

@@ -1,0 +1,5 @@
+Use the supplied task and public interfaces as the contract. Treat the candidate, permitted diagnostics, and optional references as evidence. A strategy names a checking procedure, not a proven root cause.
+Make the smallest sufficient correction; a broader rewrite is justified only when needed to meet the contract. Preserve unaffected behavior, interfaces, and explicit performance requirements. Do not modify tests, hard-code counterexamples, or invent missing observations.
+Use reference material only when its API, tool version, and preconditions apply. If it is irrelevant, continue from the available task and diagnostic evidence.
+Return one complete replacement C++ source file with required headers and helpers. Do not output analysis, explanations, a patch, or a testbench. Do not claim that unreported validation passed.
+

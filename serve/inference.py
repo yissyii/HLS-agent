@@ -108,7 +108,67 @@ def request_payload(problem, config, *, system_prompt=''):
 
 
 def generate(problem, config, output, timeout=None, *, system_prompt=''):
+    from evaluation.lifecycle import request_retry_settings, observe_request
+    settings = request_retry_settings()
+    if settings is None:
+        return _generate_once(problem, config, output, timeout, system_prompt=system_prompt)
+    from local_eval.retry import classify
+    output = Path(output)
+    meta_path = Path(str(output) + '.meta.json')
+    if output.exists() or meta_path.exists():
+        raise Failure('input_error', 'Refusing to overwrite a previous response')
+    archive = output.parent / (output.name + '.transport')
+    archive.mkdir(parents=True, exist_ok=False)
+    started = time.monotonic()
+    deadline = started + (timeout or config['model']['timeout_seconds'])
+    history = []
+
+    def publish(current, final=False):
+        attempts = history + [current]
+        aggregate = dict(current, requests=sum(m.get('requests', 0) for m in attempts),
+                         transport_retries=len(history), retry_scope='request',
+                         request_outcome_unknown=any(m.get('category') == 'api_network_or_timeout'
+                             and bool(m.get('requests')) for m in attempts),
+                         transport_attempts=[{k: m[k] for k in ('status', 'category', 'http_status',
+                             'requests', 'elapsed_seconds', 'evidence') if k in m} for m in attempts],
+                         elapsed_seconds=round(time.monotonic() - started, 3))
+        if not final:
+            aggregate['status'] = 'sending'
+        write_json(meta_path, aggregate)
+        observe_request(meta_path, aggregate)
+        return aggregate
+
+    for number in range(settings['max_restarts'] + 1):
+        target = archive / ('attempt_%03d.txt' % number)
+        def observer(path, metadata):
+            publish(dict(metadata, evidence=str(path)))
+        failure = None
+        try:
+            _generate_once(problem, config, target, max(.001, deadline - time.monotonic()),
+                           system_prompt=system_prompt, observer=observer)
+        except Failure as error:
+            failure = error
+        current = json.loads(Path(str(target) + '.meta.json').read_text(encoding='utf-8'))
+        current['evidence'] = str(target) + '.meta.json'
+        reason = classify(current, settings)
+        delay = min(settings['initial_delay_seconds'] * 2 ** number, settings['max_delay_seconds'])
+        if failure and reason and number < settings['max_restarts'] and time.monotonic() + delay < deadline:
+            history.append(current)
+            time.sleep(delay)
+            continue
+        if target.exists():
+            with output.open('xb') as stream:
+                stream.write(target.read_bytes())
+        result = publish(current, final=True)
+        if failure:
+            raise failure
+        return result
+
+
+def _generate_once(problem, config, output, timeout=None, *, system_prompt='', observer=None):
     from evaluation.lifecycle import before_request, observe_request
+    if observer is not None:
+        observe_request = observer
     before_request()
     if not problem.strip():
         raise Failure("input_error", "Problem is empty")

@@ -62,6 +62,7 @@ def run(problem_path, output, config, run_id):
         meta_path = output / 'response.txt.meta.json'
         metadata = json.loads(meta_path.read_text(encoding='utf-8')) if meta_path.is_file() else {}
         result.update(generation_requests=metadata.get('requests', 0), usage=metadata.get('usage'),
+                      retries=metadata.get('transport_retries', 0),
                       finish_reason=metadata.get('finish_reason'), elapsed_seconds=round(time.monotonic()-started, 3),
                       finished_at=datetime.now(timezone.utc).isoformat())
         write_json(output / 'result.json', result)

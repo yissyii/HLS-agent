@@ -49,9 +49,14 @@ def output_path(path):
 
 
 def before_request():
+    scope()  # Validate scope; never cancel siblings after a transport fault.
+
+
+def request_retry_settings():
     attempt = scope()
-    if attempt and any((attempt / 'network_failures').glob('*.json')):
-        raise Failure('local_evaluation_aborted', 'Network failure invalidated this entire evaluation round')
+    if attempt is None:
+        return None
+    return json.loads((attempt / 'scope.json').read_text(encoding='utf-8'))['settings']
 
 
 def observe_request(path, metadata):
@@ -68,8 +73,10 @@ def observe_request(path, metadata):
     record['evidence'] = evidence
     write_json(attempt / 'requests' / (key + '.json'), record)
     reason = classify(metadata, descriptor['settings'])
-    if reason:
-        write_json(attempt / 'network_failures' / (key + '.json'), dict(record, reason=reason))
+    if reason and metadata.get('status') != 'sending':
+        directory = attempt / 'unresolved_network'
+        directory.mkdir(exist_ok=True)
+        write_json(directory / (key + '.json'), dict(record, reason=reason))
 
 
 def input_files(args):
@@ -164,7 +171,7 @@ def evaluate(args, run_once, *, output=None, output_is_file=False):
         try:
             code = run_once(copy.deepcopy(frozen_args))
             requests = [json.loads(p.read_text(encoding='utf-8')) for p in (attempt / 'requests').glob('*.json')]
-            failures = [json.loads(p.read_text(encoding='utf-8')) for p in (attempt / 'network_failures').glob('*.json')]
+            failures = [json.loads(p.read_text(encoding='utf-8')) for p in (attempt / 'unresolved_network').glob('*.json')]
             return dict(exit_code=code, network_failures=failures,
                         api_requests_recorded=sum(r.get('requests', 0) for r in requests),
                         request_outcomes_unknown=sum(r.get('status') == 'sending' or r.get('request_outcome_unknown', False)

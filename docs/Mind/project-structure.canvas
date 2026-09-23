@@ -1,6 +1,6 @@
 {
 	"nodes":[
-		{"id":"workspace","type":"text","x":0,"y":-820,"width":480,"height":220,"color":"6","text":"## ADMCmpt · 工作区\n\n- Obsidian vault 根目录\n- 核对日期：2026-09-18\n- [[zcomp/report/design/project_structure.md|项目结构详细说明]]"},
+		{"id":"workspace","type":"text","x":0,"y":-820,"width":480,"height":220,"color":"6","text":"## ADMCmpt · 工作区\n\n- Obsidian vault 根目录\n- 核对日期：2026-09-23\n- [[zcomp/report/design/project_structure.md|项目结构详细说明]]"},
 		{"id":"docs","type":"text","x":-720,"y":-820,"width":480,"height":300,"color":"3","text":"## docs/ · 资料与阅读\n\n- [[zcomp/docs/ReadReference/README|ReadReference/ 论文共读]]\n- [[download-manifest|文献与下载清单]]\n- [[AMD讲座_整理笔记|AMD 讲座笔记]]\n- 比赛指南、UG1399 手册与 Mind/ 画布"},
 		{"id":"zcomp","type":"text","x":0,"y":-380,"width":480,"height":260,"color":"6","text":"## zcomp/ · HLS 框架\n\n- Git 仓库根目录\n- [[zcomp/README.md|运行与配置说明]]\n- [[zcomp/report/design/instruction.md|当前能力与剩余工作]]"},
 		{"id":"entries","type":"text","x":-720,"y":-350,"width":480,"height":290,"color":"5","text":"## 运行入口\n\n- [[zcomp/run.sh|run.sh → Agent]]\n- [[zcomp/run_baseline.sh|run_baseline.sh → 严格裸基线]]\n- [[zcomp/run_paired.sh|run_paired.sh → 同配置配对]]\n- run_*.ps1 → Windows 入口"},
@@ -9,7 +9,7 @@
 		{"id":"eval","type":"text","x":720,"y":-260,"width":480,"height":310,"color":"4","text":"## evaluation/ · 验证执行\n\n- task_io.py → 公开题目与依赖\n- validator.py → 每候选独立工作目录\n- hls.py → Vitis 仿真、综合与超时\n- single_task.py / batch.py → 兼容及批量入口\n- lifecycle.py → 研发评测接入"},
 		{"id":"life","type":"text","x":-720,"y":570,"width":480,"height":310,"color":"5","text":"## local_eval/ · 研发会话\n\n- guard.py → 配置冻结、请求观察\n- retry.py → 网络故障整轮作废与重跑\n- retry.json → 默认额外重跑上限 2\n- 有效轮由 session.json 指定\n- [[zcomp/local_eval/README.md|生命周期与移除说明]]"},
 		{"id":"knowledge","type":"text","x":720,"y":220,"width":480,"height":340,"color":"3","text":"## skill/、rag/、model/\n\n- [[zcomp/skill/README.md|skill/ 只读规则内容，默认关闭]]\n- [[zcomp/rag/README.md|rag/ 手册建库与 BM25 / 向量 / 混合检索]]\n- RAG 尚未接入 Agent 默认流程\n- rag/reports/ 保存原始 JSON 证据\n- [[zcomp/model/MODEL.md|model/ 生成模型声明待补齐]]"},
-		{"id":"report","type":"text","x":720,"y":720,"width":480,"height":310,"color":"6","text":"## report/ · 报告归档\n\n- [[zcomp/report/README.md|报告与证据总索引]]\n- design/ 设计、状态与两张图\n- reproducibility/ 复现协议和环境记录\n- model_selection/ 检索方案依据\n- evaluations/ 四轮 baseline / Agent 对照"},
+		{"id":"report","type":"text","x":720,"y":720,"width":480,"height":310,"color":"6","text":"## report/ · 报告归档\n\n- [[zcomp/report/README.md|报告与证据总索引]]\n- design/ 设计、状态与两张图\n- reproducibility/ 复现协议和环境记录\n- model_selection/ 检索方案依据\n- evaluations/ 历史实验与当前基线\n- 当前 HLS 基线：Vitis/Vivado 2026.1，pass@5\n- [[zcomp/report/evaluations/9-23-HLS-pass5-vitis2026.1.md|当前冻结：155/610 综合通过]]"},
 		{"id":"support","type":"text","x":-720,"y":1040,"width":480,"height":350,"color":"2","text":"## 工程支撑\n\n- tools/ 评测、诊断与合同检查\n- data/ 数据清单；raw/、processed/ 本地忽略\n- [[zcomp/src/README.md|src/ 源码地图，不存实现]]\n- sim/ 仿真约定\n- build/、board/ 构建与板级约定\n- Dockerfile 仍为容器占位"},
 		{"id":"output","type":"text","x":720,"y":1190,"width":480,"height":290,"color":"2","text":"## output/ · 本地产物\n\n- 会话索引与有效轮\n- 请求、响应与候选代码\n- Vitis 日志、报告与 RTL\n- 实际输出目录也可由调用者指定\n- 运行产物由 Git 忽略"}
 	],

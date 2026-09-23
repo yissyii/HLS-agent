@@ -88,24 +88,24 @@ class LifecycleTests(unittest.TestCase):
                                                 source_file='kernel.cpp', testbench_files=['tb.cpp']))
         return directory / 'task.json'
 
-    def test_agent_default_entry_restarts_503(self):
+    def test_agent_retries_request_without_restarting(self):
         self.responses = [503, 200]
         output = self.root / 'agent'
         self.assertEqual(self.invoke(entry.main, [self.problem, output, '--config', self.config]), 0)
         summary = self.session(output)
-        self.assertEqual(summary['valid_attempt'], 'attempt_001')
+        self.assertEqual(summary['valid_attempt'], 'attempt_000')
         self.assertEqual(summary['api_requests_recorded_all_attempts'], 2)
         self.assertEqual(self.requests[0], self.requests[1])
-        self.assertTrue((output / 'attempt_000/discarded.json').is_file())
-        self.assertTrue((output / 'attempt_001/result/candidate.cpp').is_file())
-        self.assertFalse((output / 'attempt_000/result/candidate.cpp').exists())
+        self.assertFalse((output / 'attempt_000/discarded.json').exists())
+        self.assertTrue((output / 'attempt_000/result/candidate.cpp').is_file())
+        self.assertEqual(len(list(output.glob('attempt_*'))), 1)
         self.assertNotIn(guard.SCOPE_ENV, os.environ)
 
     def test_baseline_entry_and_disconnect_recovery(self):
         self.responses = ['disconnect', 200]
         output = self.root / 'baseline'
         self.assertEqual(self.invoke(baseline_entry.main, [self.problem, output, '--config', self.config]), 0)
-        self.assertEqual(self.session(output)['valid_attempt'], 'attempt_001')
+        self.assertEqual(self.session(output)['valid_attempt'], 'attempt_000')
         self.assertEqual(len(self.requests), 2)
 
     def test_legacy_file_entry_exports_only_accepted_response(self):
@@ -113,26 +113,25 @@ class LifecycleTests(unittest.TestCase):
         output = self.root / 'answer.cpp'
         self.assertEqual(self.invoke(baseline.main, [self.problem, output, '--config', self.config]), 0)
         self.assertTrue(output.is_file())
-        self.assertEqual(self.session(Path(str(output) + '.evaluation'))['valid_attempt'], 'attempt_001')
+        self.assertEqual(self.session(Path(str(output) + '.evaluation'))['valid_attempt'], 'attempt_000')
 
-    def test_paired_restarts_baseline_and_agent_together(self):
+    def test_paired_preserves_successful_baseline(self):
         self.responses = [200, 503, 200, 200]
         output = self.root / 'pair'
         self.assertEqual(self.invoke(paired_entry.main, [self.problem, output, '--config', self.config]), 0)
-        self.assertEqual(len(self.requests), 4)
+        self.assertEqual(len(self.requests), 3)
         summary = self.session(output)
-        self.assertEqual(summary['valid_attempt'], 'attempt_001')
+        self.assertEqual(summary['valid_attempt'], 'attempt_000')
         first = output / 'attempt_000/result/baseline/result.json'
-        last = output / 'attempt_001/result/baseline/result.json'
-        self.assertNotEqual(json.loads(first.read_text())['run_id'], json.loads(last.read_text())['run_id'])
+        self.assertEqual(json.loads(first.read_text())['generation_requests'], 1)
         self.assertEqual(len(list(output.rglob('session.json'))), 1)
 
-    def test_baseline_network_fault_prevents_agent_request_in_discarded_pair(self):
+    def test_baseline_network_fault_recovers_then_runs_agent(self):
         self.responses = [503, 200, 200]
         output = self.root / 'pair'
         self.assertEqual(self.invoke(paired_entry.main, [self.problem, output, '--config', self.config]), 0)
         self.assertEqual(len(self.requests), 3)
-        self.assertEqual(self.session(output)['valid_attempt'], 'attempt_001')
+        self.assertEqual(self.session(output)['valid_attempt'], 'attempt_000')
 
     def test_legacy_single_task_enters_scope_and_recovers(self):
         manifest = self.task('synthetic')
@@ -145,9 +144,9 @@ class LifecycleTests(unittest.TestCase):
         with patch.object(guard, 'run_session', side_effect=capture), patch('agent.interface.entry.HLSValidator', return_value=FakeValidator()):
             self.assertEqual(self.invoke(single_task.main, [manifest, '--config', self.config]), 0)
         self.assertEqual(len(captured), 1)
-        self.assertEqual(self.session(captured[0])['valid_attempt'], 'attempt_001')
+        self.assertEqual(self.session(captured[0])['valid_attempt'], 'attempt_000')
 
-    def test_batch_restarts_whole_dataset_without_nested_retry(self):
+    def test_batch_preserves_completed_sibling(self):
         for name in ('one', 'two'):
             self.task(name)
         self.responses = [200, 503, 200, 200]
@@ -167,11 +166,11 @@ class LifecycleTests(unittest.TestCase):
             self.assertEqual(self.invoke(batch.main, [self.root / 'dataset', '--config', self.config]), 0)
         self.assertEqual(len(captured), 1)
         summary = self.session(captured[0])
-        self.assertEqual(summary['valid_attempt'], 'attempt_001')
-        self.assertEqual(len(self.requests), 4)
+        self.assertEqual(summary['valid_attempt'], 'attempt_000')
+        self.assertEqual(len(self.requests), 3)
         self.assertEqual(len(list(captured[0].rglob('session.json'))), 1)
 
-    def test_compare_keeps_existing_cli_and_restarts_entire_round(self):
+    def test_compare_retries_only_failed_request(self):
         self.task('custom_name')
         self.responses = [200, 503, 200, 200]
         captured = []
@@ -194,31 +193,68 @@ class LifecycleTests(unittest.TestCase):
              patch('agent.interface.entry.HLSValidator', return_value=FakeValidator()):
             self.assertEqual(self.invoke(compare.main, ['--dataset', self.root / 'dataset', '--config', self.config, '--workers', '1']), 0)
         self.assertEqual(len(captured), 1)
-        self.assertEqual(self.session(captured[0])['valid_attempt'], 'attempt_001')
-        self.assertEqual(len(self.requests), 4)
+        self.assertEqual(self.session(captured[0])['valid_attempt'], 'attempt_000')
+        self.assertEqual(len(self.requests), 3)
+
+        prior = next(captured[0].rglob('summary.json'))
+        with patch.object(guard, 'run_session', side_effect=capture), patch.object(compare, '_run') as child_call:
+            self.assertEqual(self.invoke(compare.main, [
+                '--dataset', self.root / 'dataset', '--config', self.config, '--workers', '1',
+                '--resume-summary', prior]), 0)
+            child_call.assert_not_called()
+        resumed = json.loads(next(captured[1].rglob('summary.json')).read_text())
+        self.assertEqual(resumed['retained_count'], 2)
 
     def test_persistent_network_failure_exhausts_limit(self):
         self.responses = [503, 503, 503]
         output = self.root / 'failed'
         self.assertEqual(self.invoke(baseline_entry.main, [self.problem, output, '--config', self.config]), 2)
         summary = self.session(output)
-        self.assertIsNone(summary['valid_attempt'])
-        self.assertEqual(summary['status'], 'network_retries_exhausted')
+        self.assertEqual(summary['valid_attempt'], 'attempt_000')
+        self.assertEqual(summary['status'], 'completed_with_network_failures')
+        self.assertEqual(len(self.requests), 3)
+        self.assertEqual(len(summary['attempts']), 1)
         self.assertTrue(all(not a['valid_for_metrics'] for a in summary['attempts']))
 
     def test_non_network_failures_are_accepted_without_retry(self):
-        for response in (401, 404, 'length'):
+        for response in (400, 'length'):
             self.responses = [response]
             output = self.root / str(response)
             self.assertEqual(self.invoke(baseline_entry.main, [self.problem, output, '--config', self.config]), 1)
             self.assertEqual(self.session(output)['valid_attempt'], 'attempt_000')
             self.assertEqual(len(self.session(output)['attempts']), 1)
 
+    def test_external_service_errors_retry_without_extra_candidates(self):
+        for status in (401, 404, 429, 500, 502, 503, 504):
+            self.responses = [status, 200]
+            output = self.root / ('external_' + str(status))
+            before = len(self.requests)
+            self.assertEqual(self.invoke(baseline_entry.main, [self.problem, output, '--config', self.config]), 0)
+            self.assertEqual(len(self.requests) - before, 2)
+            receipt = json.loads((output / 'attempt_000/result/result.json').read_text())
+            self.assertEqual(receipt['retries'], 1)
+            self.assertEqual(receipt['generation_requests'], 2)
+            self.assertEqual(self.requests[-1], self.requests[-2])
+
+    def test_infrastructure_is_not_an_ability_failure(self):
+        from evaluation.metrics import summarize
+        rows = [
+            dict(task='one', method='baseline', overall=True),
+            dict(task='two', method='baseline', reason='api_auth_error'),
+            dict(task='three', method='baseline', reason='response_format_error'),
+            dict(task='one', method='agent', stop_reason='compile_error'),
+        ]
+        report = summarize(rows)
+        self.assertEqual(report['baseline']['scored'], 2)
+        self.assertEqual(report['baseline']['pending'], 1)
+        self.assertEqual(report['baseline']['pass_rate'], .5)
+        self.assertEqual(report['paired'], dict(tasks=1, baseline=1, agent=0))
+
     def test_only_transport_evidence_classifies_as_retryable(self):
         for status in (408, 429, 500, 502, 503, 504):
             self.assertIsNotNone(classify(dict(category='api_http_error', http_status=status), self.settings))
-        for category in ('compile_error', 'synthesis_error', 'functional_or_runtime_error', 'api_tls_error',
-                         'tool_timeout', 'total_timeout', 'generation_timeout', 'generation_incomplete', 'api_response_error'):
+        for category in ('compile_error', 'synthesis_error', 'functional_or_runtime_error',
+                         'tool_timeout', 'total_timeout', 'generation_timeout', 'generation_incomplete'):
             self.assertIsNone(classify(dict(category=category, message='503'), self.settings))
 
     def test_removing_module_restores_single_attempt(self):

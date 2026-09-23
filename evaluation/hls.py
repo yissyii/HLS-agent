@@ -41,6 +41,29 @@ def environment(work, settings, cpu_only):
         values[name] = str(location)
     values.update(XILINX_VITIS=str(vitis), XILINX_HLS=str(vitis), XILINX_VIVADO=str(vivado))
     values["PATH"] = str(vitis / "bin") + os.pathsep + str(vivado / "bin") + os.pathsep + values.get("PATH", "")
+    # 2026.1 csim requires AP_GCC_PATH (autosetup aborts without it). Link/runtime
+    # libs for clang-16 come from LD_LIBRARY_PATH; csim.mk itself points
+    # --gcc-toolchain at Vitis/tps/lnx64/gcc-8.3.0 (must be populated).
+    if os.name != "nt":
+        gcc_bin = vitis / "lnx64/tools/gcc/bin"
+        clang_lib = vitis / "lnx64/tools/clang-16/lib"
+        # Do not prepend lnx64/tools/gcc/lib64: its ancient libstdc++ breaks clang-16.
+        libs = [
+            vitis / "lib/lnx64.o",
+            vitis / "lnx64/lib/csim",
+            clang_lib,
+        ]
+        if gcc_bin.is_dir():
+            values["AP_GCC_PATH"] = str(gcc_bin)
+        existing = [p for p in values.get("LD_LIBRARY_PATH", "").split(os.pathsep) if p]
+        ordered = [str(p) for p in libs if p.is_dir()] + existing
+        seen, unique = set(), []
+        for path in ordered:
+            if path not in seen:
+                seen.add(path)
+                unique.append(path)
+        if unique:
+            values["LD_LIBRARY_PATH"] = os.pathsep.join(unique)
     if settings["license_file"]:
         values["XILINXD_LICENSE_FILE"] = str(Path(settings["license_file"]).resolve())
     if cpu_only:

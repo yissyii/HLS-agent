@@ -96,3 +96,16 @@ flowchart TD
 可编辑流程图：[functional-diagnostics-flow.canvas](../../docs/Mind/functional-diagnostics-flow.canvas)。
 
 本轮结果：95 项相关回归通过，其中新增功能诊断测试 11 项；最终对新增 11 项复核也通过（`output/functional_diagnostics_final.log`）。
+
+## Additional explicit testbench formats
+
+The text parser also accepts `Fixed test error at cycle N`,
+`Random test error at cycle N`, and `Error at test case N`, followed by
+an explicit expected/got (or actual) scalar pair. Test cases use `index`;
+cycles use `cycle`. Matching output labels such as `expected out=1, got out=0`
+produce `signal: out` and separate value strings. Decimal, hexadecimal, binary,
+boolean and floating-point scalar values are supported. Unrelated prefixes,
+incomplete pairs and conflicting output labels are rejected. Free-form input
+prose is not reconstructed; use `ZCOMP_FUNCTIONAL` for structured inputs/history.
+These events share the existing category classification, compiler-block exclusion,
+release-policy and whole-event budget handling. Dataset policies remain unchanged.

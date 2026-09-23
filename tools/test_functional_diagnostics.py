@@ -30,6 +30,53 @@ class FunctionalParsing(unittest.TestCase):
         self.assertEqual(report['events'][1]['observed']['mismatches_reported'], 6)
         self.assertNotIn('Mismatch', result['compiler_text'])
 
+    def test_explicit_testbench_formats(self):
+        cases = [
+            ('Fixed test error at cycle 4: a=0, b=1, expected out=1, got out=0',
+             dict(cycle=4, signal='out', expected='1', actual='0')),
+            ('Error at test case 2: inputs (a,b) = (0,1), expected out_sop = 1, got out_sop = 0',
+             dict(index=2, signal='out_sop', expected='1', actual='0')),
+            ('Random test error at cycle 12: expected 1, got 0',
+             dict(cycle=12, expected='1', actual='0')),
+            ('Random test error at cycle 8 for input 42: expected = 0xABC, got = 0x123',
+             dict(cycle=8, expected='0xABC', actual='0x123')),
+            ('Fixed test error at cycle 9: expected q = -1.25e-3, actual q = 0',
+             dict(cycle=9, signal='q', expected='-1.25e-3', actual='0')),
+        ]
+        for text, fields in cases:
+            with self.subTest(text=text):
+                result = self.extract(text)
+                self.assertEqual(result['category'], 'functional_or_runtime_error')
+                event = result['functional_diagnostics']['events'][0]
+                self.assertEqual(event['observed'], fields)
+                self.assertEqual(result['entries'][0]['kind'], 'functional')
+                self.assertEqual(event['failure_kind'], 'output_mismatch')
+                self.assertEqual(result['compiler_text'], '')
+
+    def test_testbench_prefixes_do_not_match_unrelated_or_incomplete_text(self):
+        for text in (
+            'INFO: Random test error at cycle 12: expected 1, got 0',
+            'compiler.cpp:2:3: error: expected 1, got 0',
+            'Example expected 1, got 0',
+            'Random test error at cycle 12garbage: expected 1, got 0',
+            'Random test error at cycle 12: expected 1',
+            'Error at test case 2: expected out=1, got other=0',
+            'Fixed test error at cycle 4: expected success, got failure',
+        ):
+            with self.subTest(text=text):
+                self.assertEqual(self.extract(text)['functional_diagnostics']['events'], [])
+
+    def test_new_formats_do_not_leak_through_compiler_source_or_note(self):
+        for prefix in ('Fixed test error at cycle 4', 'Random test error at cycle 12',
+                       'Error at test case 2'):
+            line = prefix + ': expected out=123456789, got out=0'
+            for preceding in ('kernel.cpp:1:2: error: unknown name',
+                              'kernel.cpp:1:2: error: unknown name\nsource\n ^\napi.h:2:3: note: declared here'):
+                result = self.extract(preceding + '\n' + line)
+                self.assertEqual(result['category'], 'compile_error')
+                self.assertNotIn('123456789', result['compiler_text'])
+                self.assertEqual(len(result['functional_diagnostics']['events']), 1)
+
     def test_runtime_is_not_compiler_and_timeout_is_not_deadlock(self):
         for text in ('kernel.cpp:7:9: runtime error: division by zero', 'Segmentation fault (core dumped)',
                      '==12==ERROR: AddressSanitizer: heap-buffer-overflow'):
@@ -129,6 +176,24 @@ class FunctionalRelease(unittest.TestCase):
                 else:
                     self.assertIn('PRIVATE_UNRELATED_LOG', prompt.text)
 
+    def test_new_formats_release_only_under_authorized_policies(self):
+        self.public_task(feedback='functional_diagnostics')
+        task = load_task(self.problem, self.manifest)
+        candidate = Candidate(0, 'int kernel(int a){return a;}', self.directory/'c0/candidate.cpp', None)
+        for prefix in ('Fixed test error at cycle 4', 'Random test error at cycle 12',
+                       'Error at test case 2'):
+            extracted = extract_diagnostics('csim', {'timed_out': False, 'exit_code': 1},
+                                           prefix + ': expected out=123456789, got out=0')
+            with patch('evaluation.validator.validate_stage', return_value=dict(extracted, status='failed')):
+                for policy in ('category_only', 'compiler_diagnostics', 'functional_diagnostics', 'public_diagnostics'):
+                    with self.subTest(prefix=prefix, policy=policy):
+                        task.manifest['feedback_policy'] = policy
+                        result = HLSValidator().check(candidate, task, self.config, 'csim', time.monotonic()+10)
+                        prompt = build(task, self.config, self.policy, candidate, classify(result))
+                        self.assertEqual('123456789' in prompt.text,
+                                         policy in ('functional_diagnostics', 'public_diagnostics'))
+                        self.assertEqual(result.checks['run'], 'failed')
+
     def test_missing_functional_evidence_does_not_fall_back_to_raw_tail(self):
         self.public_task(feedback='functional_diagnostics')
         task = load_task(self.problem, self.manifest)
@@ -142,7 +207,7 @@ class FunctionalRelease(unittest.TestCase):
         self.public_task(feedback='functional_diagnostics')
         type(self).response_mode = 'repair'
         extracted = extract_diagnostics('csim', {'timed_out': False, 'exit_code': 1},
-                                       'Mismatch at cycle 5: expected 7, got 0\nUNRELATED_PRIVATE_LOG')
+                                       'Random test error at cycle 5: expected 7, got 0\nUNRELATED_PRIVATE_LOG')
         with patch.object(HLSValidator, 'preflight'), patch('evaluation.validator.validate_stage',
              side_effect=[dict(extracted, status='failed'), {'status':'passed'}, {'status':'passed'}]):
             code, result = self.solve(model=None, validator=HLSValidator())

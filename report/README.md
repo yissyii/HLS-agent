@@ -1,3 +1,5 @@
+> **当前 HLS pass@5 基线（2026.1）：** [Vitis/Vivado 2026.1 冻结结果](evaluations/9-23-HLS-pass5-vitis2026.1.md)。后续 baseline/agent 报告、表格和结论必须引用该报告及其 `output/baseline_pass5_ranked_fences_v1_20260923_vitis2026_1/summary.json`；2025.2 结果仅作历史记录。
+
 # 报告与证据索引
 
 集中保存设计报告、复现说明、模型选择依据和重要模型协作记录；baseline 与 agent 的实验结果分别报告。2026-09-18 完成分类归档，保留历史报告文件名和各轮实验的原始口径。

@@ -34,6 +34,11 @@ def before_request():
         module.before_request()
 
 
+def request_retry_settings():
+    module = _development()
+    return module.request_retry_settings() if module else None
+
+
 def observe_request(path, metadata):
     module = _development()
     if module:

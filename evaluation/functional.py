@@ -9,6 +9,17 @@ _KINDS = {'output_mismatch', 'assertion_failure', 'runtime_exception', 'deadlock
 _RUNTIME = re.compile(r'(?:^|:\s)(?:runtime error:\s|AddressSanitizer:|UndefinedBehaviorSanitizer:)', re.I)
 HEADER = 'Functional diagnostic (observed facts; absent fields were not reported):\n'
 
+# Explicit testbench formats only; arbitrary expected/got text is not evidence.
+_TEST_ERROR = re.compile(
+    r'^(?:(?:Fixed|Random) test error at cycle (?P<cycle>\d+)|'
+    r'Error at test case (?P<index>\d+))(?=\s*:|\s+for input\b)', re.I)
+_VALUE = r'[+-]?(?:0x[0-9a-f]+|0b[01]+|(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?|true|false)'
+_TEST_PAIR = re.compile(
+    r'\bexpected\s+(?:(?P<expected_signal>[A-Za-z_]\w*)\s*=\s*|[:=]\s*)?'
+    r'(?P<expected>' + _VALUE + r')\s*,\s*(?:got|actual)\s+'
+    r'(?:(?P<actual_signal>[A-Za-z_]\w*)\s*=\s*|[:=]\s*)?'
+    r'(?P<actual>' + _VALUE + r')\s*$', re.I)
+
 
 def _bounded(value, depth=0):
     if depth > 3:
@@ -48,6 +59,18 @@ def parse_line(line):
             return None
         fields, trimmed = _bounded({k: v for k, v in data.items() if k in _FIELDS})
         return dict(failure_kind=data['kind'], observed=fields, truncated=trimmed, format='zcomp_json_v1')
+    test_error = _TEST_ERROR.match(line)
+    if test_error:
+        pair = _TEST_PAIR.search(line, test_error.end())
+        if not pair or pair['expected_signal'] != pair['actual_signal']:
+            return None
+        fields = {name: int(value) for name, value in test_error.groupdict().items() if value is not None}
+        fields.update(expected=pair['expected'], actual=pair['actual'])
+        if pair['expected_signal']:
+            fields['signal'] = pair['expected_signal']
+        # Free-form input prose is deliberately not interpreted as input/history.
+        fields, trimmed = _bounded(fields)
+        return dict(failure_kind='output_mismatch', observed=fields, truncated=trimmed, format='text')
     if re.match(r'^Mismatch\b', line, re.I):
         fields = {}
         pair = re.search(r'expected\s*[:=]?\s*(.+?)\s*,?\s+(?:got|actual)\s*[:=]?\s*(.+)$', line, re.I)
