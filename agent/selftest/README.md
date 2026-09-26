@@ -1,5 +1,17 @@
 # 独立自建测试模块 v0.2
 
+**Bench4HLS 当前结构**见 [行为前端 v4 与模块分层](BENCH4HLS_BEHAVIORS.md)。
+竞赛默认入口仍为 `bench4hls_competition.py` 的 legacy；v4 由独立实验 runner 选择，
+未替换默认流程。下文主要介绍较早的独立 `generate.py` 模块，其接口限制不能直接用于描述 Bench4HLS 新路径。
+
+当前增量：[验证清单与受限域比较](VERIFICATION_WORKFLOW.md)。compact 生成器 0.2.0 自动附带声明行为的覆盖清单；通用加载入口验证扩展来源；位语义检查员补齐小域全比较与绑定映射区分输入。旧包可读，主控制器仍未接入。效果和限制见 [离线配对报告](../../report/evaluations/verification_workflow_20260924.md)。
+
+历史：[双助手 v0.3 说明](STRUCTURED_CHECKERS.md) 与 [16 道新题对照报告](../../report/evaluations/dual_checker_v3_20260923.md)。0.3.0 已完成真实对照；随后修正协议为 0.3.1，141 项回归通过，修正版真实效果待验证，未接主流程。
+
+历史：[B v0.2 计算证据说明](CALCULATION_CHECKER.md) 与 [v0.2 验收报告](../../report/evaluations/dual_checker_v2_20260923.md)，该版真实验收未达标。
+
+新增独立 [双检查助手实验模块](DUAL_CHECKERS.md)：已完成程序回归与真实模型首轮验收，但样例助手未达标，未接入主流程。详见 [验收结果与交付清单](../../report/evaluations/dual_checker_smoke_20260923.md)。
+
 新增有界采样（显式开启）、独立规则／锚点审核及旧包兼容，详见 [v0.2 使用说明](V02.md)。下文原生成流程仍默认 strict；审核是旁路命令，尚未改变主流程或运行器判分。
 
 状态：实验性原型，**未接入主控制器、默认策略、RAG 或比赛入口**。
@@ -167,3 +179,9 @@ Vitis 混合编译没有足够信息区分责任时，保守返回 `inconclusive
 - 下一阶段优先扩展真实模型留出评测和功能反馈接入，再考虑状态/reset/流序列。先不要把“小题可运行”当成通用功能验证能力。
 
 交付结果见 [交付清单与验证报告](../../report/deliveries/selftest_v0_1_20260923.md)。
+
+Bench4HLS 的竞赛式闭环（自建测试台仅用于提交前修复，冻结后才运行官方测试台）见
+[Bench4HLS 自测—提交—官方终测流程](../../docs/BENCH4HLS_SELFTEST_COMPETITION.md)。
+
+Bench4HLS 的受限语义规则实验入口、支持范围和复现命令见
+[Named semantic rules v3](BENCH4HLS_RULES.md)。该入口只用于独立评估，生成结果需要复核。
